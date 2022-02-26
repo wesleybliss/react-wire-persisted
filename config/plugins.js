@@ -5,19 +5,34 @@ const InterpolateHtmlPlugin = require('interpolate-html-plugin')
 const pkg = require('../package.json')
 const paths = require('./paths')
 
-module.exports = [
-    new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-        'process.env.TITLE': JSON.stringify(pkg.name),
-    }),
+const plugins = [
     new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-        title: pkg.name,
-        template: paths.demo('public/index.html'),
-        filename: 'index.html',
-        templateParameters: {},
-    }),
-    new InterpolateHtmlPlugin({
-        'TITLE': pkg.name,
-    }),
 ]
+
+if (process.env.NODE_ENV !== 'production') {
+    
+    plugins.unshift(
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
+            'process.env.TITLE': JSON.stringify(pkg.name),
+        })
+    )
+    
+    plugins.push(
+        new HtmlWebpackPlugin({
+            title: pkg.name,
+            template: paths.demo('public/index.html'),
+            filename: 'index.html',
+            templateParameters: {},
+        })
+    )
+    
+    plugins.push(
+        new InterpolateHtmlPlugin({
+            'TITLE': pkg.name,
+        })
+    )
+    
+}
+
+module.exports = plugins

@@ -3,14 +3,12 @@ const paths = require('./paths')
 const rules = require('./rules')
 const plugins = require('./plugins')
 
-const mode = process.env.NODE_ENV
-
-const outputFile = (mode === 'production')
+const outputFile = (process.env.NODE_ENV === 'production')
     ? `${pkg.name}.min.js`
     : `${pkg.name}.js`
 
 const config = {
-    mode: mode,
+    mode: process.env.NODE_ENV,
     entry: [paths.src('index.js')],
     devtool: 'source-map',
     output: {
@@ -35,7 +33,7 @@ const config = {
     },
 }
 
-if (mode !== 'production') {
+if (config.mode !== 'production') {
     config.entry.push(paths.demo('src/index.js'))
     config.devServer = {
         historyApiFallback: true,
@@ -50,5 +48,5 @@ if (mode !== 'production') {
         port: process.env.PORT || 3002,
     }
 }
-
+console.log('config', config)
 module.exports = config
