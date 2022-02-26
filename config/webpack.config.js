@@ -2,6 +2,7 @@ const pkg = require('../package.json')
 const paths = require('./paths')
 const rules = require('./rules')
 const plugins = require('./plugins')
+const nodeExternals = require('webpack-node-externals')
 
 const outputFile = (process.env.NODE_ENV === 'production')
     ? `${pkg.name}.min.js`
@@ -10,6 +11,8 @@ const outputFile = (process.env.NODE_ENV === 'production')
 const config = {
     mode: process.env.NODE_ENV,
     entry: [paths.src('index.js')],
+    target: 'web',
+    externals: [nodeExternals()],
     devtool: 'source-map',
     output: {
         path: paths.lib(),
@@ -48,5 +51,5 @@ if (config.mode !== 'production') {
         port: process.env.PORT || 3002,
     }
 }
-console.log('config', config)
+
 module.exports = config
