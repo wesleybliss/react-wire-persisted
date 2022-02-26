@@ -11,7 +11,8 @@ class LocalStorageProvider extends StorageProvider {
         
         super(namespace, registry)
         
-        if (typeof Storage === 'undefined')
+        /* istanbul ignore next */
+        if (typeof localStorage === 'undefined')
             throw new Error('LocalStorageProvider: localStorage not supported')
         
     }
@@ -27,8 +28,6 @@ class LocalStorageProvider extends StorageProvider {
             return
         
         const items = JSON.parse(JSON.stringify(this.getAll()))
-        
-        console.log('cloned items', items)
         
         this.removeAll()
         
@@ -68,7 +67,10 @@ class LocalStorageProvider extends StorageProvider {
         
     }
     
-    removeItem(key) {
+    removeItem(key, fromRegistry = false) {
+        
+        if (fromRegistry)
+            delete this.registry[key]
         
         return localStorage.removeItem(key)
         
@@ -76,9 +78,11 @@ class LocalStorageProvider extends StorageProvider {
     
     getAll() {
         
+        const prefixNs = `${this.namespace}.`
+        
         return Object.keys(localStorage).reduce((acc, it) => {
             
-            if (this.namespace ? it.startsWith(`${this.namespace}.`) : true)
+            if (this.namespace ? it.startsWith(prefixNs) : true)
                 acc[it] = localStorage.getItem(it)
             
             return acc
@@ -87,39 +91,49 @@ class LocalStorageProvider extends StorageProvider {
         
     }
     
-    logAll() {
+    _resetAll(
+        useInitialValues = true,
+        excludedKeys = [],
+        clearRegistry = false
+    ) {
         
-        console.log(this.getAll())
-        
-    }
-    
-    _resetAll(useInitialValues = true, excludedKeys = []) {
+        const prefixNs = `${this.namespace}.`
         
         Object.keys(localStorage).forEach(it => {
             
-            const isAppKey = this.namespace ? it.startsWith(`${this.namespace}.`) : true
+            const isAppKey = this.namespace ? it.startsWith(prefixNs) : true
             const isExcluded = excludedKeys?.includes(it) || false
             
-            if (isAppKey && !isExcluded) {
-                if (useInitialValues)
-                    if (Object.prototype.hasOwnProperty.call(this.registry, it))
-                        localStorage.setItem(it, this.registry[it])
-                    else
-                        localStorage.removeItem(it)
+            if (!isAppKey || isExcluded) return
+            
+            if (useInitialValues) {
+                
+                const isRegistered = Object.prototype.hasOwnProperty.call(this.registry, it)
+                
+                if (isRegistered)
+                    localStorage.setItem(it, this.registry[it])
                 else
                     localStorage.removeItem(it)
+                
+            } else {
+                
+                localStorage.removeItem(it)
+                
+                if (clearRegistry)
+                    delete this.registry[it]
+                
             }
             
         })
         
     }
     
-    resetAll(excludedKeys = []) {
-        this._resetAll(true, excludedKeys)
+    resetAll(excludedKeys = [], clearRegistry = false) {
+        this._resetAll(true, excludedKeys || [], clearRegistry)
     }
     
-    removeAll(excludedKeys = []) {
-        this._resetAll(false, excludedKeys)
+    removeAll(excludedKeys = [], clearRegistry = false) {
+        this._resetAll(false, excludedKeys || [], clearRegistry)
     }
     
 }

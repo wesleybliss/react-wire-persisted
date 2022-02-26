@@ -5,6 +5,9 @@ import * as actions from '../actions'
 
 import ListItem from './ListItem'
 
+// Don't hold up tests unnecessarily
+const simulatedTimeout = process.env.NODE_ENV === 'test' ? 0 : 800
+
 const CategoriesList = () => {
     
     const [loading, setLoading] = useState(false)
@@ -22,7 +25,7 @@ const CategoriesList = () => {
             setLoading(false)
         }
         
-        setTimeout(fetchCategories, 800)
+        setTimeout(fetchCategories, simulatedTimeout)
         
     }, [])
     
@@ -47,7 +50,7 @@ const CategoriesList = () => {
             )}
             
             {!loading && hasCategories && (
-                <ul>
+                <ul data-testid="categories-list">
                     {categories.map((it, i) => (
                         <ListItem
                             key={`category-${i}`}
