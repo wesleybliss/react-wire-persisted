@@ -61,7 +61,7 @@ const PeopleList = () => {
             )}
             
             {!loading && hasPeople && (
-                <ul>
+                <ul data-testid="people-list">
                     {people.map((it, i) => {
                         const fullName = `${it.firstName} ${it.lastName}`
                         return (

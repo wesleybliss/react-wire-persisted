@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import {
     getNamespace,
     getStorage,
@@ -13,7 +13,7 @@ const DemoActions = () => {
     const [inputNamespace, setInputNamespace] = useState('')
     
     const handleLogAllClick = () => {
-        getStorage().logAll()
+        console.log(getStorage().getAll())
     }
     
     const handleNamespaceChange = e => {
@@ -28,12 +28,6 @@ const DemoActions = () => {
         console.log('Change namespace from', namespace, 'to', inputNamespace)
         setNamespace(inputNamespace)
     }
-    
-    useEffect(() => {
-        setTimeout(() => {
-            console.log('storage ns', getNamespace())
-        }, 1000)
-    }, [])
     
     return (
         

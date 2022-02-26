@@ -97,10 +97,6 @@ class MemoryStorageProvider extends StorageProvider {
         // Your implementation
     }
     
-    logAll(namespace = null) {
-        // Your implementation
-    }
-    
     _resetAll(
         namespace = null,
         withDefaults = true,
