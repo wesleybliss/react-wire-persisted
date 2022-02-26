@@ -15,6 +15,7 @@ const Button = ({
                 text-uppercase
                 border border-gray-200
                 outline:none focus:outline-none
+                rounded
                 ${className || ''}
             `}
             {...props}>

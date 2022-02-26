@@ -1,14 +1,43 @@
 import StorageProvider from './StorageProvider'
 import { isPrimitive } from './utils'
 
+/**
+ * A storage provider for `localStorage`
+ * @see `StorageProvider.js` for documentation
+ */
 class LocalStorageProvider extends StorageProvider {
     
-    constructor(namespace = null) {
+    constructor(namespace = null, registry = {}) {
         
-        super(namespace)
+        super(namespace, registry)
         
         if (typeof Storage === 'undefined')
             throw new Error('LocalStorageProvider: localStorage not supported')
+        
+    }
+    
+    setNamespace(namespace) {
+        
+        if (!this.namespace) {
+            this.namespace = namespace
+            return
+        }
+        
+        if (this.namespace === namespace)
+            return
+        
+        const items = JSON.parse(JSON.stringify(this.getAll()))
+        
+        console.log('cloned items', items)
+        
+        this.removeAll()
+        
+        for (const [key, value] of Object.entries(items)) {
+            const newKey = key.replace(this.namespace, namespace)
+            this.setItem(newKey, value)
+        }
+        
+        this.namespace = namespace
         
     }
     
@@ -45,33 +74,36 @@ class LocalStorageProvider extends StorageProvider {
         
     }
     
-    getAll(namespace = null) {
+    getAll() {
         
         return Object.keys(localStorage).reduce((acc, it) => {
-            if (namespace ? it.startsWith(`${this.namespace}.`) : true)
+            
+            if (this.namespace ? it.startsWith(`${this.namespace}.`) : true)
                 acc[it] = localStorage.getItem(it)
+            
             return acc
+            
         }, {})
         
     }
     
     logAll() {
         
-        console.log(this.getAll(this.namespace))
+        console.log(this.getAll())
         
     }
     
-    _resetAll(withDefaults = true, excludeKeys = []) {
+    _resetAll(useInitialValues = true, excludedKeys = []) {
         
         Object.keys(localStorage).forEach(it => {
             
             const isAppKey = this.namespace ? it.startsWith(`${this.namespace}.`) : true
-            const isExcluded = excludeKeys.includes(it)
+            const isExcluded = excludedKeys?.includes(it) || false
             
             if (isAppKey && !isExcluded) {
-                if (withDefaults)
-                    if (Object.prototype.hasOwnProperty.call(registry, it))
-                        localStorage.setItem(it, registry[it])
+                if (useInitialValues)
+                    if (Object.prototype.hasOwnProperty.call(this.registry, it))
+                        localStorage.setItem(it, this.registry[it])
                     else
                         localStorage.removeItem(it)
                 else
@@ -82,12 +114,12 @@ class LocalStorageProvider extends StorageProvider {
         
     }
     
-    resetAll(excludeKeys = []) {
-        this._resetAll(this.namespace, true, excludeKeys)
+    resetAll(excludedKeys = []) {
+        this._resetAll(true, excludedKeys)
     }
     
-    removeAll(excludeKeys = []) {
-        this._resetAll(this.namespace, false, excludeKeys)
+    removeAll(excludedKeys = []) {
+        this._resetAll(false, excludedKeys)
     }
     
 }

@@ -12,7 +12,6 @@ const config = {
     mode: process.env.NODE_ENV,
     entry: [paths.src('index.js')],
     target: 'web',
-    externals: [nodeExternals()],
     devtool: 'source-map',
     output: {
         path: paths.lib(),
@@ -36,8 +35,14 @@ const config = {
     },
 }
 
-if (config.mode !== 'production') {
+if (config.mode === 'production') {
+    
+    config.externals = [nodeExternals()]
+    
+} else {
+    
     config.entry.push(paths.demo('src/index.js'))
+    
     config.devServer = {
         historyApiFallback: true,
         static: {
@@ -50,6 +55,7 @@ if (config.mode !== 'production') {
         host: '0.0.0.0',
         port: process.env.PORT || 3002,
     }
+    
 }
 
 module.exports = config

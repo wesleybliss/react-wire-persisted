@@ -1,29 +1,47 @@
 import { createWire } from '@forminator/react-wire'
 import LocalStorageProvider from './LocalStorageProvider'
 
-let NS = 'app'
 let Provider = LocalStorageProvider
 let storage = new Provider()
 
-// Track all storage keys so we can log, reset, etc.
-const registry = {}
+/**
+ * Gets the namespace of the storage provider
+ * @returns {String}
+ */
+export const getNamespace = () => storage.namespace
 
-export const getNamespace = () => NS
+/**
+ * Gets the current storage provider class
+ * @returns {StorageProvider}
+ */
 export const getProvider = () => Provider
+
+/**
+ * Gets the current storage provider class instance
+ * @returns {StorageProvider}
+ */
 export const getStorage = () => storage
 
+/**
+ * Sets the storage provider class & instance
+ * @param {StorageProvider} StorageProviderImpl Any implementation of `StorageProvider`
+ */
 export const setProvider = StorageProviderImpl => {
     Provider = StorageProviderImpl
-    storage = new Provider(NS)
-}
-
-export const setNamespace = newNS => {
-    NS = newNS
-    setProvider(Provider)
+    storage = new Provider(getNamespace())
 }
 
 /**
- * Creates a localStorage persistent Wire object
+ * Sets the namespace for the storage provider
+ * @param {String} namespace The namespace for the storage provider
+ */
+export const setNamespace = namespace => {
+    storage.setNamespace(namespace)
+}
+
+/**
+ * Creates a persisted Wire using the `StorageProvider` that is currently set
+ * Defaults to `localStorage` via `LocalStorageProvider`
  * 
  * @param {String} key Unique key for storing this value
  * @param {*} value Initial value of this Wire
@@ -32,13 +50,14 @@ export const setNamespace = newNS => {
 export const createPersistedWire = (key, value = null) => {
     
     // This check helps ensure no accidental key typos occur
-    if (!key) throw new Error(
+    if (!key && (typeof key) !== 'number') throw new Error(
         `createPersistedWire: Key cannot be a falsey value (${key}}`
     )
     
     // Track this writable entry so we can easily clear all
-    registry[key] = value
+    storage.register(key, value)
     
+    // The actual Wire backing object
     const wire = createWire(value)
     
     const getValue = () => wire.getValue()

@@ -2,6 +2,7 @@ import { NS } from '../constants'
 import { setNamespace } from '../../../src/react-wire-persisted'
 
 import Debug from './Debug'
+import DemoActions from './DemoActions'
 import PersistedItemsList from './PersistedItemsList'
 import CategoriesList from './CategoriesList'
 import PeopleList from './PeopleList'
@@ -18,7 +19,7 @@ const App = () => {
                 {process.env.TITLE}
             </header>
             
-            <aside className="p-8">
+            <aside className="px-8 pt-3">
                 <p>
                     The store has two items (<code>selectedCategoryId</code> &amp; <code>selectedPersonName</code>)
                     that are persisted wires (using <code>localStorage</code>).
@@ -27,6 +28,10 @@ const App = () => {
                     Click on a category and a person, then reload the page. The values should be persisted.
                 </p>
             </aside>
+            
+            <section className="px-8 pt-3">
+                <DemoActions />
+            </section>
             
             <div className="grid grid-cols-3 gap-4 p-8">
                 <PersistedItemsList />

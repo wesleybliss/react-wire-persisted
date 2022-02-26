@@ -34,5 +34,5 @@ module.exports = [
         ? plugins.production
         : plugins.development
     ),
-    // new BundleAnalyzerPlugin(),
-]
+    (process.env.ANALYZE_BUNDLE === 'true') && new BundleAnalyzerPlugin(),
+].filter(Boolean)

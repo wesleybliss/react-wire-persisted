@@ -3,13 +3,6 @@ import { useWireValue } from '@forminator/react-wire'
 import * as store from '../store'
 import * as actions from '../actions'
 import * as constants from '../constants'
-import {
-    getNamespace,
-    getProvider,
-    getStorage,
-} from '../../../src/react-wire-persisted'
-
-import Button from './Button'
 
 const Debug = () => {
     
@@ -21,11 +14,8 @@ const Debug = () => {
     const hasPeople = useWireValue(store.hasPeople)
     const selectedPersonName = useWireValue(store.selectedPersonName)
     
-    const handleLogAllClick = () => {
-        getStorage().logAll()
-    }
-    
     useEffect(() => {
+        // Expose some things for easy debugging
         window.app = {}
         window.app.store = store
         window.app.actions = actions
@@ -36,27 +26,19 @@ const Debug = () => {
         
         <div className="Debug mt-10 p-4 flex flex-col bg-gray-200 font-mono">
             
-            <div className="p-4">
-                <Button onClick={handleLogAllClick}>
-                    Log All Stored Items
-                </Button>
-            </div>
-            
-            <div>
-                <pre>
-                    <code>
-                        {JSON.stringify({
-                            categories,
-                            selectedCategory,
-                            selectedCategoryId,
-                            hasCategories,
-                            people,
-                            hasPeople,
-                            selectedPersonName,
-                        }, null, 4)}
-                    </code>
-                </pre>
-            </div>
+            <pre>
+                <code>
+                    {JSON.stringify({
+                        categories,
+                        selectedCategory,
+                        selectedCategoryId,
+                        hasCategories,
+                        people,
+                        hasPeople,
+                        selectedPersonName,
+                    }, null, 4)}
+                </code>
+            </pre>
             
         </div>
         
