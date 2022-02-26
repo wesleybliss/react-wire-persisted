@@ -120,7 +120,7 @@ class MemoryStorageProvider extends StorageProvider {
 }
 ```
 
-See [LocalStorageProvider](src/LocalStorageProvider) for a full example.
+See [LocalStorageProvider](src/LocalStorageProvider.js) for a full example.
 
 ## Miscellaneous
 
