@@ -51,7 +51,7 @@ const entries = components.reduce((acc, it) => ({
     ...acc,
     [makeEntry(it)]: it,
 }), {})
-
+console.log('entries', JSON.stringify(entries, null, 4))
 const config = {
     mode: process.env.NODE_ENV,
     // entry: [paths.src('index.js')],
