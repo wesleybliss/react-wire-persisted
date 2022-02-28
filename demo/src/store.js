@@ -2,6 +2,8 @@ import { createWire, createSelector } from '@forminator/react-wire'
 import { createPersistedWire } from '../../src/react-wire-persisted'
 import { keys } from './constants'
 
+export const demoText = createPersistedWire(keys.demoText, 'Hello world!')
+
 export const categories = createWire(null)
 export const selectedCategoryId = createPersistedWire(keys.selectedCategoryId, null)
 

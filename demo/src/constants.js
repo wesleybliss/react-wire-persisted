@@ -1,14 +1,12 @@
+import { key, getPrefixedKeys } from '../../src/utils'
 
 export const NS = 'react-persisted-wire-demo'
 
-const keys = {}
+key('demoText')
 
-keys.selectedCategoryId = 'selectedCategoryId'
-keys.selectedPersonName = 'selectedPersonName'
+key('selectedCategoryId')
+key('selectedPersonName')
 
-const prefixedKeys = Object.keys(keys).reduce((acc, it) => ({
-    ...acc,
-    [it]: `${NS}.${keys[it]}`,
-}), {})
+const prefixedKeys = getPrefixedKeys(NS)
 
 export { prefixedKeys as keys }

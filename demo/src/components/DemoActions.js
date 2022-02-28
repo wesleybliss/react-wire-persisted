@@ -1,33 +1,30 @@
-import { useState } from 'react'
-import {
-    getNamespace,
-    getStorage,
-    setNamespace,
-} from '../../../src/react-wire-persisted'
+import { useState, useEffect } from 'react'
+import { useWireState } from '@forminator/react-wire'
+import * as store from '../store'
+import { getStorage } from '../../../src/react-wire-persisted'
 
 import Button from './Button'
 import TextInput from './TextInput'
 
 const DemoActions = () => {
     
-    const [inputNamespace, setInputNamespace] = useState('')
+    const [inputText, setInputText] = useState('')
+    
+    const [demoText, setDemoText] = useWireState(store.demoText)
     
     const handleLogAllClick = () => {
         console.log(getStorage().getAll())
     }
     
-    const handleNamespaceChange = e => {
-        const value = (e.target.value || '')
-            .replace(/\s/ig, '')
-            .toLowerCase()
-        setInputNamespace(value)
+    const handleInputTextChange = e => {
+        setInputText(e.target.value?.toString() || '')
     }
     
-    const handleMigrateNamespace = () => {
-        const namespace = getNamespace()
-        console.log('Change namespace from', namespace, 'to', inputNamespace)
-        setNamespace(inputNamespace)
+    const handleSaveDemoText = () => {
+        setDemoText(inputText)
     }
+    
+    useEffect(() => setInputText(demoText), [demoText])
     
     return (
         
@@ -42,11 +39,11 @@ const DemoActions = () => {
             <div className="mx-2 p-2 flex justify-center items-center content-center bg-gray-200">
                 <TextInput
                     className="mr-2"
-                    value={inputNamespace}
+                    value={inputText}
                     placeholder="New namespace"
-                    onChange={handleNamespaceChange} />
-                <Button onClick={handleMigrateNamespace}>
-                    Change Namespace
+                    onChange={handleInputTextChange} />
+                <Button onClick={handleSaveDemoText}>
+                    Change Demo Text
                 </Button>
             </div>
             

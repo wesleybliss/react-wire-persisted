@@ -19,7 +19,7 @@ const PersistedItemsList = () => {
                     Selected Person:
                 </span>
                 <span className="text-blue-500">
-                    {selectedPersonName || 'Nobody'}
+                    {(selectedCategory && selectedPersonName) || 'Nobody'}
                 </span>
             </div>
             

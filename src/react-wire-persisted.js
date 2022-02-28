@@ -6,18 +6,21 @@ let storage = new Provider()
 
 /**
  * Gets the namespace of the storage provider
+ * 
  * @returns {String}
  */
 export const getNamespace = () => storage?.namespace || null
 
 /**
  * Gets the current storage provider class instance
+ * 
  * @returns {StorageProvider}
  */
 export const getStorage = () => storage
 
 /**
  * Sets the namespace for the storage provider
+ * 
  * @param {String} namespace The namespace for the storage provider
  */
 export const setNamespace = namespace => {

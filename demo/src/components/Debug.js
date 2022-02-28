@@ -3,6 +3,8 @@ import { useWireValue } from '@forminator/react-wire'
 import * as store from '../store'
 import * as actions from '../actions'
 import * as constants from '../constants'
+import * as rwp from '../../../src/react-wire-persisted'
+import * as rwpUtils from '../../../src/utils'
 
 const Debug = () => {
     
@@ -20,6 +22,8 @@ const Debug = () => {
         window.app.store = store
         window.app.actions = actions
         window.app.constants = constants
+        window.app.rwp = rwp
+        window.app.rwpUtils = rwpUtils
     })
     
     return (

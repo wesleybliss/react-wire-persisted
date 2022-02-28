@@ -12,16 +12,13 @@ $ yarn add -D @forminator/react-wire react-wire-persisted
 
 ```javascript
 // constants.js
+import { key, getPrefixedKeys } from '../../src/utils'
+
 export const NS = 'myapp'
 
-const keys = {}
+key('foo')
 
-keys.foo = 'foo'
-
-const prefixedKeys = Object.keys(keys).reduce((acc, it) => ({
-    ...acc,
-    [it]: `${NS}.${keys[it]}`,
-}), {})
+const prefixedKeys = getPrefixedKeys(NS)
 
 export { prefixedKeys as keys }
 ```
