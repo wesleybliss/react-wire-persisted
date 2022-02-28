@@ -5,15 +5,11 @@ const plugins = require('./plugins')
 const TerserPlugin = require('terser-webpack-plugin')
 const nodeExternals = require('webpack-node-externals')
 
-const outputFile = file => (process.env.NODE_ENV === 'production')
-    ? `${file}.min`
-    : `${file}`
-
 const config = {
     mode: process.env.NODE_ENV,
     entry: {
-        [outputFile(pkg.name)]: paths.src('index.js'),
-        [outputFile('utils')]: paths.src('utils/index.js'),
+        [pkg.name]: paths.src('index.js'),
+        ['utils/index']: paths.src('utils/index.js'),
     },
     target: 'web',
     output: {
