@@ -12,7 +12,7 @@ $ yarn add -D @forminator/react-wire react-wire-persisted
 
 ```javascript
 // constants.js
-import { key, getPrefixedKeys } from '../../src/utils'
+import { key, getPrefixedKeys } from 'react-wire-persisted/lib/utils'
 
 export const NS = 'myapp'
 
