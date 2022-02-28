@@ -12,7 +12,7 @@ const outputFile = (process.env.NODE_ENV === 'production')
     : `${pkg.name}.js`
 
 const componenentExcludes = [
-    'components/index.js',
+    'src/index.js',
     'stories.jsx',
 ]
 
