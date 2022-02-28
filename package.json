@@ -4,6 +4,10 @@
   "author": "Wesley Bliss <wesley.bliss@gmail.com>",
   "license": "MIT",
   "main": "lib/react-wire-persisted.min.js",
+  "files": [
+    "package.json",
+    "lib"
+  ],
   "scripts": {
     "dev": "NODE_ENV=development webpack serve --config config/webpack.config.js --progress",
     "build": "NODE_ENV=production webpack --config config/webpack.config.js --progress",
