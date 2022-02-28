@@ -56,7 +56,7 @@ const config = {
         clean: true,
         path: paths.lib(),
         // filename: outputFile,
-        // library: pkg.name,
+        library: pkg.name,
         libraryTarget: 'umd',
         // libraryExport: 'default',
         /* libraryTarget: 'umd',
