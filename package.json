@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "author": "Wesley Bliss <wesley.bliss@gmail.com>",
   "license": "MIT",
-  "main": "lib/react-wire-persisted.js",
+  "main": "lib/react-wire-persisted.min.js",
   "files": [
     "package.json",
-    "lib"
+    "lib/*"
   ],
   "scripts": {
     "dev": "NODE_ENV=development webpack serve --config config/webpack.config.js --progress",

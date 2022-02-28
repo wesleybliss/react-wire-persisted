@@ -43,7 +43,7 @@ const buildComponentList = root => {
 
 const makeEntry = file => {
     const name = file.replace(`${paths.src()}/`, '')
-    return name.substring(0, name.length - path.extname(name).length)
+    return name.substring(0, name.length - path.extname(name).length) + `.min`
 }
 
 const components = buildComponentList(paths.src())
