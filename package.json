@@ -5,8 +5,7 @@
   "license": "MIT",
   "main": "lib/react-wire-persisted.js",
   "files": [
-    "package.json",
-    "lib/*"
+    "lib"
   ],
   "scripts": {
     "dev": "NODE_ENV=development webpack serve --config config/webpack.config.js --progress",

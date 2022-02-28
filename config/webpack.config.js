@@ -51,16 +51,16 @@ const entries = components.reduce((acc, it) => ({
     ...acc,
     [makeEntry(it)]: it,
 }), {})
-console.log('entries', JSON.stringify(entries, null, 4))
+
 const config = {
     mode: process.env.NODE_ENV,
-    // entry: [paths.src('index.js')],
-    entry: entries,
+    entry: [paths.src('index.js')],
+    // entry: entries,
     target: 'web',
     output: {
         clean: true,
         path: paths.lib(),
-        // filename: outputFile,
+        filename: outputFile,
         library: pkg.name,
         libraryTarget: 'umd',
         libraryExport: 'default',
@@ -91,7 +91,7 @@ if (config.mode === 'production') {
                 extractComments: false,
             }),
         ],
-        // splitChunks: false,
+        splitChunks: false,
     }
     config.performance = {
         hints: false,
