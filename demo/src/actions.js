@@ -2,9 +2,11 @@ import * as store from './store'
 import fakeData from './data.json'
 
 // Don't hold up tests unnecessarily
+/* istanbul ignore next */
 const simulatedTimeout = process.env.NODE_ENV === 'test' ? 0 : 2000
 
 // Simulate network delay
+/* istanbul ignore next */
 const sleep = (delayMs = 1000) =>
     new Promise(resolve => setTimeout(resolve, delayMs))
 

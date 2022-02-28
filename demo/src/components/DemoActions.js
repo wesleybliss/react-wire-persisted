@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { useState, useEffect } from 'react'
 import { useWireState } from '@forminator/react-wire'
 import * as store from '../store'

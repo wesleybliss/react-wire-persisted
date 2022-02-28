@@ -23,6 +23,14 @@ describe('react-wire-persisted', () => {
         
     })
     
+    test('Empty namespace', () => {
+        
+        rwp.setNamespace(null)
+        
+        expect(rwp.getNamespace()).toBe(null)
+        
+    })
+    
     test('createPersistedWire()', () => {
         
         const key = 'foo.bar'

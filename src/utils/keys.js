@@ -38,6 +38,9 @@ export const getPrefixedKeys = (namespace, keys = null) => {
     
     const items = keys || storageKeys
     
+    if (!namespace)
+        return items
+    
     return Object.keys(items).reduce((acc, it) => ({
         ...acc,
         [it]: `${namespace}.${items[it]}`,

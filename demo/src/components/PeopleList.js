@@ -16,6 +16,7 @@ const PeopleList = () => {
     const selectedCategory = useWireValue(store.selectedCategory)
     const selectedCategoryId = useWireValue(store.selectedCategoryId)
     
+    /* istanbul ignore next */
     const handlePersonClick = person => {
         const fullName = `${person.firstName} ${person.lastName}`
         setSelectedPersonName(fullName)
@@ -68,7 +69,10 @@ const PeopleList = () => {
                             <ListItem
                                 key={`person-${i}`}
                                 active={fullName === selectedPersonName}
-                                onClick={() => handlePersonClick(it)}>
+                                onClick={
+                                    /* istanbul ignore next */
+                                    () => handlePersonClick(it)
+                                }>
                                 {fullName}
                             </ListItem>
                         )
