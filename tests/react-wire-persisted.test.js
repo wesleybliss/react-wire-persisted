@@ -1,5 +1,5 @@
 import * as rwp from '../src/react-wire-persisted'
-import LocalStorageProvider from '../src/LocalStorageProvider'
+import LocalStorageProvider from '../src/providers/LocalStorageProvider'
 
 const namespace = 'fakeNamespace'
 

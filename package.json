@@ -1,9 +1,9 @@
 {
   "name": "react-wire-persisted",
   "version": "1.0.0",
-  "main": "index.js",
   "author": "Wesley Bliss <wesley.bliss@gmail.com>",
   "license": "MIT",
+  "main": "lib/react-wire-persisted.min.js",
   "scripts": {
     "dev": "NODE_ENV=development webpack serve --config config/webpack.config.js --progress",
     "build": "NODE_ENV=production webpack --config config/webpack.config.js --progress",

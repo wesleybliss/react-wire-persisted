@@ -1,19 +1,38 @@
 import StorageProvider from './StorageProvider'
-import { isPrimitive } from './utils'
+import { isPrimitive } from '../utils'
+
+class MemoryStorage {
+    
+    constructor() {
+        this.data = {}
+    }
+    
+    getItem(key) {
+        return this.data[key]
+    }
+    
+    setItem(key, value) {
+        this.data[key] = value
+    }
+    
+    removeItem(key) {
+        delete this.data[key]
+    }
+    
+}
+
+const memoryStorage = new MemoryStorage()
 
 /**
- * A storage provider for `localStorage`
+ * A storage provider for ephemeral memory
+ * This should not be used in production
  * @see `StorageProvider.js` for documentation
  */
-class LocalStorageProvider extends StorageProvider {
+class MemoryStorageProvider extends StorageProvider {
     
     constructor(namespace = null, registry = {}) {
         
         super(namespace, registry)
-        
-        /* istanbul ignore next */
-        if (typeof localStorage === 'undefined')
-            throw new Error('LocalStorageProvider: localStorage not supported')
         
     }
     
@@ -42,7 +61,7 @@ class LocalStorageProvider extends StorageProvider {
     
     getItem(key) {
         
-        const val = localStorage.getItem(key)
+        const val = memoryStorage.getItem(key)
         
         if (val === undefined || val === null)
             return null
@@ -63,7 +82,7 @@ class LocalStorageProvider extends StorageProvider {
         if (val !== undefined && val !== null)
             val = isPrimitive(value) ? value : JSON.stringify(value)
         
-        return localStorage.setItem(key, val)
+        return memoryStorage.setItem(key, val)
         
     }
     
@@ -72,7 +91,7 @@ class LocalStorageProvider extends StorageProvider {
         if (fromRegistry)
             delete this.registry[key]
         
-        return localStorage.removeItem(key)
+        return memoryStorage.removeItem(key)
         
     }
     
@@ -80,10 +99,10 @@ class LocalStorageProvider extends StorageProvider {
         
         const prefixNs = `${this.namespace}.`
         
-        return Object.keys(localStorage).reduce((acc, it) => {
+        return Object.keys(memoryStorage.data).reduce((acc, it) => {
             
             if (this.namespace ? it.startsWith(prefixNs) : true)
-                acc[it] = localStorage.getItem(it)
+                acc[it] = memoryStorage.getItem(it)
             
             return acc
             
@@ -99,7 +118,7 @@ class LocalStorageProvider extends StorageProvider {
         
         const prefixNs = `${this.namespace}.`
         
-        Object.keys(localStorage).forEach(it => {
+        Object.keys(memoryStorage.data).forEach(it => {
             
             const isAppKey = this.namespace ? it.startsWith(prefixNs) : true
             const isExcluded = excludedKeys?.includes(it) || false
@@ -111,13 +130,13 @@ class LocalStorageProvider extends StorageProvider {
                 const isRegistered = Object.prototype.hasOwnProperty.call(this.registry, it)
                 
                 if (isRegistered)
-                    localStorage.setItem(it, this.registry[it])
+                    memoryStorage.setItem(it, this.registry[it])
                 else
-                    localStorage.removeItem(it)
+                    memoryStorage.removeItem(it)
                 
             } else {
                 
-                localStorage.removeItem(it)
+                memoryStorage.removeItem(it)
                 
                 if (clearRegistry)
                     delete this.registry[it]
@@ -138,4 +157,4 @@ class LocalStorageProvider extends StorageProvider {
     
 }
 
-export default LocalStorageProvider
+export default MemoryStorageProvider

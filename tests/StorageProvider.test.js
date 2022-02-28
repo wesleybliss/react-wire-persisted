@@ -1,4 +1,4 @@
-import StorageProvider from '../src/StorageProvider'
+import StorageProvider from '../src/providers/StorageProvider'
 
 test('Abstract class StorageProvider can\'t be instantiated', async () => {
     

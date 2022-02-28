@@ -1,5 +1,5 @@
 import { NS } from '../constants'
-import { setNamespace } from '../../../src/react-wire-persisted'
+import { setProvider, LocalStorageProvider } from '../../../src'
 
 import Debug from './Debug'
 import DemoActions from './DemoActions'
@@ -7,7 +7,7 @@ import PersistedItemsList from './PersistedItemsList'
 import CategoriesList from './CategoriesList'
 import PeopleList from './PeopleList'
 
-setNamespace(NS)
+setProvider(LocalStorageProvider, NS)
 
 const App = () => {
     

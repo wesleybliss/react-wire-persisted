@@ -1,14 +1,14 @@
 import { createWire } from '@forminator/react-wire'
-import LocalStorageProvider from './LocalStorageProvider'
+import MemoryStorageProvider from './providers/MemoryStorageProvider'
 
-let Provider = LocalStorageProvider
+let Provider = MemoryStorageProvider
 let storage = new Provider()
 
 /**
  * Gets the namespace of the storage provider
  * @returns {String}
  */
-export const getNamespace = () => storage.namespace
+export const getNamespace = () => storage?.namespace || null
 
 /**
  * Gets the current storage provider class
@@ -26,9 +26,9 @@ export const getStorage = () => storage
  * Sets the storage provider class & instance
  * @param {StorageProvider} StorageProviderImpl Any implementation of `StorageProvider`
  */
-export const setProvider = StorageProviderImpl => {
+export const setProvider = (StorageProviderImpl, namespace = null) => {
     Provider = StorageProviderImpl
-    storage = new Provider(getNamespace())
+    storage = new Provider(namespace || getNamespace())
 }
 
 /**
@@ -48,6 +48,10 @@ export const setNamespace = namespace => {
  * @returns A new Wire decorated with localStorage functionality
  */
 export const createPersistedWire = (key, value = null) => {
+    
+    if (!Provider) throw new Error(
+        `A provider must be set before using this library`
+    )
     
     // This check helps ensure no accidental key typos occur
     if (!key && (typeof key) !== 'number') throw new Error(
