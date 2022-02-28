@@ -1,5 +1,3 @@
-const fs = require('fs')
-const path = require('path')
 const pkg = require('../package.json')
 const paths = require('./paths')
 const rules = require('./rules')
