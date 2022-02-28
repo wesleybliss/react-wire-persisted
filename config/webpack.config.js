@@ -11,12 +11,15 @@ const outputFile = (process.env.NODE_ENV === 'production')
 
 const config = {
     mode: process.env.NODE_ENV,
-    entry: [paths.src('index.js')],
+    entry: {
+        [pkg.name]: paths.src('index.js'),
+        utils: paths.src('utils/index.js'),
+    },
     target: 'web',
     output: {
         clean: true,
         path: paths.lib(),
-        filename: outputFile,
+        // filename: outputFile,
         // library: pkg.name,
         libraryTarget: 'umd',
         // libraryExport: 'default',
