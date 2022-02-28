@@ -11,6 +11,11 @@ const outputFile = (process.env.NODE_ENV === 'production')
     ? `${pkg.name}.min.js`
     : `${pkg.name}.js`
 
+const componenentExcludes = [
+    'components/index.js',
+    'stories.jsx',
+]
+
 /**
  * Builds a list of components so Webpack can create
  * separate entries & transpiled files for individual import
@@ -25,7 +30,7 @@ const buildComponentList = root => {
     
     nodes.forEach(it => {
         const node = path.resolve(root, it)
-        // if (it.endsWith('index.js')) return
+        if (componenentExcludes.some(ex => it.endsWith(ex))) return
         if (fs.statSync(node).isFile())
             list.push(node)
         else if (fs.statSync(node).isDirectory())
