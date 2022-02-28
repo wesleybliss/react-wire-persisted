@@ -1,13 +1,8 @@
-import { NS } from '../constants'
-import { setProvider, LocalStorageProvider } from '../../../src'
-
 import Debug from './Debug'
 import DemoActions from './DemoActions'
 import PersistedItemsList from './PersistedItemsList'
 import CategoriesList from './CategoriesList'
 import PeopleList from './PeopleList'
-
-setProvider(LocalStorageProvider, NS)
 
 const App = () => {
     

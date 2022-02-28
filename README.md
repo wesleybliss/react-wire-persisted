@@ -27,13 +27,13 @@ export { prefixedKeys as keys }
 ```
 
 ```javascript
-// App.js
+// index.js
 import { NS } from './constants'
-import { setNamespace } from 'react-wire-persisted'
+import * as reactPersistedWire from 'react-wire-persisted'
 
-setNamespace(NS)
+reactPersistedWire.setNamespace(NS)
 
-// Normal app code
+// Normal React init code
 ```
 
 ```javascript
@@ -68,55 +68,9 @@ See the [demo](demo) folder for a more complete example.
 
 ## Storage Providers
 
-This library uses `localStorage` by default, but you can create your own
-storage provider by extending the base class.
+This library uses `localStorage`, and will only work in browser environments.
 
-```javascript
-// MemoryStorageProvider.js
-import { StorageProvider } from 'react-wire-persisted'
-
-class MemoryStorageProvider extends StorageProvider {
-    
-    constructor(namespace = null) {
-        super(namespace)
-    }
-    
-    getItem(key) {
-        // Your implementation
-    }
-    
-    setItem(key) {
-        // Your implementation
-    }
-    
-    removeItem(key) {
-        // Your implementation
-    }
-    
-    getAll(namespace = null) {
-        // Your implementation
-    }
-    
-    _resetAll(
-        namespace = null,
-        withDefaults = true,
-        excludeKeys = []
-    ) {
-        // Your implementation
-    }
-    
-    resetAll(namespace = null, excludeKeys = []) {
-        // Your implementation
-    }
-    
-    removeAll(namespace = null, excludeKeys = []) {
-        // Your implementation
-    }
-    
-}
-```
-
-See [LocalStorageProvider](src/LocalStorageProvider.js) for a full example.
+See [LocalStorageProvider](src/LocalStorageProvider.js) for implementation.
 
 ## Miscellaneous
 
