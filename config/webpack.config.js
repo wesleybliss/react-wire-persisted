@@ -63,10 +63,8 @@ const config = {
         // filename: outputFile,
         library: pkg.name,
         libraryTarget: 'umd',
-        // libraryExport: 'default',
-        /* libraryTarget: 'umd',
         libraryExport: 'default',
-        umdNamedDefine: true, */
+        umdNamedDefine: true,
         globalObject: 'this' // `typeof self !== 'undefined' ? self : this`,
     },
     module: {

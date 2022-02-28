@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "author": "Wesley Bliss <wesley.bliss@gmail.com>",
   "license": "MIT",
-  "main": "lib/react-wire-persisted.min.js",
+  "main": "lib/index.js",
   "files": [
     "package.json",
     "lib"
