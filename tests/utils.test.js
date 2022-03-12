@@ -64,3 +64,33 @@ describe('Utils/Keys', () => {
     })
     
 })
+
+describe('Fake localStorage', () => {
+    
+    test('It has fake key', () => {
+        
+        const key = '__IS_FAKE_LOCAL_STORAGE__'
+        const value = utils.fakeLocalStorage[key]
+        
+        expect(value).toStrictEqual(true)
+        
+    })
+    
+    test('It can read, write, and remove', () => {
+        
+        const key = 'testKey'
+        const expected = 'testValue'
+        
+        utils.fakeLocalStorage.setItem(key, expected)
+        
+        let value = utils.fakeLocalStorage.getItem(key)
+        expect(value).toStrictEqual(expected)
+        
+        utils.fakeLocalStorage.removeItem(key)
+        
+        value = utils.fakeLocalStorage.getItem(key)
+        expect(value).toBe(undefined)
+        
+    })
+    
+})

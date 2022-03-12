@@ -11,9 +11,22 @@ class LocalStorageProvider extends StorageProvider {
         
         super(namespace, registry)
         
+        this.initialize()
+        this.storage = this.getStorage()
+        
+    }
+    
+    initialize() {
+        
         /* istanbul ignore next */
         if (typeof localStorage === 'undefined')
             console.warn('LocalStorageProvider: localStorage not supported')
+        
+    }
+    
+    getStorage() {
+        
+        return window.localStorage
         
     }
     
@@ -42,7 +55,7 @@ class LocalStorageProvider extends StorageProvider {
     
     getItem(key) {
         
-        const val = localStorage.getItem(key)
+        const val = this.storage.getItem(key)
         
         if (val === undefined || val === null)
             return null
@@ -63,7 +76,7 @@ class LocalStorageProvider extends StorageProvider {
         if (val !== undefined && val !== null)
             val = isPrimitive(value) ? value : JSON.stringify(value)
         
-        return localStorage.setItem(key, val)
+        return this.storage.setItem(key, val)
         
     }
     
@@ -72,7 +85,7 @@ class LocalStorageProvider extends StorageProvider {
         if (fromRegistry)
             delete this.registry[key]
         
-        return localStorage.removeItem(key)
+        return this.storage.removeItem(key)
         
     }
     
@@ -80,10 +93,10 @@ class LocalStorageProvider extends StorageProvider {
         
         const prefixNs = `${this.namespace}.`
         
-        return Object.keys(localStorage).reduce((acc, it) => {
+        return Object.keys(this.storage).reduce((acc, it) => {
             
             if (this.namespace ? it.startsWith(prefixNs) : true)
-                acc[it] = localStorage.getItem(it)
+                acc[it] = this.storage.getItem(it)
             
             return acc
             
@@ -111,13 +124,13 @@ class LocalStorageProvider extends StorageProvider {
                 const isRegistered = Object.prototype.hasOwnProperty.call(this.registry, it)
                 
                 if (isRegistered)
-                    localStorage.setItem(it, this.registry[it])
+                    this.storage.setItem(it, this.registry[it])
                 else
-                    localStorage.removeItem(it)
+                    this.storage.removeItem(it)
                 
             } else {
                 
-                localStorage.removeItem(it)
+                this.storage.removeItem(it)
                 
                 if (clearRegistry)
                     delete this.registry[it]
