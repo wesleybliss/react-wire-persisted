@@ -26,9 +26,9 @@ export { prefixedKeys as keys }
 ```javascript
 // index.js
 import { NS } from './constants'
-import * as reactPersistedWire from 'react-wire-persisted'
+import * as reactWirePersisted from 'react-wire-persisted'
 
-reactPersistedWire.setNamespace(NS)
+reactWirePersisted.setNamespace(NS)
 
 // Normal React init code
 ```

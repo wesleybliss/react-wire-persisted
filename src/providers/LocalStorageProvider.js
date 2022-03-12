@@ -13,7 +13,7 @@ class LocalStorageProvider extends StorageProvider {
         
         /* istanbul ignore next */
         if (typeof localStorage === 'undefined')
-            throw new Error('LocalStorageProvider: localStorage not supported')
+            console.warn('LocalStorageProvider: localStorage not supported')
         
     }
     
