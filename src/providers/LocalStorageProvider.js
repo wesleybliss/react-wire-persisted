@@ -1,5 +1,5 @@
 import StorageProvider from './StorageProvider'
-import { isPrimitive } from '../utils'
+import { fakeLocalStorage, isPrimitive } from '../utils'
 
 /**
  * A storage provider for `localStorage`
@@ -11,22 +11,20 @@ class LocalStorageProvider extends StorageProvider {
         
         super(namespace, registry)
         
-        this.initialize()
         this.storage = this.getStorage()
-        
-    }
-    
-    initialize() {
-        
-        /* istanbul ignore next */
-        if (typeof localStorage === 'undefined')
-            console.warn('LocalStorageProvider: localStorage not supported')
         
     }
     
     getStorage() {
         
-        return window.localStorage
+        try {
+            return window.localStorage
+        } catch (e) {
+            /* istanbul ignore next */
+            console.warn('LocalStorageProvider: localStorage not supported')
+            /* istanbul ignore next */
+            return fakeLocalStorage
+        }
         
     }
     
