@@ -120,6 +120,18 @@ describe('LocalStorageProvider', () => {
         
     })
     
+    test('Writes numbers to JSON correctly', () => {
+        
+        const key = keyFor('foo')
+        const values = [0, 1, 2.3, 45.6789]
+        
+        values.forEach(value => {
+            storage.setItem(key, value)
+            expect(storage.getItem(key)).toStrictEqual(value)
+        })
+        
+    })
+    
     test('Removes items successfully, but keeps registry', () => {
         
         const key = keyFor('foo')
