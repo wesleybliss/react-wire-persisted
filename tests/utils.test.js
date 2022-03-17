@@ -4,7 +4,7 @@ describe('Utils', () => {
     
     test('isPrimitive', () => {
         
-        const primitives = [1, true, 'hello']
+        const primitives = [null, 1, true, 'hello']
         const unprimitives = [{}, new Error('test')]
         
         expect(utils.isPrimitive([])).toBe(false)

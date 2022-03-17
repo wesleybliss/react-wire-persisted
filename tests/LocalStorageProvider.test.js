@@ -127,7 +127,9 @@ describe('LocalStorageProvider', () => {
         
         values.forEach(value => {
             storage.setItem(key, value)
-            expect(storage.getItem(key)).toStrictEqual(value)
+            const storedValue = storage.getItem(key)
+            expect(storedValue).toStrictEqual(value)
+            expect(typeof storedValue).toStrictEqual(typeof value)
         })
         
     })

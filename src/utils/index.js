@@ -11,8 +11,9 @@ export const isPrimitive = val => {
     
     const type = typeof val
     
+    if (val === null) return true
     if (Array.isArray(val)) return false
-    if (type === 'object') return val === null
+    if (type === 'object') return false
     
     return type !== 'function'
     

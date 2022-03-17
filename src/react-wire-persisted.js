@@ -61,7 +61,9 @@ export const createPersistedWire = (key, value = null) => {
     }
     
     const storedValue = storage.getItem(key)
-    const initialValue = storedValue === false ? false : (storedValue || value)
+    
+    // const initialValue = storedValue === false ? false : (storedValue || value)
+    const initialValue = storedValue === null ? value : storedValue
     
     if (initialValue !== value)
         setValue(initialValue)

@@ -101,4 +101,42 @@ describe('react-wire-persisted', () => {
         
     })
     
+    test('createPeristedWire() with existing stored numbers', () => {
+        
+        const fn = value => {
+            
+            const key = 'foo.bar'
+            const changedValue = -1
+            
+            expect(localStorage.getItem(key)).toBe(null)
+            expect(rwp.getStorage().getItem(key)).toBe(null)
+            
+            const wire = rwp.createPersistedWire(key, value)
+            wire.setValue(value)
+            
+            // Note: localStorage compares to the stringified value, since that's how it stores data
+            expect(wire.getValue()).toStrictEqual(value)
+            expect(localStorage.getItem(key)).toStrictEqual(value.toString())
+            expect(rwp.getStorage().getItem(key)).toStrictEqual(value)
+            
+            // rwp.getStorage().setItem(key, value)
+            const otherWire = rwp.createPersistedWire(key, changedValue, true)
+            
+            // Note: localStorage compares to the stringified value, since that's how it stores data
+            expect(wire.getValue()).toStrictEqual(value)
+            expect(otherWire.getValue()).toStrictEqual(value)
+            
+            // Since we didn't call setValue, the Wire value is changed, but not the persisted value
+            expect(localStorage.getItem(key)).toStrictEqual(value.toString())
+            
+            localStorage.clear()
+            
+        }
+        
+        const values = [0, 1, 2.3, 45.6789]
+        
+        values.forEach(fn)
+        
+    })
+    
 })
