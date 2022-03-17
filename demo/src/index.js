@@ -6,6 +6,10 @@ import App from './components/App'
 
 import './index.css'
 
+reactPersistedWire.setOptions({
+    logging: true,
+})
+
 reactPersistedWire.setNamespace(NS)
 
 ReactDOM.render(

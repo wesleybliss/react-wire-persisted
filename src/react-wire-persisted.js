@@ -1,15 +1,21 @@
 import { createWire } from '@forminator/react-wire'
 import LocalStorageProvider from './providers/LocalStorageProvider'
 
+export const defaultOptions = {
+    logging: false,
+}
+
 let Provider = LocalStorageProvider
 let storage = new Provider()
+let options = { ...defaultOptions }
+let pendingLogs = []
 
 /**
  * Gets the namespace of the storage provider
  * 
  * @returns {String}
  */
-export const getNamespace = () => storage?.namespace || null
+export const getNamespace = () => storage.namespace
 
 /**
  * Gets the current storage provider class instance
@@ -17,6 +23,8 @@ export const getNamespace = () => storage?.namespace || null
  * @returns {StorageProvider}
  */
 export const getStorage = () => storage
+
+export const getOptions = () => options
 
 /**
  * Sets the namespace for the storage provider
@@ -26,6 +34,29 @@ export const getStorage = () => storage
 export const setNamespace = namespace => {
     storage.setNamespace(namespace)
     storage = new Provider(namespace || getNamespace())
+}
+
+export const setOptions = value => {
+    options = {
+        ...options,
+        ...value,
+    }
+    /* istanbul ignore next */
+    if (options.logging) {
+        console.info('Flushing', pendingLogs.length, 'pending logs')
+        while (pendingLogs.length)
+            /* istanbul ignore next */
+            console.log(...pendingLogs.shift())
+    }
+}
+
+const log = (...args) => {
+    /* istanbul ignore next */
+    if (options.logging.enabled)
+        /* istanbul ignore next */
+        console.log(...args)
+    else
+        pendingLogs.push(args)
 }
 
 /**
@@ -61,9 +92,13 @@ export const createPersistedWire = (key, value = null) => {
     }
     
     const storedValue = storage.getItem(key)
-    
-    // const initialValue = storedValue === false ? false : (storedValue || value)
     const initialValue = storedValue === null ? value : storedValue
+    
+    log('react-wire-persisted: create', key, {
+        value,
+        storedValue,
+        initialValue,
+    })
     
     if (initialValue !== value)
         setValue(initialValue)

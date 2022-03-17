@@ -56,7 +56,7 @@ if (config.mode === 'production') {
     
 } else {
     
-    config.entry.push(paths.demo('src/index.js'))
+    config.entry.demo = paths.demo('src/index.js')
     config.devtool = 'inline-source-map'
     config.devServer = {
         historyApiFallback: true,

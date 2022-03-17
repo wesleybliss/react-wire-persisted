@@ -3,6 +3,7 @@ import { createPersistedWire } from '../../src/react-wire-persisted'
 import { keys } from './constants'
 
 export const demoText = createPersistedWire(keys.demoText, 'Hello world!')
+export const demoNumber = createPersistedWire(keys.demoNumber, 1)
 
 export const categories = createWire(null)
 export const selectedCategoryId = createPersistedWire(keys.selectedCategoryId, null)

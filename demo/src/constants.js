@@ -3,6 +3,7 @@ import { key, getPrefixedKeys } from '../../src/utils'
 export const NS = 'react-persisted-wire-demo'
 
 key('demoText')
+key('demoNumber')
 
 key('selectedCategoryId')
 key('selectedPersonName')

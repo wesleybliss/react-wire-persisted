@@ -12,6 +12,7 @@ const DemoActions = () => {
     const [inputText, setInputText] = useState('')
     
     const [demoText, setDemoText] = useWireState(store.demoText)
+    const [demoNumber, setDemoNumber] = useWireState(store.demoNumber)
     
     const handleLogAllClick = () => {
         console.log(getStorage().getAll())
@@ -23,6 +24,13 @@ const DemoActions = () => {
     
     const handleSaveDemoText = () => {
         setDemoText(inputText)
+    }
+    
+    const handledemoNumberChange = e => {
+        const parsed = parseInt(e.target.value, 10)
+        if (parsed.toString() !== e.target.value)
+            return
+        setDemoNumber(parsed)
     }
     
     useEffect(() => setInputText(demoText), [demoText])
@@ -46,6 +54,15 @@ const DemoActions = () => {
                 <Button onClick={handleSaveDemoText}>
                     Change Demo Text
                 </Button>
+            </div>
+            
+            <div className="mx-2 p-2 flex justify-center items-center content-center bg-gray-200">
+                <TextInput
+                    className="mr-2"
+                    type="number"
+                    value={demoNumber?.toString() ?? ''}
+                    placeholder="42 (auto saves)"
+                    onChange={handledemoNumberChange} />
             </div>
             
         </div>

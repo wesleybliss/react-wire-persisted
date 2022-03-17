@@ -17,6 +17,18 @@ describe('react-wire-persisted', () => {
         
     })
     
+    test('setOptions', () => {
+        
+        const expected = { logging: true }
+        
+        expect(rwp.getOptions()).toStrictEqual(rwp.defaultOptions)
+        
+        rwp.setOptions(expected)
+        
+        expect(rwp.getOptions()).toStrictEqual(expected)
+        
+    })
+    
     test('getNamespace()', () => {
         
         expect(rwp.getNamespace()).toBe(namespace)
