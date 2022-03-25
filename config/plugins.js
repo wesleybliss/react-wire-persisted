@@ -1,5 +1,4 @@
 const webpack = require('webpack')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const InterpolateHtmlPlugin = require('interpolate-html-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
@@ -8,9 +7,7 @@ const paths = require('./paths')
 
 const plugins = {}
 
-plugins.production = [
-    new CleanWebpackPlugin(),
-]
+plugins.production = []
 
 plugins.development = [
     ...plugins.production,

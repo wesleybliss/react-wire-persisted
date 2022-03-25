@@ -2,7 +2,9 @@ import { createWire } from '@forminator/react-wire'
 import LocalStorageProvider from './providers/LocalStorageProvider'
 
 export const defaultOptions = {
-    logging: false,
+    logging: {
+        enabled: false,
+    },
 }
 
 let Provider = LocalStorageProvider
@@ -42,7 +44,7 @@ export const setOptions = value => {
         ...value,
     }
     /* istanbul ignore next */
-    if (options.logging) {
+    if (options.logging.enabled) {
         console.info('Flushing', pendingLogs.length, 'pending logs')
         while (pendingLogs.length)
             /* istanbul ignore next */
