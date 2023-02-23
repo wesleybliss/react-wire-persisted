@@ -1,6 +1,6 @@
-import * as utils from '../src/utils'
+import * as utils from '../../src/utils'
 
-describe('Utils', () => {
+test('Utils', () => {
     
     test('isPrimitive', () => {
         
@@ -21,7 +21,7 @@ describe('Utils', () => {
     
 })
 
-describe('Utils/Keys', () => {
+test('Utils/Keys', () => {
     
     test('key(), addKey(), getKeys()', () => {
         
@@ -65,7 +65,7 @@ describe('Utils/Keys', () => {
     
 })
 
-describe('Fake localStorage', () => {
+test('Fake localStorage', () => {
     
     test('It has fake key', () => {
         

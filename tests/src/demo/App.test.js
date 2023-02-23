@@ -1,5 +1,6 @@
+import '../../setup'
 import { render, fireEvent, waitFor, screen } from '@testing-library/react'
-import App from '../../demo/src/components/App'
+import App from '../../../demo/src/components/App'
 
 test('App renders', async () => {
     

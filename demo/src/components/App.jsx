@@ -11,7 +11,7 @@ const App = () => {
         <div className="App w-full h-screen overflow-y-auto flex flex-col">
             
             <header className="App-header w-full p-8 text-2xl">
-                {process.env.TITLE}
+                React Wire Persisted (Demo)
             </header>
             
             <aside className="px-8 pt-3">

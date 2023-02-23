@@ -1,50 +1,34 @@
-import { defineConfig } from 'vite'
+import { defineConfig, mergeConfig, splitVendorChunkPlugin as vendor } from 'vite'
 import react from '@vitejs/plugin-react'
-import svgrPlugin from 'vite-plugin-svgr'
 import { getEnvironmentVars, loadEnvironment } from './config/environment'
-import aliases from './config/aliases'
-import injectProcessEnv from 'rollup-plugin-inject-process-env'
+import testingConfig from './config/vite.config.testing'
+import developmentConfig from './config/vite.config.development'
+import productionConfig from './config/vite.config.production'
 
 const env = getEnvironmentVars()
+const isProduction = process.env.NODE_ENV === 'production'
 
-const developmentConfig = {
+const config = {
+    root: __dirname,
+    define: loadEnvironment(env),
+    plugins: [
+        react(),
+    ],
+    build: {
+        sourcemap: process.env.SOURCEMAPS || isProduction,
+    },
+    esbuild: {
+        jsxInject: `import React from 'react'`,
+    },
     server: {
         port: process.env.PORT || 3000,
     },
 }
 
-const productionConfig = {
-    build: {
-        rollupOptions: {
-            // @todo investigate if this is useful
-            /* input: {
-                main: path.resolve(__dirname, '../src/index.html'),
-                dashboard: path.resolve(__dirname, '../dashboard/index.html'),
-            }, */
-            plugins: [
-                injectProcessEnv(env, { verbose: false }),
-            ],
-        },
-    },
-}
+const mainConfig = mergeConfig(defineConfig(config), testingConfig)
+const extraConfig = isProduction ? productionConfig : developmentConfig
 
-// https://vitejs.dev/config/
-export default defineConfig({
-    define: loadEnvironment(env),
-    plugins: [
-        react(),
-        svgrPlugin({
-            svgrOptions: {
-                icon: true,
-                // ...svgr options (https://react-svgr.com/docs/options/)
-            },
-        }),
-    ],
-    esbuild: {
-        jsxInject: `import React from 'react'`,
-    },
-    resolve: {
-        alias: aliases,
-    },
-    ...(process.env.NODE_ENV === 'production' ? productionConfig : developmentConfig),
-})
+export default mergeConfig(
+    mainConfig,
+    extraConfig,
+)
