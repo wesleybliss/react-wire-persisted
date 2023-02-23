@@ -20,14 +20,7 @@
     "build": "vite build --config config/vite.config.production.js",
     "test:unit": "NODE_ENV=test vitest run --threads=false",
     "test:unit:only": "NODE_ENV=test vitest run --threads=false -t ",
-    "test:unit:coverage": "NODE_ENV=test vitest run --threads=false --no-color --reporter=junit --coverage --outputFile=coverage/report.xml",
-    "old:test": "jest",
-    "old:test:watch": "jest --watch",
-    "old:test:watch:all": "jest --watchAll",
-    "old:test:watch:coverage": "jest --watch --collectCoverage",
-    "old:test:snapshots": "jest --updateSnapshot",
-    "old:test:coverage": "jest --collectCoverage",
-    "old:test:ci": "jest --runInBand"
+    "test:unit:coverage": "NODE_ENV=test vitest run --threads=false --no-color --reporter=junit --coverage --outputFile=coverage/report.xml"
   },
   "dependencies": {},
   "devDependencies": {
