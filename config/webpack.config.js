@@ -10,8 +10,8 @@ const createConfig = options => {
     const config = {
         mode: process.env.NODE_ENV,
         entry: {
-            [pkg.name]: paths.src('index.js'),
-            ['utils/index']: paths.src('utils/index.js'),
+            [pkg.name]: paths.src('index.ts'),
+            ['utils/index']: paths.src('utils/index.ts'),
         },
         name: options.target,
         target: 'web',
@@ -37,7 +37,7 @@ const createConfig = options => {
                 paths.root('node_modules'),
                 paths.src(),
             ],
-            extensions: ['.js', '.json'],
+            extensions: ['.ts', '.js', '.json'],
         },
     }
     

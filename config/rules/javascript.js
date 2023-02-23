@@ -1,6 +1,6 @@
 
 module.exports = {
-    test: /(\.js|\.jsx)$/,
+    test: /(\.ts|\.js|\.jsx)$/,
     use: {
         loader: 'babel-loader',
     },
