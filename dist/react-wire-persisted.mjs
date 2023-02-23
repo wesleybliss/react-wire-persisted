@@ -12,7 +12,7 @@ import { createWire as b } from "@forminator/react-wire";
 })();
 const m = {}, p = (s) => {
   m[s] = s;
-}, I = (s) => p(s), O = () => m, v = (s, e = null) => {
+}, I = (s) => p(s), O = () => m, S = (s, e = null) => {
   const t = e || m;
   return s ? Object.keys(t).reduce((r, n) => ({
     ...r,
@@ -34,7 +34,7 @@ const m = {}, p = (s) => {
   addKey: p,
   fakeLocalStorage: g,
   getKeys: O,
-  getPrefixedKeys: v,
+  getPrefixedKeys: S,
   isPrimitive: d,
   key: I
 }, Symbol.toStringTag, { value: "Module" }));
@@ -122,7 +122,7 @@ class h {
   removeAll(e = []) {
   }
 }
-class S extends h {
+class v extends h {
   constructor(e = null, t = {}) {
     super(e, t), this.storage = this.getStorage();
   }
@@ -183,13 +183,12 @@ class S extends h {
     this._resetAll(!1, e || [], t);
   }
 }
-console.log("rwp v2");
 const A = {
   logging: {
     enabled: !1
   }
 };
-let y = S, i = new y(), u = { ...A }, f = [];
+let y = v, i = new y(), u = { ...A }, f = [];
 const w = () => i.namespace, x = () => i, _ = () => u, K = (s) => {
   i.setNamespace(s), i = new y(s || w());
 }, V = (s) => {
