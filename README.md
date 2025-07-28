@@ -8,6 +8,16 @@
 $ pnpm add -D @forminator/react-wire react-wire-persisted
 ```
 
+## Building
+
+```shell
+$ pnpm build
+$ npm version patch # patch, minor, major
+$ git push
+$ git push --tags
+$ npm publish
+```
+
 ## Usage
 
 ```javascript
