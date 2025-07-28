@@ -130,7 +130,7 @@ class v extends h {
     try {
       return window.localStorage;
     } catch {
-      return console.warn("LocalStorageProvider: localStorage not supported"), g;
+      return console.warn(new Error("LocalStorageProvider: localStorage not supported")), g;
     }
   }
   setNamespace(e) {
@@ -189,9 +189,9 @@ const A = {
   }
 };
 let y = v, i = new y(), u = { ...A }, f = [];
-const w = () => i.namespace, x = () => i, _ = () => u, K = (s) => {
+const w = () => i.namespace, x = () => i, _ = () => u, E = (s) => {
   i.setNamespace(s), i = new y(s || w());
-}, V = (s) => {
+}, K = (s) => {
   if (u = {
     ...u,
     ...s
@@ -200,7 +200,7 @@ const w = () => i.namespace, x = () => i, _ = () => u, K = (s) => {
       console.log(...f.shift());
 }, N = (...s) => {
   u.logging.enabled ? console.log(...s) : f.push(s);
-}, E = (s, e = null) => {
+}, V = (s, e = null) => {
   if (!s && typeof s != "number")
     throw new Error(
       `createPersistedWire: Key cannot be a falsey value (${s}}`
@@ -221,12 +221,12 @@ const w = () => i.namespace, x = () => i, _ = () => u, K = (s) => {
   };
 };
 export {
-  E as createPersistedWire,
+  V as createPersistedWire,
   A as defaultOptions,
   w as getNamespace,
   _ as getOptions,
   x as getStorage,
-  K as setNamespace,
-  V as setOptions,
+  E as setNamespace,
+  K as setOptions,
   P as utils
 };
