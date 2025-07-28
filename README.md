@@ -5,7 +5,7 @@
 ## Install
 
 ```shell
-$ yarn add -D @forminator/react-wire react-wire-persisted
+$ pnpm add -D @forminator/react-wire react-wire-persisted
 ```
 
 ## Usage
