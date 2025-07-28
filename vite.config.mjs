@@ -1,4 +1,4 @@
-import { defineConfig, mergeConfig, splitVendorChunkPlugin as vendor } from 'vite'
+import { defineConfig, mergeConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { getEnvironmentVars, loadEnvironment } from './config/environment'
 import testingConfig from './config/vite.config.testing'
@@ -16,6 +16,15 @@ const config = {
     ],
     build: {
         sourcemap: process.env.SOURCEMAPS || isProduction,
+        rollupOptions: {
+            output: {
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        return 'vendor';
+                    }
+                }
+            }
+        }
     },
     esbuild: {
         jsxInject: `import React from 'react'`,

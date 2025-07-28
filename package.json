@@ -3,6 +3,7 @@
   "version": "1.5.0",
   "author": "Wesley Bliss <wesley.bliss@gmail.com>",
   "license": "MIT",
+  "type": "module",
   "main": "./dist/react-wire-persisted.umd.cjs",
   "module": "./dist/react-wire-persisted.mjs",
   "files": [
@@ -18,9 +19,9 @@
   "scripts": {
     "dev": "vite --host --config config/vite.config.development.js",
     "build": "vite build --config config/vite.config.production.js",
-    "test:unit": "NODE_ENV=test vitest run --threads=false",
-    "test:unit:only": "NODE_ENV=test vitest run --threads=false -t ",
-    "test:unit:coverage": "NODE_ENV=test vitest run --threads=false --no-color --reporter=junit --coverage --outputFile=coverage/report.xml"
+    "test:unit": "NODE_ENV=test vitest run",
+    "test:unit:only": "NODE_ENV=test vitest run -t ",
+    "test:unit:coverage": "NODE_ENV=test vitest run --no-color --reporter=junit --coverage --outputFile=coverage/report.xml"
   },
   "devDependencies": {
     "@forminator/react-wire": "^0.7.0",
