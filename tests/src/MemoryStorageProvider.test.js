@@ -2,7 +2,7 @@ import MemoryStorageProvider from '../../src/providers/MemoryStorageProvider'
 
 const namespace = 'fakeNamespace'
 
-test('MemoryStorageProvider', () => {
+describe('MemoryStorageProvider', () => {
     
     let storage = null
     
@@ -16,6 +16,7 @@ test('MemoryStorageProvider', () => {
     test('Proves it is using memory storage', () => {
         
         const key = '__IS_FAKE_LOCAL_STORAGE__'
+        storage.setItem(key, true)
         const value = storage.getItem(key)
         
         // console.log('ALL ITEMS', storage.getStorage())

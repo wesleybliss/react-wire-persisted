@@ -2,7 +2,7 @@ import * as rwp from '../../src/react-wire-persisted'
 
 const namespace = 'fakeNamespace'
 
-test('react-wire-persisted', () => {
+describe('react-wire-persisted', () => {
     
     beforeEach(() => {
         

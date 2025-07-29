@@ -4,7 +4,7 @@ import LocalStorageProvider from '../../src/providers/LocalStorageProvider'
 const namespace = 'fakeNamespace'
 const keyFor = key => `${namespace}.${key}`
 
-test('LocalStorageProvider', () => {
+describe('LocalStorageProvider', () => {
     
     let storage = null
     

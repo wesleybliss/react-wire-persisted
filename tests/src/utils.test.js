@@ -1,6 +1,6 @@
 import * as utils from '../../src/utils'
 
-test('Utils', () => {
+describe('Utils', () => {
     
     test('isPrimitive', () => {
         
@@ -21,7 +21,7 @@ test('Utils', () => {
     
 })
 
-test('Utils/Keys', () => {
+describe('Utils/Keys', () => {
     
     test('key(), addKey(), getKeys()', () => {
         
@@ -65,11 +65,12 @@ test('Utils/Keys', () => {
     
 })
 
-test('Fake localStorage', () => {
+describe('Fake localStorage', () => {
     
     test('It has fake key', () => {
         
         const key = '__IS_FAKE_LOCAL_STORAGE__'
+        utils.fakeLocalStorage.setItem(key, true)
         const value = utils.fakeLocalStorage[key]
         
         expect(value).toStrictEqual(true)

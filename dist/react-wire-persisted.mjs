@@ -29,7 +29,7 @@ const m = {}, p = (s) => {
 }, d = (s) => {
   const e = typeof s;
   return s === null ? !0 : Array.isArray(s) || e === "object" ? !1 : e !== "function";
-}, P = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, j = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
   addKey: p,
   fakeLocalStorage: g,
@@ -130,7 +130,7 @@ class v extends h {
     try {
       return window.localStorage;
     } catch {
-      return console.warn("LocalStorageProvider: localStorage not supported"), g;
+      return console.warn(new Error("LocalStorageProvider: localStorage not supported")), g;
     }
   }
   setNamespace(e) {
@@ -172,7 +172,7 @@ class v extends h {
   _resetAll(e = !0, t = [], r = !1) {
     const n = `${this.namespace}.`;
     Object.keys(localStorage).forEach((o) => {
-      const l = this.namespace ? o.startsWith(n) : !0, a = (t == null ? void 0 : t.includes(o)) || !1;
+      const l = this.namespace ? o.startsWith(n) : !0, a = t?.includes(o) || !1;
       !l || a || (e ? Object.prototype.hasOwnProperty.call(this.registry, o) ? this.storage.setItem(o, this.registry[o]) : this.storage.removeItem(o) : (this.storage.removeItem(o), r && delete this.registry[o]));
     });
   }
@@ -189,27 +189,26 @@ const A = {
   }
 };
 let y = v, i = new y(), u = { ...A }, f = [];
-const w = () => i.namespace, x = () => i, _ = () => u, K = (s) => {
+const w = () => i.namespace, K = () => i, P = () => u, _ = (s) => {
   i.setNamespace(s), i = new y(s || w());
-}, V = (s) => {
+}, E = (s) => {
   if (u = {
     ...u,
     ...s
   }, u.logging.enabled)
     for (console.info("Flushing", f.length, "pending logs"); f.length; )
       console.log(...f.shift());
-}, N = (...s) => {
+}, x = (...s) => {
   u.logging.enabled ? console.log(...s) : f.push(s);
-}, E = (s, e = null) => {
-  if (!s && typeof s != "number")
-    throw new Error(
-      `createPersistedWire: Key cannot be a falsey value (${s}}`
-    );
+}, V = (s, e = null) => {
+  if (!s && typeof s != "number") throw new Error(
+    `createPersistedWire: Key cannot be a falsey value (${s}}`
+  );
   i.register(s, e);
   const t = b(e), r = () => t.getValue(), n = (c) => (i.setItem(s, c), t.setValue(c)), o = (c) => {
     t.subscribe(c);
   }, l = i.getItem(s), a = l === null ? e : l;
-  return N("react-wire-persisted: create", s, {
+  return x("react-wire-persisted: create", s, {
     value: e,
     storedValue: l,
     initialValue: a
@@ -221,12 +220,12 @@ const w = () => i.namespace, x = () => i, _ = () => u, K = (s) => {
   };
 };
 export {
-  E as createPersistedWire,
+  V as createPersistedWire,
   A as defaultOptions,
   w as getNamespace,
-  _ as getOptions,
-  x as getStorage,
-  K as setNamespace,
-  V as setOptions,
-  P as utils
+  P as getOptions,
+  K as getStorage,
+  _ as setNamespace,
+  E as setOptions,
+  j as utils
 };

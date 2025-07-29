@@ -21,7 +21,7 @@ class LocalStorageProvider extends StorageProvider {
             return window.localStorage
         } catch (e) {
             /* istanbul ignore next */
-            console.warn('LocalStorageProvider: localStorage not supported')
+            console.warn(new Error('LocalStorageProvider: localStorage not supported'))
             /* istanbul ignore next */
             return fakeLocalStorage
         }
