@@ -1,4 +1,5 @@
-import { createWire as b } from "@forminator/react-wire";
+import { createWire as U } from "@forminator/react-wire";
+import { useRef as b, useEffect as O } from "react";
 (function() {
   const s = {};
   try {
@@ -10,42 +11,62 @@ import { createWire as b } from "@forminator/react-wire";
   }
   globalThis.process = { env: s };
 })();
-const m = {}, p = (s) => {
-  m[s] = s;
-}, I = (s) => p(s), O = () => m, S = (s, e = null) => {
-  const t = e || m;
-  return s ? Object.keys(t).reduce((r, n) => ({
+const y = {}, w = (s) => {
+  y[s] = s;
+}, j = (s) => w(s), x = () => y, N = (s, e = null) => {
+  const t = e || y;
+  return s ? Object.keys(t).reduce((r, o) => ({
     ...r,
-    [n]: `${s}.${t[n]}`
+    [o]: `${s}.${t[o]}`
   }), {}) : t;
 }, g = {
+  __IS_FAKE_LOCAL_STORAGE__: !0
+}, h = {
   getItem: (s) => g[s],
   setItem: (s, e) => {
     g[s] = e;
   },
   removeItem: (s) => {
     delete g[s];
+  },
+  // Make Object.keys() work properly for _resetAll method
+  ...g
+};
+let S = !1, p = !1;
+typeof window < "u" && (S = !0, document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", () => {
+  p = !0;
+}) : p = !0);
+const m = () => S, _ = () => p, d = () => {
+  if (!S) return !1;
+  try {
+    const s = "__rwp_test__";
+    return window.localStorage.setItem(s, "test"), window.localStorage.removeItem(s), !0;
+  } catch {
+    return !1;
   }
-}, d = (s) => {
+}, A = (s) => {
   const e = typeof s;
   return s === null ? !0 : Array.isArray(s) || e === "object" ? !1 : e !== "function";
-}, j = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+}, k = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  addKey: p,
-  fakeLocalStorage: g,
-  getKeys: O,
-  getPrefixedKeys: S,
-  isPrimitive: d,
-  key: I
+  addKey: w,
+  fakeLocalStorage: h,
+  getHasHydrated: _,
+  getIsClient: m,
+  getKeys: x,
+  getPrefixedKeys: N,
+  isLocalStorageAvailable: d,
+  isPrimitive: A,
+  key: j
 }, Symbol.toStringTag, { value: "Module" }));
-class h {
+class I {
   /**
    * Initializes the class
    * @param {String} namespace Namespace to prefix all keys with. Mostly used for the logging & reset functions
    * @param {Object} registry (Optional) Initialize the storage provider with an existing registry
    */
   constructor(e, t) {
-    if (new.target === h)
+    if (new.target === I)
       throw TypeError("StorageProvider is abstract. Extend this class to implement it");
     this.namespace = e || null, this.registry = t || /* istanbul ignore next */
     {};
@@ -122,16 +143,12 @@ class h {
   removeAll(e = []) {
   }
 }
-class v extends h {
+class T extends I {
   constructor(e = null, t = {}) {
-    super(e, t), this.storage = this.getStorage();
+    super(e, t), this.storage = this.getStorage(), this._isUsingFakeStorage = !d();
   }
   getStorage() {
-    try {
-      return window.localStorage;
-    } catch {
-      return console.warn(new Error("LocalStorageProvider: localStorage not supported")), g;
-    }
+    return d() ? window.localStorage : h;
   }
   setNamespace(e) {
     if (!this.namespace) {
@@ -142,9 +159,9 @@ class v extends h {
       return;
     const t = JSON.parse(JSON.stringify(this.getAll()));
     this.removeAll();
-    for (const [r, n] of Object.entries(t)) {
-      const o = r.replace(this.namespace, e);
-      this.setItem(o, n);
+    for (const [r, o] of Object.entries(t)) {
+      const n = r.replace(this.namespace, e);
+      this.setItem(n, o);
     }
     this.namespace = e;
   }
@@ -160,7 +177,7 @@ class v extends h {
   }
   setItem(e, t) {
     let r = t;
-    return r != null && (r = d(t) ? t : JSON.stringify(t)), this.storage.setItem(e, r);
+    return r != null && (r = A(t) ? t : JSON.stringify(t)), this.storage.setItem(e, r);
   }
   removeItem(e, t = !1) {
     return t && delete this.registry[e], this.storage.removeItem(e);
@@ -170,10 +187,10 @@ class v extends h {
     return Object.keys(this.storage).reduce((t, r) => ((!this.namespace || r.startsWith(e)) && (t[r] = this.storage.getItem(r)), t), {});
   }
   _resetAll(e = !0, t = [], r = !1) {
-    const n = `${this.namespace}.`;
-    Object.keys(localStorage).forEach((o) => {
-      const l = this.namespace ? o.startsWith(n) : !0, a = t?.includes(o) || !1;
-      !l || a || (e ? Object.prototype.hasOwnProperty.call(this.registry, o) ? this.storage.setItem(o, this.registry[o]) : this.storage.removeItem(o) : (this.storage.removeItem(o), r && delete this.registry[o]));
+    const o = `${this.namespace}.`;
+    Object.keys(this.storage).forEach((n) => {
+      const a = this.namespace ? n.startsWith(o) : !0, l = t?.includes(n) || !1;
+      !a || l || (e ? Object.prototype.hasOwnProperty.call(this.registry, n) ? this.storage.setItem(n, this.registry[n]) : this.storage.removeItem(n) : (this.storage.removeItem(n), r && delete this.registry[n]));
     });
   }
   resetAll(e = [], t = !1) {
@@ -182,50 +199,111 @@ class v extends h {
   removeAll(e = [], t = !1) {
     this._resetAll(!1, e || [], t);
   }
+  /**
+   * Attempt to upgrade from fake storage to real localStorage
+   * This is useful for hydration scenarios
+   */
+  upgradeToRealStorage() {
+    if (!this._isUsingFakeStorage || !d())
+      return !1;
+    const e = { ...this.storage };
+    return this.storage = window.localStorage, this._isUsingFakeStorage = !1, Object.keys(e).forEach((t) => {
+      if (t !== "__IS_FAKE_LOCAL_STORAGE__" && e[t] != null)
+        try {
+          this.storage.setItem(t, e[t]);
+        } catch {
+          return this.storage = h, this._isUsingFakeStorage = !0, !1;
+        }
+    }), !0;
+  }
+  /**
+   * Check if currently using fake storage
+   */
+  isUsingFakeStorage() {
+    return this._isUsingFakeStorage;
+  }
 }
-const A = {
+const L = {
   logging: {
     enabled: !1
   }
 };
-let y = v, i = new y(), u = { ...A }, f = [];
-const w = () => i.namespace, K = () => i, P = () => u, _ = (s) => {
-  i.setNamespace(s), i = new y(s || w());
-}, E = (s) => {
+let v = T, i = new v(), u = { ...L }, f = [];
+const P = () => i.namespace, V = () => i, $ = () => u, C = (s) => {
+  i.setNamespace(s), i = new v(s || P());
+}, H = (s) => {
   if (u = {
     ...u,
     ...s
   }, u.logging.enabled)
     for (console.info("Flushing", f.length, "pending logs"); f.length; )
       console.log(...f.shift());
-}, x = (...s) => {
+}, K = () => {
+  if (!m())
+    return !1;
+  const s = i.upgradeToRealStorage();
+  return s && E("react-wire-persisted: Upgraded to real localStorage after hydration"), s;
+}, E = (...s) => {
   u.logging.enabled ? console.log(...s) : f.push(s);
-}, V = (s, e = null) => {
+}, W = (s, e = null) => {
   if (!s && typeof s != "number") throw new Error(
     `createPersistedWire: Key cannot be a falsey value (${s}}`
   );
   i.register(s, e);
-  const t = b(e), r = () => t.getValue(), n = (c) => (i.setItem(s, c), t.setValue(c)), o = (c) => {
+  const t = U(e), r = () => t.getValue(), o = (c) => (i.setItem(s, c), t.setValue(c)), n = (c) => {
     t.subscribe(c);
-  }, l = i.getItem(s), a = l === null ? e : l;
-  return x("react-wire-persisted: create", s, {
+  }, a = i.getItem(s), l = a === null ? e : a;
+  return E("react-wire-persisted: create", s, {
     value: e,
-    storedValue: l,
-    initialValue: a
-  }), a !== e && n(a), {
+    storedValue: a,
+    initialValue: l
+  }), l !== e && o(l), {
     ...t,
     getValue: r,
-    setValue: n,
-    subscribe: o
+    setValue: o,
+    subscribe: n
+  };
+}, J = (s = {}) => {
+  const {
+    autoUpgrade: e = !0,
+    onUpgrade: t
+  } = s, r = b(!1);
+  return O(() => {
+    if (!e || r.current || !m())
+      return;
+    const o = () => {
+      _() && !r.current && K() && (r.current = !0, t?.());
+    };
+    o();
+    const n = setTimeout(o, 0);
+    return () => clearTimeout(n);
+  }, [e, t]), {
+    hasUpgraded: r.current
   };
 };
+function D({ children: s, onUpgrade: e, autoUpgrade: t = !0 }) {
+  const r = b(!1);
+  return O(() => {
+    if (!t || r.current || !m())
+      return;
+    const o = () => {
+      _() && !r.current && K() && (r.current = !0, e?.());
+    };
+    o();
+    const n = setTimeout(o, 0);
+    return () => clearTimeout(n);
+  }, [t, e]), s;
+}
 export {
-  V as createPersistedWire,
-  A as defaultOptions,
-  w as getNamespace,
-  P as getOptions,
-  K as getStorage,
-  _ as setNamespace,
-  E as setOptions,
-  j as utils
+  D as HydrationProvider,
+  W as createPersistedWire,
+  L as defaultOptions,
+  P as getNamespace,
+  $ as getOptions,
+  V as getStorage,
+  C as setNamespace,
+  H as setOptions,
+  K as upgradeStorage,
+  J as useHydration,
+  k as utils
 };

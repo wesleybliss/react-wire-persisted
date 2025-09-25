@@ -8,12 +8,23 @@
   "module": "./dist/index.js",
   "files": [
     "src",
-    "dist"
+    "dist",
+    "client.js",
+    "client.mjs",
+    "nextjs.js"
   ],
   "exports": {
     ".": {
       "import": "./dist/react-wire-persisted.js",
       "require": "./dist/react-wire-persisted.umd.cjs"
+    },
+    "./client": {
+      "import": "./client.mjs",
+      "require": "./client.js"
+    },
+    "./nextjs": {
+      "import": "./nextjs.js",
+      "require": "./nextjs.js"
     }
   },
   "scripts": {
@@ -21,7 +32,8 @@
     "build": "vite build --config config/vite.config.production.js && cp dist/react-wire-persisted.js dist/index.js",
     "test:unit": "NODE_ENV=test vitest run",
     "test:unit:only": "NODE_ENV=test vitest run -t ",
-    "test:unit:coverage": "NODE_ENV=test vitest run --no-color --reporter=junit --coverage --outputFile=coverage/report.xml"
+    "test:unit:coverage": "NODE_ENV=test vitest run --no-color --reporter=junit --coverage --outputFile=coverage/report.xml",
+    "yalc": "pnpm build && yalc push"
   },
   "devDependencies": {
     "@forminator/react-wire": "^0.7.0",

@@ -1,5 +1,6 @@
 import { createWire } from '@forminator/react-wire'
 import LocalStorageProvider from './providers/LocalStorageProvider'
+import { getIsClient, getHasHydrated } from './utils'
 
 export const defaultOptions = {
     logging: {
@@ -50,6 +51,26 @@ export const setOptions = value => {
             /* istanbul ignore next */
             console.log(...pendingLogs.shift())
     }
+}
+
+/**
+ * Attempts to upgrade the storage provider from fake storage to real localStorage
+ * This should be called on the client side after hydration
+ *
+ * @returns {Boolean} True if upgrade was successful
+ */
+export const upgradeStorage = () => {
+    if (!getIsClient()) {
+        return false
+    }
+
+    const upgraded = storage.upgradeToRealStorage()
+
+    if (upgraded) {
+        log('react-wire-persisted: Upgraded to real localStorage after hydration')
+    }
+
+    return upgraded
 }
 
 const log = (...args) => {

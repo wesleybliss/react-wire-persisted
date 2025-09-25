@@ -4,11 +4,13 @@ const storage = {
 }
 
 export const fakeLocalStorage = {
-    getItem: key => fakeLocalStorage[key],
+    getItem: key => storage[key],
     setItem: (key, value) => {
-        fakeLocalStorage[key] = value
+        storage[key] = value
     },
     removeItem: key => {
-        delete fakeLocalStorage[key]
-    }
+        delete storage[key]
+    },
+    // Make Object.keys() work properly for _resetAll method
+    ...storage
 }

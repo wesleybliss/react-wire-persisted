@@ -1,5 +1,6 @@
 export * from './keys'
 export * from './fakeLocalStorage'
+export * from './isomorphic'
 
 /**
  * Checks if a value is a primitive type
