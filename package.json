@@ -5,20 +5,20 @@
   "license": "MIT",
   "type": "module",
   "main": "./dist/react-wire-persisted.umd.cjs",
-  "module": "./dist/react-wire-persisted.mjs",
+  "module": "./dist/index.js",
   "files": [
     "src",
     "dist"
   ],
   "exports": {
     ".": {
-      "import": "./dist/react-wire-persisted.mjs",
+      "import": "./dist/react-wire-persisted.js",
       "require": "./dist/react-wire-persisted.umd.cjs"
     }
   },
   "scripts": {
     "dev": "vite --host --config config/vite.config.development.js",
-    "build": "vite build --config config/vite.config.production.js",
+    "build": "vite build --config config/vite.config.production.js && cp dist/react-wire-persisted.js dist/index.js",
     "test:unit": "NODE_ENV=test vitest run",
     "test:unit:only": "NODE_ENV=test vitest run -t ",
     "test:unit:coverage": "NODE_ENV=test vitest run --no-color --reporter=junit --coverage --outputFile=coverage/report.xml"
@@ -47,8 +47,8 @@
   },
   "peerDependencies": {
     "@forminator/react-wire": "^0.5.0-alpha.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "browserslist": {
     "production": [
