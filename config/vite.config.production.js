@@ -26,6 +26,8 @@ const productionConfig = {
                 // for externalized deps
                 globals: {
                     react: 'React',
+                    'react-dom': 'ReactDOM',
+                    '@forminator/react-wire': 'reactWire',
                 },
             },
         },

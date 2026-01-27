@@ -16,10 +16,10 @@ const config = {
         // setupFiles: ['./src/setupTests.ts']
         // globalSetup: [],
         coverage: {
-            provider: 'c8',
+            provider: 'v8',
             reporter: ['text', 'html'],
             include: [
-                '**/tests/src/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}',
+                'src/**',
             ],
             exclude: [
                 'node_modules/',
