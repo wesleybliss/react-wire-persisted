@@ -4,10 +4,11 @@ const namespace = 'fakeNamespace'
 
 describe('react-wire-persisted', () => {
     beforeEach(() => {
+        localStorage.clear()
         rwp.setNamespace(namespace)
+        rwp.getStorage().upgradeToRealStorage()
         rwp.getStorage().removeAll(null, true)
         rwp.getStorage().registry = {}
-        localStorage.clear()
 
         expect(Object.keys(rwp.getStorage().getAll()).length).toBe(0)
         expect(Object.keys(rwp.getStorage().registry).length).toBe(0)

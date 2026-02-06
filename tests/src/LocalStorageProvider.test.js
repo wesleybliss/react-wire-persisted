@@ -11,6 +11,7 @@ describe('LocalStorageProvider', () => {
         localStorage.clear()
         storage?.removeAll(null, true)
         storage = new LocalStorageProvider(namespace)
+        storage.upgradeToRealStorage()
     })
 
     test('Instantiates with a null namespace', () => {

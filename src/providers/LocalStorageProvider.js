@@ -1,4 +1,4 @@
-import { fakeLocalStorage, isLocalStorageAvailable, isPrimitive } from 'src/utils'
+import { fakeLocalStorage, isLocalStorageAvailable, isPrimitive } from '../utils/index.js'
 import StorageProvider from './StorageProvider.js'
 
 /**
