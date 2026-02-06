@@ -1,6 +1,6 @@
 'use client'
 
-import { useHydration } from '../hooks/useHydration'
+import { useHydration } from '../hooks/useHydration.js'
 
 /**
  * A Next.js App Router compatible component that handles automatic storage upgrade

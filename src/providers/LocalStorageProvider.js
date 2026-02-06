@@ -1,5 +1,5 @@
-import StorageProvider from './StorageProvider'
-import { fakeLocalStorage, isPrimitive, isLocalStorageAvailable } from '../utils'
+import StorageProvider from './StorageProvider.js'
+import { fakeLocalStorage, isPrimitive, isLocalStorageAvailable } from '../utils/index.js'
 
 /**
  * A storage provider for `localStorage`
@@ -11,8 +11,10 @@ class LocalStorageProvider extends StorageProvider {
 
         super(namespace, registry)
 
-        this.storage = this.getStorage()
-        this._isUsingFakeStorage = !isLocalStorageAvailable()
+        // Always start with fake storage to prevent hydration mismatches
+        // Will be upgraded to real storage after hydration via upgradeToRealStorage()
+        this.storage = fakeLocalStorage
+        this._isUsingFakeStorage = true
 
     }
     
@@ -161,23 +163,10 @@ class LocalStorageProvider extends StorageProvider {
             return false // Real storage still not available
         }
 
-        const fakeData = { ...this.storage }
+        // Simply switch to real storage - don't migrate fake data
+        // The existing persisted data in localStorage should be preserved
         this.storage = window.localStorage
         this._isUsingFakeStorage = false
-
-        // Migrate data from fake storage to real storage
-        Object.keys(fakeData).forEach(key => {
-            if (key !== '__IS_FAKE_LOCAL_STORAGE__' && fakeData[key] != null) {
-                try {
-                    this.storage.setItem(key, fakeData[key])
-                } catch (e) {
-                    // If we can't write to localStorage, revert to fake storage
-                    this.storage = fakeLocalStorage
-                    this._isUsingFakeStorage = true
-                    return false
-                }
-            }
-        })
 
         return true
     }

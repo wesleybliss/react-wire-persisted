@@ -76,5 +76,8 @@
   },
   "pnpm": {
     "neverBuiltDependencies": []
+  },
+  "dependencies": {
+    "react-wire-persisted": "^2.0.1"
   }
 }

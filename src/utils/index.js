@@ -1,6 +1,6 @@
-export * from './keys'
-export * from './fakeLocalStorage'
-export * from './isomorphic'
+export * from './keys.js'
+export * from './fakeLocalStorage.js'
+export * from './isomorphic.js'
 
 /**
  * Checks if a value is a primitive type

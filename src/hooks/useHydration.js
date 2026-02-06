@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { upgradeStorage } from '../react-wire-persisted'
-import { getIsClient, getHasHydrated } from '../utils'
+import { upgradeStorage } from '../react-wire-persisted.js'
+import { getIsClient, getHasHydrated } from '../utils/index.js'
 
 /**
  * React hook that handles automatic storage upgrade after hydration

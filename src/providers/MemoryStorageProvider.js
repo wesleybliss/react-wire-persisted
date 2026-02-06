@@ -1,5 +1,5 @@
-import LocalStorageProvider from './LocalStorageProvider'
-import { fakeLocalStorage } from '../utils'
+import LocalStorageProvider from './LocalStorageProvider.js'
+import { fakeLocalStorage } from '../utils/index.js'
 
 class MemoryStorageProvider extends LocalStorageProvider {
     

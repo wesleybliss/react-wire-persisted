@@ -4,19 +4,21 @@
 
 let isClient = false
 let hasHydrated = false
+let hasHydratedStorage = false
 
 // Detect if we're running in a browser environment
 if (typeof window !== 'undefined') {
+    
     isClient = true
-
+    
     // Mark as hydrated when the DOM is ready
-    if (document.readyState === 'loading') {
+    if (document.readyState === 'loading')
         document.addEventListener('DOMContentLoaded', () => {
             hasHydrated = true
         })
-    } else {
+    else
         hasHydrated = true
-    }
+    
 }
 
 /**
@@ -30,17 +32,39 @@ export const getIsClient = () => isClient
 export const getHasHydrated = () => hasHydrated
 
 /**
+ * Check if storage has been hydrated (safe to read from real localStorage)
+ */
+export const getHasHydratedStorage = () => hasHydratedStorage
+
+/**
+ * Mark storage as hydrated (called after upgradeStorage)
+ */
+export const markStorageAsHydrated = () => {
+    
+    hasHydratedStorage = true
+    
+}
+
+/**
  * Check if localStorage is available and safe to use
  */
 export const isLocalStorageAvailable = () => {
+    
     if (!isClient) return false
-
+    
     try {
+        
         const testKey = '__rwp_test__'
+        
         window.localStorage.setItem(testKey, 'test')
         window.localStorage.removeItem(testKey)
+        
         return true
+        
     } catch (e) {
+        
         return false
+        
     }
+    
 }
