@@ -1,39 +1,34 @@
-import * as fs from 'fs'
-import * as path from 'path'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 import dotenv from 'dotenv'
 
 export const getEnvironmentVars = () => {
-    
     const env = path.resolve(__dirname, '../.env')
     const sampleEnv = path.resolve(__dirname, '../sample.env')
-    
+
     if (process.env.IS_CI) {
         const { parsed } = dotenv.config({ path: sampleEnv })
-        return Object.keys(parsed).reduce((acc, it) => ({
-            ...acc,
-            [it]: process.env[it],
-        }), {})
+        return Object.keys(parsed).reduce((acc, it) => {
+            acc[it] = process.env[it]
+            return acc
+        }, {})
     }
-    
-    if (!fs.existsSync(env))
-        return {}
-    
+
+    if (!fs.existsSync(env)) return {}
+
     const { parsed } = dotenv.config({ path: env })
-    
+
     // console.info('Loading env vars from system', parsed)
-    
+
     return parsed
-    
 }
 
 export const loadEnvironment = (existingEnv = null) => {
-    
     const env = existingEnv || getEnvironmentVars()
-    
+
     // For Vite, these need to be the fully qualified process notation
-    return Object.keys(env).reduce((acc, it) => ({
-        ...acc,
-        [`process.env.${it}`]: JSON.stringify(env[it]),
-    }), {})
-    
+    return Object.keys(env).reduce((acc, it) => {
+        acc[`process.env.${it}`] = JSON.stringify(env[it])
+        return acc
+    }, {})
 }

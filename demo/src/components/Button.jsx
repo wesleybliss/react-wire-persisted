@@ -1,12 +1,5 @@
-
-const Button = ({
-    children,
-    className,
-    ...props
-}) => {
-    
+const Button = ({ children, className, ...props }) => {
     return (
-        
         <button
             className={`
                 Button px-4 py-3
@@ -18,14 +11,11 @@ const Button = ({
                 rounded
                 ${className || ''}
             `}
-            {...props}>
-            
+            {...props}
+        >
             {children}
-            
         </button>
-        
     )
-    
 }
 
 export default Button

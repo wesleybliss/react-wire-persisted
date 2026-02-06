@@ -1,8 +1,8 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { NS } from './constants'
 import * as reactPersistedWire from '../../src'
 import App from './components/App'
+import { NS } from './constants'
 
 import './index.css'
 
