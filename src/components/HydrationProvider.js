@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import { upgradeStorage } from '../react-wire-persisted.js'
-import { getIsClient, getHasHydrated } from '../utils/index.js'
+import { getHasHydrated, getIsClient } from '../utils/index.js'
 
 /**
  * A Next.js App Router compatible component that handles automatic storage upgrade

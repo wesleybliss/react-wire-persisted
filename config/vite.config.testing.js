@@ -5,10 +5,8 @@ const config = {
         // https://vitest.dev/config
         globals: true,
         environment: 'jsdom',
-        
-        include: [
-            `**/tests/src/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}`,
-        ],
+
+        include: [`**/tests/src/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}`],
 
         // open: true, // experimental
         // silent: true,
@@ -18,12 +16,8 @@ const config = {
         coverage: {
             provider: 'v8',
             reporter: ['text', 'html'],
-            include: [
-                'src/**',
-            ],
-            exclude: [
-                'node_modules/',
-            ],
+            include: ['src/**'],
+            exclude: ['node_modules/'],
 
             // 'reports-dir': __dirname + '/coverage'
         },

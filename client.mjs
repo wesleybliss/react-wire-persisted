@@ -16,7 +16,7 @@ const isLocalStorageAvailable = () => {
         window.localStorage.setItem(testKey, 'test')
         window.localStorage.removeItem(testKey)
         return true
-    } catch (e) {
+    } catch (_) {
         return false
     }
 }
@@ -30,10 +30,11 @@ const fakeStorage = {
     },
     removeItem: (key) => {
         delete fakeStorage.data[key]
-    }
+    },
 }
 
 // Get current storage (real or fake)
+// biome-ignore lint/correctness/noUnusedVariables: client usage only
 const getCurrentStorage = () => {
     return isLocalStorageAvailable() ? window.localStorage : fakeStorage
 }
@@ -52,7 +53,7 @@ const upgradeStorageToReal = () => {
     try {
         // Move data from fake to real storage
         const fakeData = { ...fakeStorage.data }
-        Object.keys(fakeData).forEach(key => {
+        Object.keys(fakeData).forEach((key) => {
             if (fakeData[key] != null) {
                 window.localStorage.setItem(key, fakeData[key])
             }
@@ -61,7 +62,7 @@ const upgradeStorageToReal = () => {
         // Clear fake storage
         fakeStorage.data = {}
         return true
-    } catch (e) {
+    } catch (_) {
         return false
     }
 }

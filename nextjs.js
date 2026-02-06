@@ -13,7 +13,5 @@
  */
 
 // Re-export HydrationProvider as NextJSHydrationProvider for backwards compatibility
-export { HydrationProvider as NextJSHydrationProvider } from './src/components/HydrationProvider.js'
-
 // Also export the main HydrationProvider
-export { HydrationProvider } from './src/components/HydrationProvider.js'
+export { HydrationProvider as NextJSHydrationProvider, HydrationProvider } from './src/components/HydrationProvider.js'

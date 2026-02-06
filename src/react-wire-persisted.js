@@ -1,6 +1,6 @@
 import { createWire } from '@forminator/react-wire'
 import LocalStorageProvider from './providers/LocalStorageProvider.js'
-import { getIsClient, getHasHydrated, getHasHydratedStorage, markStorageAsHydrated } from './utils/index.js'
+import { getHasHydratedStorage, getIsClient, markStorageAsHydrated } from './utils/index.js'
 
 // Generate unique instance ID
 const instanceId = Math.random().toString(36).substring(7)
@@ -12,7 +12,7 @@ export const defaultOptions = {
     },
 }
 
-let Provider = LocalStorageProvider
+const Provider = LocalStorageProvider
 
 // Make storage global so all instances share the same storage after upgrade
 console.log('[RWP] About to check global storage, instanceId:', instanceId)
@@ -31,7 +31,7 @@ try {
     storage = new Provider()
 }
 let options = { ...defaultOptions }
-let pendingLogs = []
+const pendingLogs = []
 
 // Use a global registry to handle multiple module instances
 // This ensures all instances share the same wire registry
@@ -50,14 +50,14 @@ console.log('[RWP] registeredWires Map reference in instance:', instanceId, 'siz
 
 /**
  * Gets the namespace of the storage provider
- * 
+ *
  * @returns {String}
  */
 export const getNamespace = () => storage.namespace
 
 /**
  * Gets the current storage provider class instance
- * 
+ *
  * @returns {StorageProvider}
  */
 export const getStorage = () => storage
@@ -69,14 +69,14 @@ export const getOptions = () => options
  *
  * @param {String} namespace The namespace for the storage provider
  */
-export const setNamespace = namespace => {
+export const setNamespace = (namespace) => {
     console.log('[RWP] setNamespace() called with:', namespace, 'registered wires before:', registeredWires.size)
     storage.setNamespace(namespace)
     storage = new Provider(namespace || getNamespace())
     console.log('[RWP] setNamespace() done, registered wires after:', registeredWires.size)
 }
 
-export const setOptions = value => {
+export const setOptions = (value) => {
     options = {
         ...options,
         ...value,
@@ -95,25 +95,23 @@ export const setOptions = value => {
  * Called after storage upgrade to sync wires with persisted values
  */
 const refreshAllWires = () => {
-
     console.log('[RWP] refreshAllWires() called in instance:', instanceId, 'registered wires:', registeredWires.size)
     log('react-wire-persisted: refreshAllWires() called, registered wires:', registeredWires.size)
 
     registeredWires.forEach((wire, key) => {
-
         const storedValue = storage.getItem(key)
         const currentValue = wire.getValue()
 
         console.log('[RWP] Checking wire', key, {
             storedValue,
             currentValue,
-            willUpdate: storedValue !== null && storedValue !== currentValue
+            willUpdate: storedValue !== null && storedValue !== currentValue,
         })
 
         log('react-wire-persisted: Checking wire', key, {
             storedValue,
             currentValue,
-            willUpdate: storedValue !== null && storedValue !== currentValue
+            willUpdate: storedValue !== null && storedValue !== currentValue,
         })
 
         if (storedValue !== null && storedValue !== currentValue) {
@@ -121,9 +119,7 @@ const refreshAllWires = () => {
             log('react-wire-persisted: Refreshing wire', key, 'with stored value', storedValue)
             wire.setValue(storedValue)
         }
-
     })
-
 }
 
 /**
@@ -133,19 +129,17 @@ const refreshAllWires = () => {
  * @returns {Boolean} True if upgrade was successful
  */
 export const upgradeStorage = () => {
-
     console.log('[RWP] upgradeStorage() called in instance:', instanceId, {
         isClient: getIsClient(),
-        isUsingFakeStorage: storage.isUsingFakeStorage()
+        isUsingFakeStorage: storage.isUsingFakeStorage(),
     })
 
     log('react-wire-persisted: upgradeStorage() called', {
         isClient: getIsClient(),
-        isUsingFakeStorage: storage.isUsingFakeStorage()
+        isUsingFakeStorage: storage.isUsingFakeStorage(),
     })
 
-    if (!getIsClient())
-        return false
+    if (!getIsClient()) return false
 
     const upgraded = storage.upgradeToRealStorage()
 
@@ -153,29 +147,23 @@ export const upgradeStorage = () => {
     log('react-wire-persisted: upgradeToRealStorage() returned', upgraded)
 
     if (upgraded) {
-
         markStorageAsHydrated()
         console.log('[RWP] Upgraded to real localStorage, calling refreshAllWires()')
         log('react-wire-persisted: Upgraded to real localStorage after hydration')
 
         // Refresh all wires with stored values
         refreshAllWires()
-
     }
 
     return upgraded
-
 }
 
 const log = (...args) => {
-    
     /* istanbul ignore next */
     if (options.logging.enabled)
         /* istanbul ignore next */
         console.log(...args)
-    else
-        pendingLogs.push(args)
-    
+    else pendingLogs.push(args)
 }
 
 /**
@@ -187,47 +175,49 @@ const log = (...args) => {
  * @returns A new Wire decorated with localStorage functionality
  */
 export const createPersistedWire = (key, value = null) => {
-
     console.log('[RWP] createPersistedWire() called in instance:', instanceId, 'key:', key, 'value:', value)
 
     // This check helps ensure no accidental key typos occur
-    if (!key && (typeof key) !== 'number') throw new Error(
-        `createPersistedWire: Key cannot be a falsey value (${key}}`)
+    if (!key && typeof key !== 'number') throw new Error(`createPersistedWire: Key cannot be a falsey value (${key}}`)
 
     // Track this writable entry so we can easily clear all
     storage.register(key, value)
 
     // The actual Wire backing object
     const wire = createWire(value)
-    
+
     const getValue = () => wire.getValue()
-    
-    const setValue = newValue => {
-        console.log('[RWP] setValue called in instance:', instanceId, 'key:', key, 'isUsingFakeStorage:', storage.isUsingFakeStorage())
+
+    const setValue = (newValue) => {
+        console.log(
+            '[RWP] setValue called in instance:',
+            instanceId,
+            'key:',
+            key,
+            'isUsingFakeStorage:',
+            storage.isUsingFakeStorage(),
+        )
         storage.setItem(key, newValue)
         return wire.setValue(newValue)
     }
-    
-    const subscribe = fn => {
+
+    const subscribe = (fn) => {
         wire.subscribe(fn)
     }
-    
+
     // Always start with default value to ensure SSR consistency
     let initialValue = value
-    
+
     // Only read from storage if we've hydrated OR if storage is already using real localStorage
     // (prevents hydration mismatch in SSR, but allows normal behavior in client-only apps)
     const canReadStorage = getHasHydratedStorage() || !storage.isUsingFakeStorage()
-    
+
     if (canReadStorage && getIsClient()) {
-        
         const storedValue = storage.getItem(key)
-        
-        if (storedValue !== null)
-            initialValue = storedValue
-        
+
+        if (storedValue !== null) initialValue = storedValue
     }
-    
+
     log('react-wire-persisted: create', key, {
         value,
         initialValue,
@@ -235,10 +225,9 @@ export const createPersistedWire = (key, value = null) => {
         isUsingFakeStorage: storage.isUsingFakeStorage(),
         canReadStorage,
     })
-    
-    if (initialValue !== value)
-        setValue(initialValue)
-    
+
+    if (initialValue !== value) setValue(initialValue)
+
     // Register wire for post-hydration refresh
     registeredWires.set(key, {
         getValue,
@@ -246,7 +235,12 @@ export const createPersistedWire = (key, value = null) => {
         subscribe,
     })
 
-    console.log('[RWP] Wire registered, total wires:', registeredWires.size, 'keys:', Array.from(registeredWires.keys()))
+    console.log(
+        '[RWP] Wire registered, total wires:',
+        registeredWires.size,
+        'keys:',
+        Array.from(registeredWires.keys()),
+    )
 
     return {
         ...wire,
@@ -254,5 +248,4 @@ export const createPersistedWire = (key, value = null) => {
         setValue,
         subscribe,
     }
-    
 }

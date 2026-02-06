@@ -1,12 +1,5 @@
-
-const TextInput = ({
-    className,
-    type,
-    ...props
-}) => {
-    
+const TextInput = ({ className, type, ...props }) => {
     return (
-        
         <input
             className={`
                 TextInput
@@ -19,10 +12,9 @@ const TextInput = ({
                 ${className}
             `}
             type={type}
-            {...props} />
-        
+            {...props}
+        />
     )
-    
 }
 
 TextInput.defaultProps = {
