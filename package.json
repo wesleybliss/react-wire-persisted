@@ -30,12 +30,16 @@
   "scripts": {
     "dev": "vite --host --config config/vite.config.development.js",
     "build": "vite build --config config/vite.config.production.js && cp dist/react-wire-persisted.js dist/index.js",
+    "lint": "biome check --write",
+    "lint:format": "biome format --write",
+    "lint:lint": "biome lint --write",
     "test:unit": "NODE_ENV=test vitest run",
     "test:unit:only": "NODE_ENV=test vitest run -t ",
     "test:unit:coverage": "NODE_ENV=test vitest run --no-color --reporter=junit --coverage --outputFile=coverage/report.xml",
     "yalc": "pnpm build && yalc push"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.3.14",
     "@forminator/react-wire": "^0.7.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.8.0",
@@ -53,7 +57,7 @@
     "react-dom": "^19.1.1",
     "rollup-plugin-inject-process-env": "^1.3.1",
     "snapshot-diff": "^0.10.0",
-    "vite": "^7.1.7",
+    "vite": "7.3.1",
     "vite-jest": "^0.1.4",
     "vitest": "^4.0.18"
   },
@@ -71,7 +75,7 @@
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version, not dead"
     ]
   },
   "pnpm": {
