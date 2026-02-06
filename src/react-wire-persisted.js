@@ -4,7 +4,11 @@ import { getHasHydratedStorage, getIsClient, markStorageAsHydrated } from './uti
 
 // Generate unique instance ID
 const instanceId = Math.random().toString(36).substring(7)
-console.log('[RWP] Module initialized, instance ID:', instanceId)
+const rwpLog = (...args) => {
+    if (typeof globalThis !== 'undefined' && globalThis.__RWP_LOGGING_ENABLED__ !== false) {
+        console.log(...args)
+    }
+}
 
 export const defaultOptions = {
     logging: {
@@ -12,22 +16,29 @@ export const defaultOptions = {
     },
 }
 
+// Set global logging flag on startup
+if (typeof globalThis !== 'undefined' && globalThis.__RWP_LOGGING_ENABLED__ === undefined) {
+    globalThis.__RWP_LOGGING_ENABLED__ = defaultOptions.logging.enabled
+}
+
+rwpLog('[RWP] Module initialized, instance ID:', instanceId)
+
 const Provider = LocalStorageProvider
 
 // Make storage global so all instances share the same storage after upgrade
-console.log('[RWP] About to check global storage, instanceId:', instanceId)
+rwpLog('[RWP] About to check global storage, instanceId:', instanceId)
 let storage
 try {
     if (!globalThis.__RWP_STORAGE__) {
-        console.log('[RWP] Creating global storage in instance:', instanceId)
+        rwpLog('[RWP] Creating global storage in instance:', instanceId)
         globalThis.__RWP_STORAGE__ = new Provider()
     } else {
-        console.log('[RWP] Using existing global storage in instance:', instanceId)
+        rwpLog('[RWP] Using existing global storage in instance:', instanceId)
     }
     storage = globalThis.__RWP_STORAGE__
-    console.log('[RWP] Storage assigned successfully')
+    rwpLog('[RWP] Storage assigned successfully')
 } catch (error) {
-    console.error('[RWP] Error setting up global storage:', error)
+    if (globalThis.__RWP_LOGGING_ENABLED__) console.error('[RWP] Error setting up global storage:', error)
     storage = new Provider()
 }
 let options = { ...defaultOptions }
@@ -37,16 +48,16 @@ const pendingLogs = []
 // This ensures all instances share the same wire registry
 if (typeof globalThis !== 'undefined') {
     if (!globalThis.__RWP_REGISTERED_WIRES__) {
-        console.log('[RWP] Creating global registeredWires in instance:', instanceId)
+        rwpLog('[RWP] Creating global registeredWires in instance:', instanceId)
         globalThis.__RWP_REGISTERED_WIRES__ = new Map()
     } else {
-        console.log('[RWP] Using existing global registeredWires in instance:', instanceId)
+        rwpLog('[RWP] Using existing global registeredWires in instance:', instanceId)
     }
 }
 
 // Registry to track wire instances for hydration refresh
 const registeredWires = globalThis.__RWP_REGISTERED_WIRES__ || new Map()
-console.log('[RWP] registeredWires Map reference in instance:', instanceId, 'size:', registeredWires.size)
+rwpLog('[RWP] registeredWires Map reference in instance:', instanceId, 'size:', registeredWires.size)
 
 /**
  * Gets the namespace of the storage provider
@@ -70,16 +81,20 @@ export const getOptions = () => options
  * @param {String} namespace The namespace for the storage provider
  */
 export const setNamespace = (namespace) => {
-    console.log('[RWP] setNamespace() called with:', namespace, 'registered wires before:', registeredWires.size)
+    rwpLog('[RWP] setNamespace() called with:', namespace, 'registered wires before:', registeredWires.size)
     storage.setNamespace(namespace)
     storage = new Provider(namespace || getNamespace())
-    console.log('[RWP] setNamespace() done, registered wires after:', registeredWires.size)
+    rwpLog('[RWP] setNamespace() done, registered wires after:', registeredWires.size)
 }
 
 export const setOptions = (value) => {
     options = {
         ...options,
         ...value,
+    }
+    // Update global logging flag
+    if (typeof globalThis !== 'undefined') {
+        globalThis.__RWP_LOGGING_ENABLED__ = options.logging.enabled
     }
     /* istanbul ignore next */
     if (options.logging.enabled) {
@@ -95,14 +110,14 @@ export const setOptions = (value) => {
  * Called after storage upgrade to sync wires with persisted values
  */
 const refreshAllWires = () => {
-    console.log('[RWP] refreshAllWires() called in instance:', instanceId, 'registered wires:', registeredWires.size)
+    rwpLog('[RWP] refreshAllWires() called in instance:', instanceId, 'registered wires:', registeredWires.size)
     log('react-wire-persisted: refreshAllWires() called, registered wires:', registeredWires.size)
 
     registeredWires.forEach((wire, key) => {
         const storedValue = storage.getItem(key)
         const currentValue = wire.getValue()
 
-        console.log('[RWP] Checking wire', key, {
+        rwpLog('[RWP] Checking wire', key, {
             storedValue,
             currentValue,
             willUpdate: storedValue !== null && storedValue !== currentValue,
@@ -115,7 +130,7 @@ const refreshAllWires = () => {
         })
 
         if (storedValue !== null && storedValue !== currentValue) {
-            console.log('[RWP] Refreshing wire', key, 'with stored value', storedValue)
+            rwpLog('[RWP] Refreshing wire', key, 'with stored value', storedValue)
             log('react-wire-persisted: Refreshing wire', key, 'with stored value', storedValue)
             wire.setValue(storedValue)
         }
@@ -129,7 +144,7 @@ const refreshAllWires = () => {
  * @returns {Boolean} True if upgrade was successful
  */
 export const upgradeStorage = () => {
-    console.log('[RWP] upgradeStorage() called in instance:', instanceId, {
+    rwpLog('[RWP] upgradeStorage() called in instance:', instanceId, {
         isClient: getIsClient(),
         isUsingFakeStorage: storage.isUsingFakeStorage(),
     })
@@ -143,12 +158,12 @@ export const upgradeStorage = () => {
 
     const upgraded = storage.upgradeToRealStorage()
 
-    console.log('[RWP] upgradeToRealStorage() returned', upgraded)
+    rwpLog('[RWP] upgradeToRealStorage() returned', upgraded)
     log('react-wire-persisted: upgradeToRealStorage() returned', upgraded)
 
     if (upgraded) {
         markStorageAsHydrated()
-        console.log('[RWP] Upgraded to real localStorage, calling refreshAllWires()')
+        rwpLog('[RWP] Upgraded to real localStorage, calling refreshAllWires()')
         log('react-wire-persisted: Upgraded to real localStorage after hydration')
 
         // Refresh all wires with stored values
@@ -175,7 +190,7 @@ const log = (...args) => {
  * @returns A new Wire decorated with localStorage functionality
  */
 export const createPersistedWire = (key, value = null) => {
-    console.log('[RWP] createPersistedWire() called in instance:', instanceId, 'key:', key, 'value:', value)
+    rwpLog('[RWP] createPersistedWire() called in instance:', instanceId, 'key:', key, 'value:', value)
 
     // This check helps ensure no accidental key typos occur
     if (!key && typeof key !== 'number') throw new Error(`createPersistedWire: Key cannot be a falsey value (${key}}`)
@@ -189,7 +204,7 @@ export const createPersistedWire = (key, value = null) => {
     const getValue = () => wire.getValue()
 
     const setValue = (newValue) => {
-        console.log(
+        rwpLog(
             '[RWP] setValue called in instance:',
             instanceId,
             'key:',
@@ -235,12 +250,7 @@ export const createPersistedWire = (key, value = null) => {
         subscribe,
     })
 
-    console.log(
-        '[RWP] Wire registered, total wires:',
-        registeredWires.size,
-        'keys:',
-        Array.from(registeredWires.keys()),
-    )
+    rwpLog('[RWP] Wire registered, total wires:', registeredWires.size, 'keys:', Array.from(registeredWires.keys()))
 
     return {
         ...wire,
