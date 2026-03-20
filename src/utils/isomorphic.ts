@@ -2,9 +2,9 @@
  * Utilities for handling server-side rendering and client-side hydration
  */
 
-let isClient = false
-let hasHydrated = false
-let hasHydratedStorage = false
+let isClient: boolean = false
+let hasHydrated: boolean = false
+let hasHydratedStorage: boolean = false
 
 // Detect if we're running in a browser environment
 if (typeof window !== 'undefined') {
@@ -21,29 +21,29 @@ if (typeof window !== 'undefined') {
 /**
  * Check if we're running in a browser environment
  */
-export const getIsClient = () => isClient
+export const getIsClient = (): boolean => isClient
 
 /**
  * Check if the client has finished hydrating
  */
-export const getHasHydrated = () => hasHydrated
+export const getHasHydrated = (): boolean => hasHydrated
 
 /**
  * Check if storage has been hydrated (safe to read from real localStorage)
  */
-export const getHasHydratedStorage = () => hasHydratedStorage
+export const getHasHydratedStorage = (): boolean => hasHydratedStorage
 
 /**
  * Mark storage as hydrated (called after upgradeStorage)
  */
-export const markStorageAsHydrated = () => {
+export const markStorageAsHydrated = (): void => {
     hasHydratedStorage = true
 }
 
 /**
  * Check if localStorage is available and safe to use
  */
-export const isLocalStorageAvailable = () => {
+export const isLocalStorageAvailable = (): boolean => {
     if (!isClient) return false
 
     try {

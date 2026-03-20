@@ -1,4 +1,4 @@
-import MemoryStorageProvider from '../../src/providers/MemoryStorageProvider'
+import MemoryStorageProvider from 'src/providers/MemoryStorageProvider'
 
 const namespace = 'fakeNamespace'
 

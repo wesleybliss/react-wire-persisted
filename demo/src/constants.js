@@ -1,4 +1,4 @@
-import { getPrefixedKeys, key } from '../../src/utils'
+import { getPrefixedKeys, key } from 'src/utils'
 
 export const NS = 'react-persisted-wire-demo'
 

@@ -2,7 +2,7 @@
 
 import { useWireState } from '@forminator/react-wire'
 import { useEffect, useState } from 'react'
-import { getStorage } from '../../../src/react-wire-persisted'
+import { getStorage } from 'src/react-wire-persisted'
 import * as store from '../store'
 
 import Button from './Button'

@@ -23,15 +23,15 @@ export const key = (value) => addKey(value)
 /**
  * Convenience method to get internally managed storage keys
  *
- * @returns {Object} Storage keys map
+ * @returns {Object} InternalStorage keys map
  */
 export const getKeys = () => storageKeys
 
 /**
  * Helper utility to prefix all keys in a map to use a namespace
  *
- * @param {String} namespace Storage namespace prefix
- * @param {Object} keys (Optional) Storage key/values. Defaults to the internally managed keys map
+ * @param {String} namespace InternalStorage namespace prefix
+ * @param {Object} keys (Optional) InternalStorage key/values. Defaults to the internally managed keys map
  */
 export const getPrefixedKeys = (namespace, keys = null) => {
     const items = keys || storageKeys

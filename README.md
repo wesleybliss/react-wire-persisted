@@ -34,7 +34,7 @@ export { prefixedKeys as keys }
 ```
 
 ```javascript
-// index.js
+// index.tsx
 import { NS } from './constants'
 import * as reactWirePersisted from 'react-wire-persisted'
 
@@ -73,7 +73,7 @@ export default SomeComponent
 
 See the [demo](demo) folder for a more complete example.
 
-## Storage Providers
+## InternalStorage Providers
 
 This library uses `localStorage`, and will only work in browser environments.
 

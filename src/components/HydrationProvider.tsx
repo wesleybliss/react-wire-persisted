@@ -1,6 +1,7 @@
 'use client'
 
-import { useHydration } from '../hooks/useHydration.js'
+import { useHydration } from 'src/hooks/useHydration'
+import type { ReactNode } from 'react'
 
 /**
  * A Next.js App Router compatible component that handles automatic storage upgrade
@@ -11,7 +12,22 @@ import { useHydration } from '../hooks/useHydration.js'
  * @param {Function} props.onUpgrade Callback called when storage is upgraded
  * @param {Boolean} props.autoUpgrade Whether to automatically upgrade storage (default: true)
  */
-export function HydrationProvider({ children, onUpgrade, autoUpgrade = true }) {
-    useHydration({ onUpgrade, autoUpgrade })
-    return children
+export type HydrationProviderProps = {
+    children: ReactNode
+    onUpgrade?: () => void
+    autoUpgrade?: boolean
 }
+
+const HydrationProvider = ({
+    children,
+    onUpgrade,
+    autoUpgrade = true,
+}: HydrationProviderProps) => {
+    
+    useHydration({ onUpgrade, autoUpgrade })
+    
+    return children
+    
+}
+
+export default HydrationProvider

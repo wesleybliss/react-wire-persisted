@@ -1,13 +1,13 @@
 import * as path from 'node:path'
 import injectProcessEnv from 'rollup-plugin-inject-process-env'
-import { getEnvironmentVars } from './environment'
+import { getEnvironmentVars } from 'config/environment'
 
 const env = getEnvironmentVars()
 
 const productionConfig = {
     build: {
         lib: {
-            entry: path.resolve(__dirname, '../src/index.js'),
+            entry: path.resolve(__dirname, '../src/index.tsx'),
             name: 'react-wire-persisted',
             fileName: 'react-wire-persisted',
             // formats: ['cjs', 'es'],

@@ -1,8 +1,13 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { upgradeStorage } from '../react-wire-persisted.js'
-import { getHasHydrated, getIsClient } from '../utils/index.js'
+import { upgradeStorage } from '@/react-wire-persisted'
+import { getHasHydrated, getIsClient } from 'src/utils'
+
+export type UseHydrationOptions = {
+    autoUpgrade?: boolean
+    onUpgrade?: () => void
+}
 
 /**
  * React hook that handles automatic storage upgrade after hydration
@@ -12,7 +17,7 @@ import { getHasHydrated, getIsClient } from '../utils/index.js'
  * @param {Boolean} options.autoUpgrade Whether to automatically upgrade storage (default: true)
  * @param {Function} options.onUpgrade Callback called when storage is upgraded
  */
-export const useHydration = (options = {}) => {
+export const useHydration = (options: UseHydrationOptions = {}) => {
     const { autoUpgrade = true, onUpgrade } = options
 
     const hasUpgraded = useRef(false)

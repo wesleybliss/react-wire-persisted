@@ -1,5 +1,5 @@
 import react from '@vitejs/plugin-react'
-import { defineConfig, mergeConfig } from 'vite'
+import { defineConfig, mergeConfig, type UserConfig } from 'vite'
 import { getEnvironmentVars, loadEnvironment } from './config/environment'
 import developmentConfig from './config/vite.config.development'
 import productionConfig from './config/vite.config.production'
@@ -13,7 +13,7 @@ const config = {
     define: loadEnvironment(env),
     plugins: [react()],
     build: {
-        sourcemap: process.env.SOURCEMAPS || isProduction,
+        sourcemap: !!process.env.SOURCEMAPS || isProduction,
         rollupOptions: {
             output: {
                 manualChunks(id) {
@@ -28,9 +28,9 @@ const config = {
         jsxInject: `import React from 'react'`,
     },
     server: {
-        port: process.env.PORT || 3000,
+        port: parseInt(process.env?.PORT ?? '3000', 10),
     },
-}
+} satisfies UserConfig
 
 const mainConfig = mergeConfig(defineConfig(config), testingConfig)
 const extraConfig = isProduction ? productionConfig : developmentConfig

@@ -1,6 +1,6 @@
-import * as utils from './utils'
+import * as utils from 'src/utils'
 
 export { utils }
-export * from './components'
-export * from './hooks/useHydration'
-export * from './react-wire-persisted'
+export * from 'src/components'
+export * from 'src/hooks/useHydration'
+export * from 'src/react-wire-persisted'

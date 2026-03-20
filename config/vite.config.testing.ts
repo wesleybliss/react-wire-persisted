@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitest/config'
+import { defineConfig, type ViteUserConfigExport } from 'vitest/config'
 
 const config = {
     test: {
@@ -22,6 +22,6 @@ const config = {
             // 'reports-dir': __dirname + '/coverage'
         },
     },
-}
+} satisfies ViteUserConfigExport
 
 export default defineConfig(config)

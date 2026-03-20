@@ -1,12 +1,16 @@
-import { fakeLocalStorage, isLocalStorageAvailable, isPrimitive } from '../utils/index.js'
-import StorageProvider from './StorageProvider.js'
+import { fakeLocalStorage, isLocalStorageAvailable } from '@/utils'
+import StorageProvider from '@/providers/StorageProvider'
+import type { AnyStorage } from '@/types'
 
 /**
  * A storage provider for `localStorage`
- * @see `StorageProvider.js` for documentation
+ * @see `StorageProvider.ts` for documentation
  */
 class LocalStorageProvider extends StorageProvider {
-    constructor(namespace = null, registry = {}) {
+    public storage: AnyStorage
+    private _isUsingFakeStorage: boolean
+    
+    constructor(namespace: string, registry: Record<string, unknown> = {}) {
         super(namespace, registry)
 
         // Always start with fake storage to prevent hydration mismatches
@@ -15,17 +19,16 @@ class LocalStorageProvider extends StorageProvider {
         this._isUsingFakeStorage = true
     }
 
-    getStorage() {
+    getStorage(): AnyStorage {
         // Use the isomorphic utility to check localStorage availability
-        if (isLocalStorageAvailable()) {
+        if (isLocalStorageAvailable())
             return window.localStorage
-        }
 
         // Fallback to fake localStorage for SSR or when localStorage is disabled
         return fakeLocalStorage
     }
 
-    setNamespace(namespace) {
+    setNamespace(namespace: string) {
         if (!this.namespace) {
             this.namespace = namespace
             return
@@ -45,7 +48,7 @@ class LocalStorageProvider extends StorageProvider {
         this.namespace = namespace
     }
 
-    getItem(key) {
+    getItem(key: string) {
         const val = this.storage.getItem(key)
 
         if (val === undefined || val === null) return null
@@ -57,32 +60,33 @@ class LocalStorageProvider extends StorageProvider {
         }
     }
 
-    setItem(key, value) {
-        let val = value
-
+    setItem(key: string, value: unknown) {
+        
         // Don't allow "null" & similar values to be stringified
-        if (val !== undefined && val !== null) val = isPrimitive(value) ? value : JSON.stringify(value)
+        if (value === undefined || value === null)
+            return this.removeItem(key)
 
-        return this.storage.setItem(key, val)
+        return this.storage.setItem(key, JSON.stringify(value))
     }
 
-    removeItem(key, fromRegistry = false) {
+    removeItem(key: string, fromRegistry: boolean = false) {
         if (fromRegistry) delete this.registry[key]
 
         return this.storage.removeItem(key)
     }
 
-    getAll() {
+    getAll(): Record<string, unknown> {
         const prefixNs = `${this.namespace}.`
 
         return Object.keys(this.storage).reduce((acc, it) => {
-            if (this.namespace ? it.startsWith(prefixNs) : true) acc[it] = this.storage.getItem(it)
+            if (this.namespace ? it.startsWith(prefixNs) : true)
+                acc[it] = this.storage.getItem(it)
 
             return acc
-        }, {})
+        }, {} as Record<string, unknown>)
     }
 
-    _resetAll(useInitialValues = true, excludedKeys = [], clearRegistry = false) {
+    _resetAll(useInitialValues: boolean = true, excludedKeys: string[] = [], clearRegistry: boolean = false) {
         const prefixNs = `${this.namespace}.`
 
         Object.keys(this.storage).forEach((it) => {
@@ -94,7 +98,11 @@ class LocalStorageProvider extends StorageProvider {
             if (useInitialValues) {
                 const isRegistered = Object.hasOwn(this.registry, it)
 
-                if (isRegistered) this.storage.setItem(it, this.registry[it])
+                if (isRegistered)
+                    if (this.registry[it] === undefined || this.registry[it] === null)
+                        this.storage.removeItem(it)
+                    else
+                        this.storage.setItem(it, JSON.stringify(this.registry[it]))
                 else this.storage.removeItem(it)
             } else {
                 this.storage.removeItem(it)
@@ -104,11 +112,11 @@ class LocalStorageProvider extends StorageProvider {
         })
     }
 
-    resetAll(excludedKeys = [], clearRegistry = false) {
+    resetAll(excludedKeys: string[] = [], clearRegistry: boolean = false) {
         this._resetAll(true, excludedKeys || [], clearRegistry)
     }
 
-    removeAll(excludedKeys = [], clearRegistry = false) {
+    removeAll(excludedKeys: string[] = [], clearRegistry: boolean = false) {
         this._resetAll(false, excludedKeys || [], clearRegistry)
     }
 
@@ -116,14 +124,12 @@ class LocalStorageProvider extends StorageProvider {
      * Attempt to upgrade from fake storage to real localStorage
      * This is useful for hydration scenarios
      */
-    upgradeToRealStorage() {
-        if (!this._isUsingFakeStorage) {
+    upgradeToRealStorage(): boolean {
+        if (!this._isUsingFakeStorage)
             return false // Already using real storage
-        }
 
-        if (!isLocalStorageAvailable()) {
+        if (!isLocalStorageAvailable())
             return false // Real storage still not available
-        }
 
         // Simply switch to real storage - don't migrate fake data
         // The existing persisted data in localStorage should be preserved
@@ -136,7 +142,7 @@ class LocalStorageProvider extends StorageProvider {
     /**
      * Check if currently using fake storage
      */
-    isUsingFakeStorage() {
+    isUsingFakeStorage(): boolean {
         return this._isUsingFakeStorage
     }
 }

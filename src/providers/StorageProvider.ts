@@ -1,15 +1,19 @@
 /**
  * Base class to allow storage access
- * @see `LocalStorageProvider.js` for an example implementation
+ * @see `LocalStorageProvider.ts` for an example implementation
  */
 /** biome-ignore-all lint/correctness/noUnusedFunctionParameters: WIP next PR will switch to TypeScript */
-class StorageProvider {
+abstract class StorageProvider {
+    
+    namespace: string | null
+    registry: Record<string, unknown>
+    
     /**
      * Initializes the class
      * @param {String} namespace Namespace to prefix all keys with. Mostly used for the logging & reset functions
      * @param {Object} registry (Optional) Initialize the storage provider with an existing registry
      */
-    constructor(namespace, registry) {
+    constructor(namespace: string, registry: Record<string, unknown>) {
         // Simulate being an abstract class
         if (new.target === StorageProvider)
             throw TypeError(`StorageProvider is abstract. Extend this class to implement it`)
@@ -24,14 +28,14 @@ class StorageProvider {
      * @param {String} namespace New namespace for this storage provider
      */
     /* istanbul ignore next */
-    setNamespace(namespace) {}
+    abstract setNamespace(namespace: string | null): void
 
     /**
      * Registers an item with it's initial value. This is used for logging, resetting, etc.
-     * @param {String} key Storage item's key
-     * @param {*} initialValue Storage item's initial value
+     * @param {String} key InternalStorage item's key
+     * @param {*} initialValue InternalStorage item's initial value
      */
-    register(key, initialValue) {
+    register(key: string, initialValue: unknown) {
         this.registry[key] = initialValue
     }
 
@@ -40,7 +44,7 @@ class StorageProvider {
      * @param {String} key Key for the item to retrieve
      */
     /* istanbul ignore next */
-    getItem(key) {}
+    abstract getItem(key: string): unknown
 
     /**
      * Stores a value
@@ -48,7 +52,7 @@ class StorageProvider {
      * @param {String} value Item's value to store
      */
     /* istanbul ignore next */
-    setItem(key, value) {}
+    abstract setItem(key: string, value: unknown): void
 
     /**
      * Removes an item from storage
@@ -56,14 +60,14 @@ class StorageProvider {
      * @param {Boolean} fromRegistry (Optional) If the item should also be removed from the registry
      */
     /* istanbul ignore next */
-    removeItem(key, fromRegistry = false) {}
+    abstract removeItem(key: string, fromRegistry: boolean): void
 
     /**
      * Gets all stored keys & values
      * If a `namespace` was set, only keys prefixed with the namespace will be returned
      */
     /* istanbul ignore next */
-    getAll() {}
+    abstract getAll(): Record<string, unknown>
 
     /**
      *
@@ -72,7 +76,7 @@ class StorageProvider {
      * @param {Boolean} clearRegistry (Optional) If the registry should also be cleared
      */
     /* istanbul ignore next */
-    _resetAll(useInitialValues = true, excludedKeys = [], clearRegistry = false) {}
+    abstract _resetAll(useInitialValues: boolean, excludedKeys: string[], clearRegistry: boolean): void
 
     /**
      * Resets all values to their initial values
@@ -80,7 +84,7 @@ class StorageProvider {
      * @param {String[]} excludedKeys (Optional) List of keys to exclude
      */
     /* istanbul ignore next */
-    resetAll(excludedKeys = []) {}
+    abstract resetAll(excludedKeys: string[]): void
 
     /**
      * Removes all items from local storage.
@@ -88,7 +92,15 @@ class StorageProvider {
      * @param {String[]} excludedKeys (Optional) List of keys to exclude
      */
     /* istanbul ignore next */
-    removeAll(excludedKeys = []) {}
+    abstract removeAll(excludedKeys: string[]): void
+    
+    upgradeToRealStorage(): boolean {
+        return false
+    }
+    
+    isUsingFakeStorage(): boolean {
+        return false
+    }
 }
 
 export default StorageProvider

@@ -1,8 +1,8 @@
-import { fakeLocalStorage } from '../utils/index.js'
-import LocalStorageProvider from './LocalStorageProvider.js'
+import { fakeLocalStorage } from 'src/utils'
+import LocalStorageProvider from './LocalStorageProvider'
 
 class MemoryStorageProvider extends LocalStorageProvider {
-    constructor(namespace = null, registry = {}) {
+    constructor(namespace: string, registry: Record<string, unknown> = {}) {
         super(namespace, registry)
     }
 

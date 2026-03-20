@@ -1,6 +1,6 @@
-export * from './fakeLocalStorage.js'
-export * from './isomorphic.js'
-export * from './keys.js'
+export * from './fakeLocalStorage'
+export * from './isomorphic'
+export * from './keys'
 
 /**
  * Checks if a value is a primitive type
@@ -8,7 +8,7 @@ export * from './keys.js'
  * @param {*} val Value to check
  * @returns {Boolean} True if value is a primitive type
  */
-export const isPrimitive = (val) => {
+export const isPrimitive = (val: unknown): boolean => {
     const type = typeof val
 
     if (val === null) return true

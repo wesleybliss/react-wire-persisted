@@ -1,4 +1,4 @@
-import '../../setup'
+import 'tests/setup'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import App from '../../../demo/src/components/App'
 

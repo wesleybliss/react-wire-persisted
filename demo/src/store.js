@@ -1,5 +1,5 @@
 import { createSelector, createWire } from '@forminator/react-wire'
-import { createPersistedWire } from '../../src/react-wire-persisted'
+import { createPersistedWire } from 'src/react-wire-persisted'
 import { keys } from './constants'
 
 export const demoText = createPersistedWire(keys.demoText, 'Hello world!')
