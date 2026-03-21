@@ -206,7 +206,7 @@ export const createPersistedWire = <T, >(key: string, value: T | null = null) =>
 
     const getValue = () => wire.getValue()
 
-    const setValue = (newValue: Defined<T> | null) => {
+    const setValue = <T, >(newValue: Defined<T>) => {
         rwpLog(
             '[RWP] setValue called in instance:',
             instanceId,
@@ -231,7 +231,7 @@ export const createPersistedWire = <T, >(key: string, value: T | null = null) =>
     const canReadStorage = getHasHydratedStorage() || !storage.isUsingFakeStorage()
 
     if (canReadStorage && getIsClient()) {
-        const storedValue = storage.getItem(key)
+        const storedValue = storage.getItem<T>(key)
 
         if (storedValue !== null)
             initialValue = storedValue
@@ -245,7 +245,7 @@ export const createPersistedWire = <T, >(key: string, value: T | null = null) =>
         canReadStorage,
     })
 
-    if (initialValue !== value) setValue(initialValue)
+    if (initialValue !== value) setValue<T>(initialValue)
 
     // Register wire for post-hydration refresh
     registeredWires.set(key, {

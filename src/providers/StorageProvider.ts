@@ -34,7 +34,7 @@ abstract class StorageProvider {
      * @param {String} key InternalStorage item's key
      * @param {*} initialValue InternalStorage item's initial value
      */
-    register(key: string, initialValue: unknown) {
+    register<T>(key: string, initialValue: T | null) {
         this.registry[key] = initialValue
     }
 
@@ -43,7 +43,7 @@ abstract class StorageProvider {
      * @param {String} key Key for the item to retrieve
      */
     /* istanbul ignore next */
-    abstract getItem(key: string): unknown
+    abstract getItem<T>(key: string): T | null
 
     /**
      * Stores a value
@@ -51,7 +51,7 @@ abstract class StorageProvider {
      * @param {String} value Item's value to store
      */
     /* istanbul ignore next */
-    abstract setItem(key: string, value: unknown): void
+    abstract setItem<T>(key: string, value: T | null): void
 
     /**
      * Removes an item from storage

@@ -1,7 +1,7 @@
 import { useWireState, useWireValue } from '@forminator/react-wire'
-import { useEffect, useState } from 'react'
 import * as actions from 'demo/src/actions'
 import * as store from 'demo/src/store'
+import { useEffect, useState } from 'react'
 
 import ListItem from './ListItem'
 
@@ -14,7 +14,7 @@ const CategoriesList = () => {
 
     const categories = useWireValue(store.categories)
     const hasCategories = useWireValue(store.hasCategories)
-    const [selectedCategoryId, setselectedCategoryId] = useWireState(store.selectedCategoryId)
+    const [selectedCategoryId, setSelectedCategoryId] = useWireState(store.selectedCategoryId)
 
     // Fetch categories onload
     useEffect(() => {
@@ -49,7 +49,7 @@ const CategoriesList = () => {
                         <ListItem
                             key={`category-${i}`}
                             active={selectedCategoryId === it.id}
-                            onClick={() => setselectedCategoryId(it.id)}
+                            onClick={() => setSelectedCategoryId(it.id)}
                         >
                             {it.name}
                         </ListItem>

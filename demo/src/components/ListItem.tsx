@@ -1,4 +1,16 @@
-const ListItem = ({ children, active, ...props }) => {
+import type React from 'react'
+import type { ComponentPropsWithoutRef } from 'react'
+
+export type ListItemProps = {
+    children: React.ReactNode
+    active?: boolean
+}
+
+const ListItem = ({
+    active,
+    children,
+    ...props
+}: ListItemProps & ComponentPropsWithoutRef<'li'>) => {
     return (
         <li
             className={`
