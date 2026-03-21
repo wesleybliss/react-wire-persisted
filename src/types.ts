@@ -1,7 +1,5 @@
-
 export type RWPOptions = {
     logging: { enabled: boolean }
-    
 }
 
 export interface InternalStorage {

@@ -4,10 +4,9 @@
  */
 /** biome-ignore-all lint/correctness/noUnusedFunctionParameters: WIP next PR will switch to TypeScript */
 abstract class StorageProvider {
-    
     namespace: string | null
     registry: Record<string, unknown>
-    
+
     /**
      * Initializes the class
      * @param {String} namespace Namespace to prefix all keys with. Mostly used for the logging & reset functions
@@ -93,11 +92,11 @@ abstract class StorageProvider {
      */
     /* istanbul ignore next */
     abstract removeAll(excludedKeys: string[]): void
-    
+
     upgradeToRealStorage(): boolean {
         return false
     }
-    
+
     isUsingFakeStorage(): boolean {
         return false
     }

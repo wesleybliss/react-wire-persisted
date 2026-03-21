@@ -38,9 +38,12 @@ export const getPrefixedKeys = (namespace: string, keys: Record<string, string> 
 
     if (!namespace) return items
 
-    return Object.keys(items).reduce((acc, it) => {
-        acc[it] = `${namespace}.${items[it]}`
+    return Object.keys(items).reduce(
+        (acc, it) => {
+            acc[it] = `${namespace}.${items[it]}`
 
-        return acc
-    }, {} as Record<string, string>)
+            return acc
+        },
+        {} as Record<string, string>,
+    )
 }

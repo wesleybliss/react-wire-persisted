@@ -56,8 +56,8 @@ if (typeof globalThis !== 'undefined') {
 }
 
 // Registry to track wire instances for hydration refresh
-const registeredWires = globalThis.__RWP_REGISTERED_WIRES__ ||
-    new Map<string, Pick<Wire<unknown>, 'getValue' | 'setValue' | 'subscribe'>>()
+const registeredWires =
+    globalThis.__RWP_REGISTERED_WIRES__ || new Map<string, Pick<Wire<unknown>, 'getValue' | 'setValue' | 'subscribe'>>()
 rwpLog('[RWP] registeredWires Map reference in instance:', instanceId, 'size:', registeredWires.size)
 
 /**
@@ -80,10 +80,9 @@ export const getOptions = () => options
 export const setNamespace = (namespace: string) => {
     rwpLog('[RWP] setNamespace() called with:', namespace, 'registered wires before:', registeredWires.size)
     const currentNamespace = namespace || getNamespace()
-    
-    if (!currentNamespace)
-        throw new Error('react-wire-persisted: Cannot set namespace to null or undefined')
-    
+
+    if (!currentNamespace) throw new Error('react-wire-persisted: Cannot set namespace to null or undefined')
+
     storage.setNamespace(namespace)
     storage = new LocalStorageProvider(currentNamespace)
     rwpLog('[RWP] setNamespace() done, registered wires after:', registeredWires.size)
@@ -115,28 +114,30 @@ const refreshAllWires = () => {
     rwpLog('[RWP] refreshAllWires() called in instance:', instanceId, 'registered wires:', registeredWires.size)
     log('react-wire-persisted: refreshAllWires() called, registered wires:', registeredWires.size)
 
-    registeredWires.forEach((wire: Wire<unknown> | Pick<Wire<unknown>, 'getValue' | 'setValue' | 'subscribe'>, key: string) => {
-        const storedValue = storage.getItem(key)
-        const currentValue = wire.getValue()
+    registeredWires.forEach(
+        (wire: Wire<unknown> | Pick<Wire<unknown>, 'getValue' | 'setValue' | 'subscribe'>, key: string) => {
+            const storedValue = storage.getItem(key)
+            const currentValue = wire.getValue()
 
-        rwpLog('[RWP] Checking wire', key, {
-            storedValue,
-            currentValue,
-            willUpdate: storedValue !== null && storedValue !== currentValue,
-        })
+            rwpLog('[RWP] Checking wire', key, {
+                storedValue,
+                currentValue,
+                willUpdate: storedValue !== null && storedValue !== currentValue,
+            })
 
-        log('react-wire-persisted: Checking wire', key, {
-            storedValue,
-            currentValue,
-            willUpdate: storedValue !== null && storedValue !== currentValue,
-        })
+            log('react-wire-persisted: Checking wire', key, {
+                storedValue,
+                currentValue,
+                willUpdate: storedValue !== null && storedValue !== currentValue,
+            })
 
-        if (storedValue !== null && storedValue !== currentValue) {
-            rwpLog('[RWP] Refreshing wire', key, 'with stored value', storedValue)
-            log('react-wire-persisted: Refreshing wire', key, 'with stored value', storedValue)
-            wire.setValue(storedValue)
-        }
-    })
+            if (storedValue !== null && storedValue !== currentValue) {
+                rwpLog('[RWP] Refreshing wire', key, 'with stored value', storedValue)
+                log('react-wire-persisted: Refreshing wire', key, 'with stored value', storedValue)
+                wire.setValue(storedValue)
+            }
+        },
+    )
 }
 
 /**

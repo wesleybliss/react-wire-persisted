@@ -8,10 +8,9 @@ describe('react-wire-persisted', () => {
         localStorage.clear()
         rwp.setNamespace(namespace)
         rwp.getStorage().upgradeToRealStorage()
-        ;(rwp.getStorage() as unknown as { removeAll: (keys: string[] | null, clearRegistry: boolean) => void }).removeAll(
-            noKeys,
-            true,
-        )
+        ;(
+            rwp.getStorage() as unknown as { removeAll: (keys: string[] | null, clearRegistry: boolean) => void }
+        ).removeAll(noKeys, true)
         rwp.getStorage().registry = {}
 
         expect(Object.keys(rwp.getStorage().getAll()).length).toBe(0)
