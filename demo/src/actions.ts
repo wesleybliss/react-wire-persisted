@@ -1,5 +1,5 @@
+import * as store from 'demo/src/store'
 import fakeData from './data.json'
-import * as store from './store'
 
 // Don't hold up test unnecessarily
 /* istanbul ignore next */
@@ -16,7 +16,7 @@ export const fetchCategories = async () => {
 }
 
 // Simulate fetching people for a given category ID from an API server
-export const fetchPeople = async (categoryId) => {
+export const fetchPeople = async (categoryId: number) => {
     await sleep(simulatedTimeout)
     const people = fakeData.people.filter((it) => it.categoryId === categoryId)
     store.people.setValue(people)

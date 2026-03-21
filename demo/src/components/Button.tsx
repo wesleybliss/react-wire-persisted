@@ -1,4 +1,16 @@
-const Button = ({ children, className, ...props }) => {
+import type React from 'react'
+import type { ComponentPropsWithoutRef } from 'react'
+
+export type ButtonProps = {
+    children: React.ReactNode
+    className?: string
+}
+
+const Button = ({
+    className,
+    children,
+    ...props
+}: ButtonProps & ComponentPropsWithoutRef<'button'>) => {
     return (
         <button
             className={`

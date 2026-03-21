@@ -3,9 +3,9 @@
 import { useWireState } from '@forminator/react-wire'
 import { useEffect, useState } from 'react'
 import { getStorage } from 'src/react-wire-persisted'
-import * as store from '../store'
+import * as store from 'demo/src/store'
 
-import Button from './Button'
+import Button from 'demo/src/components/Button'
 import TextInput from './TextInput'
 
 const DemoActions = () => {

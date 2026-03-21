@@ -1,4 +1,15 @@
-const TextInput = ({ className, type, ...props }) => {
+import type { ComponentPropsWithoutRef } from 'react'
+
+export type TextInputProps = {
+    className?: string
+    type?: string
+}
+
+const TextInput = ({
+    className,
+    type,
+    ...props
+}: TextInputProps & ComponentPropsWithoutRef<'input'>) => {
     return (
         <input
             className={`

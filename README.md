@@ -21,7 +21,7 @@ $ npm publish
 ## Usage
 
 ```javascript
-// constants.js
+// constants.ts
 import { key, getPrefixedKeys } from 'react-wire-persisted/lib/utils'
 
 export const NS = 'myapp'
@@ -44,7 +44,7 @@ reactWirePersisted.setNamespace(NS)
 ```
 
 ```javascript
-// store.js
+// store.ts
 import { createPersistedWire } from 'react-wire-persisted'
 import { keys } from './constants'
 

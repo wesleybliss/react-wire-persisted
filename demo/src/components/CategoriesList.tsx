@@ -1,7 +1,7 @@
 import { useWireState, useWireValue } from '@forminator/react-wire'
 import { useEffect, useState } from 'react'
-import * as actions from '../actions'
-import * as store from '../store'
+import * as actions from 'demo/src/actions'
+import * as store from 'demo/src/store'
 
 import ListItem from './ListItem'
 
@@ -10,7 +10,7 @@ import ListItem from './ListItem'
 const simulatedTimeout = process.env.NODE_ENV === 'test' ? 0 : 800
 
 const CategoriesList = () => {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState<boolean>(false)
 
     const categories = useWireValue(store.categories)
     const hasCategories = useWireValue(store.hasCategories)

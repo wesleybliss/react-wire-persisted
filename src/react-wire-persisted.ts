@@ -1,4 +1,4 @@
-import { createWire, type Wire } from '@forminator/react-wire'
+import { createWire, Defined, type Wire } from '@forminator/react-wire'
 import { getHasHydratedStorage, getIsClient, markStorageAsHydrated } from 'src/utils'
 import LocalStorageProvider from '@/providers/LocalStorageProvider'
 import type StorageProvider from '@/providers/StorageProvider'
@@ -192,7 +192,7 @@ const log = (...args: unknown[]) => {
  * @param {*} value Initial value of this Wire
  * @returns A new Wire decorated with localStorage functionality
  */
-export const createPersistedWire = (key: string, value: unknown = null) => {
+export const createPersistedWire = <T, >(key: string, value: T | null = null) => {
     rwpLog('[RWP] createPersistedWire() called in instance:', instanceId, 'key:', key, 'value:', value)
 
     // This check helps ensure no accidental key typos occur
@@ -202,11 +202,11 @@ export const createPersistedWire = (key: string, value: unknown = null) => {
     storage.register(key, value)
 
     // The actual Wire backing object
-    const wire = createWire(value)
+    const wire = createWire<T | null>(value)
 
     const getValue = () => wire.getValue()
 
-    const setValue = (newValue: unknown) => {
+    const setValue = (newValue: Defined<T> | null) => {
         rwpLog(
             '[RWP] setValue called in instance:',
             instanceId,
@@ -224,7 +224,7 @@ export const createPersistedWire = (key: string, value: unknown = null) => {
     }
 
     // Always start with default value to ensure SSR consistency
-    let initialValue = value
+    let initialValue: T | null = value
 
     // Only read from storage if we've hydrated OR if storage is already using real localStorage
     // (prevents hydration mismatch in SSR, but allows normal behavior in client-only apps)
@@ -233,7 +233,8 @@ export const createPersistedWire = (key: string, value: unknown = null) => {
     if (canReadStorage && getIsClient()) {
         const storedValue = storage.getItem(key)
 
-        if (storedValue !== null) initialValue = storedValue
+        if (storedValue !== null)
+            initialValue = storedValue
     }
 
     log('react-wire-persisted: create', key, {

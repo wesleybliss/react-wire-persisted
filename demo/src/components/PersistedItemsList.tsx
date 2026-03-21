@@ -1,5 +1,5 @@
 import { useWireValue } from '@forminator/react-wire'
-import * as store from '../store'
+import * as store from 'demo/src/store'
 
 const PersistedItemsList = () => {
     const selectedCategory = useWireValue(store.selectedCategory)

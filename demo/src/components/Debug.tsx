@@ -2,9 +2,9 @@ import { useWireValue } from '@forminator/react-wire'
 import { useEffect } from 'react'
 import * as rwp from 'src/react-wire-persisted'
 import * as rwpUtils from 'src/utils'
-import * as actions from '../actions'
-import * as constants from '../constants'
-import * as store from '../store'
+import * as actions from 'demo/src/actions'
+import * as constants from 'demo/src/constants'
+import * as store from 'demo/src/store'
 
 const Debug = () => {
     const categories = useWireValue(store.categories)

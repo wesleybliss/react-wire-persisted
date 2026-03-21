@@ -1,9 +1,8 @@
 import { useWireState, useWireValue } from '@forminator/react-wire'
+import * as actions from 'demo/src/actions'
+import ListItem from 'demo/src/components/ListItem'
+import * as store from 'demo/src/store'
 import { useEffect, useState } from 'react'
-import * as actions from '../actions'
-import * as store from '../store'
-
-import ListItem from './ListItem'
 
 const PeopleList = () => {
     const [loading, setLoading] = useState(false)
