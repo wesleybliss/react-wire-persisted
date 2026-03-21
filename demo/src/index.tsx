@@ -1,8 +1,8 @@
+import App from 'demo/src/components/App'
 import { NS } from 'demo/src/constants'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import * as reactPersistedWire from '@'
-import App from '@/components/App'
+import * as reactPersistedWire from 'src'
 
 import './index.css'
 

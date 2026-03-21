@@ -6,11 +6,7 @@ export type ButtonProps = {
     className?: string
 }
 
-const Button = ({
-    className,
-    children,
-    ...props
-}: ButtonProps & ComponentPropsWithoutRef<'button'>) => {
+const Button = ({ className, children, ...props }: ButtonProps & ComponentPropsWithoutRef<'button'>) => {
     return (
         <button
             className={`

@@ -1,4 +1,3 @@
-
 export type RWPOptions = {
     logging: { enabled: boolean }
 }

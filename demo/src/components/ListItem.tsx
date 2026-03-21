@@ -6,11 +6,7 @@ export type ListItemProps = {
     active?: boolean
 }
 
-const ListItem = ({
-    active,
-    children,
-    ...props
-}: ListItemProps & ComponentPropsWithoutRef<'li'>) => {
+const ListItem = ({ active, children, ...props }: ListItemProps & ComponentPropsWithoutRef<'li'>) => {
     return (
         <li
             className={`

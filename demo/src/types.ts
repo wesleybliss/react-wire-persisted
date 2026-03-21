@@ -1,4 +1,3 @@
-
 export type DemoCategory = {
     id: number
     name: string

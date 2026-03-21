@@ -1,11 +1,11 @@
 /* istanbul ignore file */
 
 import { useWireState } from '@forminator/react-wire'
+import Button from 'demo/src/components/Button'
+import * as store from 'demo/src/store'
+import type { ChangeEvent } from 'react'
 import { useEffect, useState } from 'react'
 import { getStorage } from 'src/react-wire-persisted'
-import * as store from 'demo/src/store'
-
-import Button from 'demo/src/components/Button'
 import TextInput from './TextInput'
 
 const DemoActions = () => {
@@ -18,7 +18,7 @@ const DemoActions = () => {
         console.log(getStorage().getAll())
     }
 
-    const handleInputTextChange = (e) => {
+    const handleInputTextChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputText(e.target.value?.toString() || '')
     }
 
@@ -26,13 +26,13 @@ const DemoActions = () => {
         setDemoText(inputText)
     }
 
-    const handledemoNumberChange = (e) => {
+    const handledemoNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
         const parsed = parseInt(e.target.value, 10)
         if (parsed.toString() !== e.target.value) return
         setDemoNumber(parsed)
     }
 
-    useEffect(() => setInputText(demoText), [demoText])
+    useEffect(() => setInputText(demoText ?? ''), [demoText])
 
     return (
         <div className="p-4 flex justify-center items-center content-center">

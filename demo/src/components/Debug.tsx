@@ -17,12 +17,13 @@ const Debug = () => {
 
     useEffect(() => {
         // Expose some things for easy debugging
-        window.app = {}
-        window.app.store = store
-        window.app.actions = actions
-        window.app.constants = constants
-        window.app.rwp = rwp
-        window.app.rwpUtils = rwpUtils
+        window.app = {
+            store,
+            actions,
+            constants,
+            rwp,
+            rwpUtils,
+        }
     })
 
     return (

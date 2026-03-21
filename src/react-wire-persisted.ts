@@ -1,4 +1,4 @@
-import { createWire, Defined, type Wire } from '@forminator/react-wire'
+import { createWire, type Defined, type Wire } from '@forminator/react-wire'
 import { getHasHydratedStorage, getIsClient, markStorageAsHydrated } from 'src/utils'
 import LocalStorageProvider from '@/providers/LocalStorageProvider'
 import type StorageProvider from '@/providers/StorageProvider'
@@ -192,7 +192,7 @@ const log = (...args: unknown[]) => {
  * @param {*} value Initial value of this Wire
  * @returns A new Wire decorated with localStorage functionality
  */
-export const createPersistedWire = <T, >(key: string, value: T | null = null) => {
+export const createPersistedWire = <T>(key: string, value: T | null = null) => {
     rwpLog('[RWP] createPersistedWire() called in instance:', instanceId, 'key:', key, 'value:', value)
 
     // This check helps ensure no accidental key typos occur
@@ -206,7 +206,7 @@ export const createPersistedWire = <T, >(key: string, value: T | null = null) =>
 
     const getValue = () => wire.getValue()
 
-    const setValue = <T, >(newValue: Defined<T>) => {
+    const setValue = (newValue: Defined<T | null>) => {
         rwpLog(
             '[RWP] setValue called in instance:',
             instanceId,
@@ -219,7 +219,7 @@ export const createPersistedWire = <T, >(key: string, value: T | null = null) =>
         return wire.setValue(newValue)
     }
 
-    const subscribe = (callback: (value: unknown) => void) => {
+    const subscribe = (callback: (value: Defined<T | null>) => void) => {
         return wire.subscribe(callback)
     }
 
@@ -233,8 +233,7 @@ export const createPersistedWire = <T, >(key: string, value: T | null = null) =>
     if (canReadStorage && getIsClient()) {
         const storedValue = storage.getItem<T>(key)
 
-        if (storedValue !== null)
-            initialValue = storedValue
+        if (storedValue !== null) initialValue = storedValue
     }
 
     log('react-wire-persisted: create', key, {
@@ -245,7 +244,7 @@ export const createPersistedWire = <T, >(key: string, value: T | null = null) =>
         canReadStorage,
     })
 
-    if (initialValue !== value) setValue<T>(initialValue)
+    if (initialValue !== value && initialValue !== undefined) setValue(initialValue as Defined<T | null>)
 
     // Register wire for post-hydration refresh
     registeredWires.set(key, {

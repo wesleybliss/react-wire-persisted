@@ -2,6 +2,7 @@ import { useWireState, useWireValue } from '@forminator/react-wire'
 import * as actions from 'demo/src/actions'
 import ListItem from 'demo/src/components/ListItem'
 import * as store from 'demo/src/store'
+import type { DemoPerson } from 'demo/src/types'
 import { useEffect, useState } from 'react'
 
 const PeopleList = () => {
@@ -15,7 +16,7 @@ const PeopleList = () => {
     const selectedCategoryId = useWireValue(store.selectedCategoryId)
 
     /* istanbul ignore next */
-    const handlePersonClick = (person) => {
+    const handlePersonClick = (person: DemoPerson) => {
         const fullName = `${person.firstName} ${person.lastName}`
         setSelectedPersonName(fullName)
     }
@@ -60,7 +61,7 @@ const PeopleList = () => {
 
             {!loading && hasPeople && (
                 <ul data-testid="people-list">
-                    {people.map((it, i) => {
+                    {people?.map((it, i) => {
                         const fullName = `${it.firstName} ${it.lastName}`
                         return (
                             <ListItem

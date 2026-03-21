@@ -1,5 +1,4 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-// @ts-expect-error demo app is still JS during migration
 import App from '../../../demo/src/components/App'
 
 test('App renders', async () => {

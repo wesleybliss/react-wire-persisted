@@ -45,7 +45,7 @@ const CategoriesList = () => {
 
             {!loading && hasCategories && (
                 <ul data-testid="categories-list">
-                    {categories.map((it, i) => (
+                    {categories?.map((it, i) => (
                         <ListItem
                             key={`category-${i}`}
                             active={selectedCategoryId === it.id}
