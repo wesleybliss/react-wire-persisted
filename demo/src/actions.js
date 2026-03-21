@@ -1,7 +1,7 @@
 import fakeData from './data.json'
 import * as store from './store'
 
-// Don't hold up tests unnecessarily
+// Don't hold up test unnecessarily
 /* istanbul ignore next */
 const simulatedTimeout = process.env.NODE_ENV === 'test' ? 0 : 2000
 

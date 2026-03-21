@@ -32,7 +32,7 @@ export const getEnvironmentVars = (): Record<string, string | undefined> => {
     return dotEnvToMap(parsed || {})
 }
 
-export const loadEnvironment = (existingEnv = null): Record<string, string> => {
+export const loadEnvironment = (existingEnv: Record<string, string | undefined> | null = null): Record<string, string> => {
     const env = existingEnv || getEnvironmentVars()
 
     // For Vite, these need to be the fully qualified process notation

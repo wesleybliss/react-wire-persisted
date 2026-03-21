@@ -1,6 +1,6 @@
 import * as path from 'node:path'
 import injectProcessEnv from 'rollup-plugin-inject-process-env'
-import { getEnvironmentVars } from 'config/environment'
+import { getEnvironmentVars } from './environment'
 
 const env = getEnvironmentVars()
 

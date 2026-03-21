@@ -1,1 +1,1 @@
-export { HydrationProvider } from './HydrationProvider.js'
+export { default as HydrationProvider } from './HydrationProvider'

@@ -46,7 +46,7 @@ describe('Utils/Keys', () => {
         Object.keys(src).forEach(utils.addKey)
 
         const plain = utils.getKeys()
-        const prefixed = utils.getPrefixedKeys()
+        const prefixed = utils.getPrefixedKeys(undefined as unknown as string)
         const prefixedWithNamespace = utils.getPrefixedKeys(ns)
 
         expect(plain).toStrictEqual(src)
@@ -58,10 +58,10 @@ describe('Utils/Keys', () => {
 describe('Fake localStorage', () => {
     test('It has fake key', () => {
         const key = '__IS_FAKE_LOCAL_STORAGE__'
-        utils.fakeLocalStorage.setItem(key, true)
-        const value = utils.fakeLocalStorage[key]
+        utils.fakeLocalStorage.setItem(key, 'true')
+        const value = (utils.fakeLocalStorage as unknown as Record<string, unknown>)[key]
 
-        expect(value).toStrictEqual(true)
+        expect(value).toStrictEqual('true')
     })
 
     test('It can read, write, and remove', () => {

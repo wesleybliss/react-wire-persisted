@@ -19,9 +19,11 @@
         "isolatedModules": true,
         "jsx": "react-jsx",
         "incremental": true,
-        "types": ["vite/client"],
+        "types": ["vite/client", "vitest/globals"],
         "paths": {
             "vite-env": ["./vite-env.d.ts"],
+            "src/*": ["./src/*"],
+            "tests/*": ["./tests/*"],
             "@/*": ["./src/*"]
         }
     },

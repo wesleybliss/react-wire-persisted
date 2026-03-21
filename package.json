@@ -34,6 +34,7 @@
         "lint": "biome check --write",
         "lint:format": "biome format --write",
         "lint:lint": "biome lint --write",
+        "test": "pnpm test:unit",
         "test:unit": "NODE_ENV=test vitest run",
         "test:unit:only": "NODE_ENV=test vitest run -t ",
         "test:unit:coverage": "NODE_ENV=test vitest run --no-color --reporter=junit --coverage --outputFile=coverage/report.xml",

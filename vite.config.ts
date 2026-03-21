@@ -1,5 +1,7 @@
+import * as path from 'node:path'
 import react from '@vitejs/plugin-react'
 import { defineConfig, mergeConfig, type UserConfig } from 'vite'
+import tsconfigPaths from 'vite-tsconfig-paths'
 import { getEnvironmentVars, loadEnvironment } from './config/environment'
 import developmentConfig from './config/vite.config.development'
 import productionConfig from './config/vite.config.production'
@@ -11,7 +13,13 @@ const isProduction = process.env.NODE_ENV === 'production'
 const config = {
     root: __dirname,
     define: loadEnvironment(env),
-    plugins: [react()],
+    plugins: [react(), tsconfigPaths()],
+    resolve: {
+        alias: {
+            src: path.resolve(__dirname, 'src'),
+            tests: path.resolve(__dirname, 'tests'),
+        },
+    },
     build: {
         sourcemap: !!process.env.SOURCEMAPS || isProduction,
         rollupOptions: {

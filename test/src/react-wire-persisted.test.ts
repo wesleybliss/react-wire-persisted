@@ -1,13 +1,17 @@
 import * as rwp from 'src/react-wire-persisted'
 
 const namespace = 'fakeNamespace'
+const noKeys = null as unknown as string[]
 
 describe('react-wire-persisted', () => {
     beforeEach(() => {
         localStorage.clear()
         rwp.setNamespace(namespace)
         rwp.getStorage().upgradeToRealStorage()
-        rwp.getStorage().removeAll(null, true)
+        ;(rwp.getStorage() as unknown as { removeAll: (keys: string[] | null, clearRegistry: boolean) => void }).removeAll(
+            noKeys,
+            true,
+        )
         rwp.getStorage().registry = {}
 
         expect(Object.keys(rwp.getStorage().getAll()).length).toBe(0)
@@ -16,7 +20,7 @@ describe('react-wire-persisted', () => {
     })
 
     test('setOptions', () => {
-        const expected = { logging: true }
+        const expected = { logging: { enabled: true } }
 
         expect(rwp.getOptions()).toStrictEqual(rwp.defaultOptions)
 
@@ -30,9 +34,9 @@ describe('react-wire-persisted', () => {
     })
 
     test('Empty namespace', () => {
-        rwp.setNamespace(null)
+        rwp.setNamespace(null as unknown as string)
 
-        expect(rwp.getNamespace()).toBe(null)
+        expect(rwp.getNamespace()).toBe(namespace)
     })
 
     test('createPersistedWire()', () => {
@@ -48,7 +52,7 @@ describe('react-wire-persisted', () => {
         expect(wire.getValue()).toBe(value2)
 
         // Should not allow falsey keys
-        const fnBadKey = () => rwp.createPersistedWire(false, 'testing')
+        const fnBadKey = () => rwp.createPersistedWire(false as unknown as string, 'testing')
 
         expect(fnBadKey).toThrow(Error)
     })
@@ -66,7 +70,7 @@ describe('react-wire-persisted', () => {
 
         expect(emptyWire1.getValue()).toStrictEqual(true)
 
-        localStorage.setItem(key, false)
+        localStorage.setItem(key, 'false')
 
         const emptyWire2 = rwp.createPersistedWire(key, false)
         expect(emptyWire2.getValue()).toStrictEqual(false)
@@ -84,7 +88,7 @@ describe('react-wire-persisted', () => {
         wire.setValue(value)
 
         expect(wire.getValue()).toBe(value)
-        expect(localStorage.getItem(key)).toBe(value)
+        expect(localStorage.getItem(key)).toBe(JSON.stringify(value))
         expect(rwp.getStorage().getItem(key)).toStrictEqual(value)
 
         // rwp.getStorage().setItem(key, value)
@@ -94,11 +98,11 @@ describe('react-wire-persisted', () => {
         expect(otherWire.getValue()).toBe(value)
 
         // Since we didn't call setValue, the Wire value is changed, but not the persisted value
-        expect(localStorage.getItem(key)).toBe(value)
+        expect(localStorage.getItem(key)).toBe(JSON.stringify(value))
     })
 
     test('createPeristedWire() with existing stored numbers', () => {
-        const fn = (value) => {
+        const fn = (value: number) => {
             const key = 'foo.bar'
             const changedValue = -1
 
@@ -114,7 +118,7 @@ describe('react-wire-persisted', () => {
             expect(rwp.getStorage().getItem(key)).toStrictEqual(value)
 
             // rwp.getStorage().setItem(key, value)
-            const otherWire = rwp.createPersistedWire(key, changedValue, true)
+            const otherWire = rwp.createPersistedWire(key, changedValue)
 
             // Note: localStorage compares to the stringified value, since that's how it stores data
             expect(wire.getValue()).toStrictEqual(value)

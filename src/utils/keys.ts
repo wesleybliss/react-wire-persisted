@@ -1,14 +1,14 @@
 /**
  * Convenience map of keys
  */
-const storageKeys = {}
+const storageKeys: Record<string, string> = {}
 
 /**
  * Adds a key to the keys map
  *
  * @param {String} value Key name
  */
-export const addKey = (value) => {
+export const addKey = (value: string): void => {
     storageKeys[value] = value
 }
 
@@ -18,14 +18,14 @@ export const addKey = (value) => {
  *
  * @param {String} value Key name
  */
-export const key = (value) => addKey(value)
+export const key = (value: string) => addKey(value)
 
 /**
  * Convenience method to get internally managed storage keys
  *
  * @returns {Object} InternalStorage keys map
  */
-export const getKeys = () => storageKeys
+export const getKeys = (): Record<string, string> => storageKeys
 
 /**
  * Helper utility to prefix all keys in a map to use a namespace
@@ -33,7 +33,7 @@ export const getKeys = () => storageKeys
  * @param {String} namespace InternalStorage namespace prefix
  * @param {Object} keys (Optional) InternalStorage key/values. Defaults to the internally managed keys map
  */
-export const getPrefixedKeys = (namespace, keys = null) => {
+export const getPrefixedKeys = (namespace: string, keys: Record<string, string> | null = null) => {
     const items = keys || storageKeys
 
     if (!namespace) return items
@@ -42,5 +42,5 @@ export const getPrefixedKeys = (namespace, keys = null) => {
         acc[it] = `${namespace}.${items[it]}`
 
         return acc
-    }, {})
+    }, {} as Record<string, string>)
 }

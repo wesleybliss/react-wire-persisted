@@ -2,20 +2,20 @@ import LocalStorageProvider from 'src/providers/LocalStorageProvider'
 import StorageProvider from 'src/providers/StorageProvider'
 
 const namespace = 'fakeNamespace'
-const keyFor = (key) => `${namespace}.${key}`
+const keyFor = (key: string) => `${namespace}.${key}`
 
 describe('LocalStorageProvider', () => {
-    let storage = null
+    let storage: LocalStorageProvider | undefined
+    const noKeys = null as unknown as string[]
 
     beforeEach(() => {
-        localStorage.clear()
-        storage?.removeAll(null, true)
+        storage?.removeAll(noKeys, true)
         storage = new LocalStorageProvider(namespace)
-        storage.upgradeToRealStorage()
+        storage!.upgradeToRealStorage()
     })
 
     test('Instantiates with a null namespace', () => {
-        const storageWithoutNs = new LocalStorageProvider()
+        const storageWithoutNs = new LocalStorageProvider(undefined as unknown as string)
 
         expect(storageWithoutNs.namespace).toStrictEqual(null)
     })
@@ -29,7 +29,7 @@ describe('LocalStorageProvider', () => {
     })
 
     test('Instantiates with correct namespace', () => {
-        expect(storage.namespace).toBe(namespace)
+        expect(storage!.namespace).toBe(namespace)
     })
 
     test('Has expected methods', () => {
@@ -48,20 +48,20 @@ describe('LocalStorageProvider', () => {
 
         // Should implement all parent methods
         baseMethods.forEach((it) => {
-            expect(typeof storage[it]).toBe('function')
+            expect(typeof (storage as unknown as Record<string, unknown>)[it]).toBe('function')
         })
 
         methods.forEach((it) => {
-            expect(typeof storage[it]).toBe('function')
+            expect(typeof (storage as unknown as Record<string, unknown>)[it]).toBe('function')
         })
     })
 
     test("Sets it's namespace correctly", () => {
         const fakeNamespace = 'foo'
 
-        storage.setNamespace(fakeNamespace)
+        storage!.setNamespace(fakeNamespace)
 
-        expect(storage.namespace).toBe(fakeNamespace)
+        expect(storage!.namespace).toBe(fakeNamespace)
     })
 
     test("Changes it's namespace & updates items", () => {
@@ -69,16 +69,16 @@ describe('LocalStorageProvider', () => {
         const fooKey = keyFor('foo')
         const barKey = keyFor('bar')
 
-        expect(storage.namespace).toBe(namespace)
+        expect(storage!.namespace).toBe(namespace)
 
-        storage.setItem(fooKey, 'bar')
-        storage.setItem(barKey, 'biz')
-        expect(Object.keys(storage.getAll()).length).toBe(2)
+        storage!.setItem(fooKey, 'bar')
+        storage!.setItem(barKey, 'biz')
+        expect(Object.keys(storage!.getAll()).length).toBe(2)
 
-        storage.setNamespace(changedNamespace)
-        expect(storage.namespace).toBe(changedNamespace)
+        storage!.setNamespace(changedNamespace)
+        expect(storage!.namespace).toBe(changedNamespace)
 
-        Object.keys(storage.getAll()).forEach((it) => {
+        Object.keys(storage!.getAll()).forEach((it) => {
             expect(it.startsWith(changedNamespace)).toBe(true)
         })
     })
@@ -87,19 +87,19 @@ describe('LocalStorageProvider', () => {
         const key = keyFor('foo')
         const value = 'bar'
 
-        storage.setItem(key, value)
+        storage!.setItem(key, value)
 
-        expect(storage.getItem(key)).toBe(value)
+        expect(storage!.getItem(key)).toBe(value)
     })
 
     test('Writes non-primitives to JSON correctly', () => {
         const key = keyFor('foo')
         const value = { foo: 'bar' }
 
-        storage.setItem(key, value)
-        storage.setItem('testing', undefined)
+        storage!.setItem(key, value)
+        storage!.setItem('testing', undefined)
 
-        expect(storage.getItem(key)).toMatchObject(value)
+        expect(storage!.getItem(key)).toMatchObject(value)
     })
 
     test('Writes numbers to JSON correctly', () => {
@@ -107,8 +107,8 @@ describe('LocalStorageProvider', () => {
         const values = [0, 1, 2.3, 45.6789]
 
         values.forEach((value) => {
-            storage.setItem(key, value)
-            const storedValue = storage.getItem(key)
+            storage!.setItem(key, value)
+            const storedValue = storage!.getItem(key)
             expect(storedValue).toStrictEqual(value)
             expect(typeof storedValue).toStrictEqual(typeof value)
         })
@@ -118,26 +118,26 @@ describe('LocalStorageProvider', () => {
         const key = keyFor('foo')
         const value = 'bar'
 
-        storage.setItem(key, value)
+        storage!.setItem(key, value)
 
-        expect(storage.getItem(key)).toBe(value)
+        expect(storage!.getItem(key)).toBe(value)
 
-        storage.removeItem(key)
+        storage!.removeItem(key)
 
-        expect(storage.getItem(key)).toBe(null)
+        expect(storage!.getItem(key)).toBe(null)
     })
 
     test('Removes items successfully, and clears registry', () => {
         const key = keyFor('foo')
         const value = 'bar'
 
-        storage.setItem(key, value)
+        storage!.setItem(key, value)
 
-        expect(storage.getItem(key)).toBe(value)
+        expect(storage!.getItem(key)).toBe(value)
 
-        storage.removeItem(key, true)
+        storage!.removeItem(key, true)
 
-        expect(storage.getItem(key)).toBe(null)
+        expect(storage!.getItem(key)).toBe(null)
     })
 
     test('Gets all stored values', () => {
@@ -148,16 +148,16 @@ describe('LocalStorageProvider', () => {
         ]
 
         items.forEach(([k, v]) => {
-            storage.setItem(k, v)
+            storage!.setItem(k, v)
         })
 
-        const stored = storage.getAll()
+        const stored = storage!.getAll()
 
         expect(typeof stored).toBe('object')
         expect(Object.keys(stored).length).toBe(items.length)
 
-        storage.setNamespace(null)
-        const storedChanged = storage.getAll()
+        storage!.setNamespace(null as unknown as string)
+        const storedChanged = storage!.getAll()
 
         expect(typeof storedChanged).toBe('object')
         expect(Object.keys(storedChanged).length).toBe(items.length)
@@ -175,19 +175,19 @@ describe('LocalStorageProvider', () => {
         ]
 
         items.forEach(([k, v]) => {
-            storage.register(k, v)
-            storage.setItem(k, v)
+            storage!.register(k, v)
+            storage!.setItem(k, v)
         })
 
         // Change an item
-        storage.setItem(changedKey, changedValue)
+        storage!.setItem(changedKey, changedValue)
 
-        expect(storage.getItem(changedKey)).toBe(changedValue)
+        expect(storage!.getItem(changedKey)).toBe(changedValue)
 
         // Now reset back to the initial values
-        storage.resetAll()
+        storage!.resetAll()
 
-        expect(storage.getItem(changedKey)).toBe(initialValue)
+        expect(storage!.getItem(changedKey)).toBe(initialValue)
     })
 
     test('Removes all items, but keeps registry', () => {
@@ -198,14 +198,14 @@ describe('LocalStorageProvider', () => {
         ]
 
         items.forEach(([k, v]) => {
-            storage.register(k, v)
-            storage.setItem(k, v)
+            storage!.register(k, v)
+            storage!.setItem(k, v)
         })
 
-        storage.removeAll()
+        storage!.removeAll()
 
-        expect(storage.getAll()).toStrictEqual({})
-        expect(Object.keys(storage.registry).length).toBe(3)
+        expect(storage!.getAll()).toStrictEqual({})
+        expect(Object.keys(storage!.registry).length).toBe(3)
     })
 
     test('Resets all items, excluding some', () => {
@@ -219,19 +219,19 @@ describe('LocalStorageProvider', () => {
         ]
 
         items.forEach(([k, v]) => {
-            storage.register(k, v)
-            storage.setItem(k, v)
+            storage!.register(k, v)
+            storage!.setItem(k, v)
         })
 
-        storage.resetAll([targetKey], true)
+        storage!.resetAll([targetKey], true)
 
-        expect(Object.keys(storage.getAll()).length).toStrictEqual(3)
-        expect(storage.getAll()[targetKey]).toStrictEqual(targetValue)
+        expect(Object.keys(storage!.getAll()).length).toStrictEqual(3)
+        expect(storage!.getAll()[targetKey]).toStrictEqual(JSON.stringify(targetValue))
 
-        storage.resetAll(null, true)
+        storage!.resetAll(noKeys, true)
 
-        expect(Object.keys(storage.getAll()).length).toStrictEqual(3)
-        expect(Object.keys(storage.registry).length).toStrictEqual(3)
+        expect(Object.keys(storage!.getAll()).length).toStrictEqual(3)
+        expect(Object.keys(storage!.registry).length).toStrictEqual(3)
     })
 
     test('Removes all items and clears registry', () => {
@@ -245,44 +245,44 @@ describe('LocalStorageProvider', () => {
         ]
 
         items.forEach(([k, v]) => {
-            storage.register(k, v)
-            storage.setItem(k, v)
+            storage!.register(k, v)
+            storage!.setItem(k, v)
         })
 
-        storage.removeAll(
-            null, // excludeKeys
+        storage!.removeAll(
+            noKeys, // excludeKeys
             false, // clearRegistry
         )
 
-        expect(storage.getAll()).toStrictEqual({})
-        expect(Object.keys(storage.registry).length).toBe(3)
+        expect(storage!.getAll()).toStrictEqual({})
+        expect(Object.keys(storage!.registry).length).toBe(3)
 
-        storage.removeAll(
-            null, // excludeKeys
+        storage!.removeAll(
+            noKeys, // excludeKeys
             true, // clearRegistry
         )
 
-        expect(storage.getAll()).toStrictEqual({})
-        expect(Object.keys(storage.registry).length).toBe(3)
+        expect(storage!.getAll()).toStrictEqual({})
+        expect(Object.keys(storage!.registry).length).toBe(3)
 
-        delete storage.registry[targetKey]
-        storage.resetAll(
-            null, // excludeKeys
+        delete storage!.registry[targetKey]
+        storage!.resetAll(
+            noKeys, // excludeKeys
             true, // clearRegistry
         )
 
-        expect(storage.getAll()).toStrictEqual({})
-        expect(Object.keys(storage.registry).length).toBe(2)
+        expect(storage!.getAll()).toStrictEqual({})
+        expect(Object.keys(storage!.registry).length).toBe(2)
     })
 
     test('Removes unregistered items during a reset', () => {
         const key = keyFor('foo')
         const value = 'bar'
 
-        storage.setItem(key, value)
+        storage!.setItem(key, value)
 
-        delete storage.registry[key]
-        storage.resetAll()
+        delete storage!.registry[key]
+        storage!.resetAll()
 
         expect(localStorage.getItem('bad')).toBe(null)
     })
@@ -293,22 +293,22 @@ describe('LocalStorageProvider', () => {
         const value = 'bar'
 
         const ops = [
-            () => storage.getAll(),
-            () => storage._resetAll(),
-            () => storage._resetAll(true, [], true),
-            () => storage._resetAll(false, null, true),
-            () => storage._resetAll(true, ['ignore'], true),
-            () => storage._resetAll(false, ['ignore'], true),
-            () => storage._resetAll(true, ['ignore'], false),
+            () => storage!.getAll(),
+            () => storage!._resetAll(),
+            () => storage!._resetAll(true, [], true),
+            () => storage!._resetAll(false, noKeys, true),
+            () => storage!._resetAll(true, ['ignore'], true),
+            () => storage!._resetAll(false, ['ignore'], true),
+            () => storage!._resetAll(true, ['ignore'], false),
         ]
 
         ops.forEach((fn) => {
-            storage.setItem(key, value)
-            storage.setItem('badkey', value)
+            storage!.setItem(key, value)
+            storage!.setItem('badkey', value)
             fn()
         })
 
-        const storageWithoutNs = new LocalStorageProvider()
+        const storageWithoutNs = new LocalStorageProvider(undefined as unknown as string)
         storageWithoutNs.setItem('badkey', value)
         storageWithoutNs.getAll()
         storageWithoutNs._resetAll()

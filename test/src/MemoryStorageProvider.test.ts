@@ -3,17 +3,18 @@ import MemoryStorageProvider from 'src/providers/MemoryStorageProvider'
 const namespace = 'fakeNamespace'
 
 describe('MemoryStorageProvider', () => {
-    let storage = null
+    let storage: MemoryStorageProvider | undefined
+    const noKeys = null as unknown as string[]
 
     beforeEach(() => {
-        storage?.removeAll(null, true)
-        storage = new MemoryStorageProvider()
+        storage?.removeAll(noKeys, true)
+        storage = new MemoryStorageProvider(undefined as unknown as string)
     })
 
     test('Proves it is using memory storage', () => {
         const key = '__IS_FAKE_LOCAL_STORAGE__'
-        storage.setItem(key, true)
-        const value = storage.getItem(key)
+        storage!.setItem(key, true)
+        const value = storage!.getItem(key)
 
         // console.log('ALL ITEMS', storage.getStorage())
 

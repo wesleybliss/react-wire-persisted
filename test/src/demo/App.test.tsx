@@ -1,5 +1,5 @@
-import 'tests/setup'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+// @ts-expect-error demo app is still JS during migration
 import App from '../../../demo/src/components/App'
 
 test('App renders', async () => {
@@ -12,6 +12,7 @@ test('App renders', async () => {
     // Select a category
     const categoryList = getByTestId('categories-list')
     const category = categoryList.firstChild
+    if (!category) throw new Error('Expected a category entry to exist')
     fireEvent.click(category)
 
     // Wait for people to be fetched

@@ -5,8 +5,8 @@ const config = {
         // https://vitest.dev/config
         globals: true,
         environment: 'jsdom',
-
-        include: [`**/tests/src/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}`],
+        setupFiles: ['./test/setup.ts'],
+        include: [`**/test/src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}`],
 
         // open: true, // experimental
         // silent: true,
