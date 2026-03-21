@@ -2,7 +2,7 @@ import { createWire, type Defined, type Wire } from '@forminator/react-wire'
 import { getHasHydratedStorage, getIsClient, markStorageAsHydrated } from 'src/utils'
 import LocalStorageProvider from '@/providers/LocalStorageProvider'
 import type StorageProvider from '@/providers/StorageProvider'
-import type { RWPOptions } from '@/types'
+import type { PersistedWire, RWPOptions } from '@/types'
 
 // Generate unique instance ID
 const instanceId = Math.random().toString(36).substring(7)
@@ -192,7 +192,7 @@ const log = (...args: unknown[]) => {
  * @param {*} value Initial value of this Wire
  * @returns A new Wire decorated with localStorage functionality
  */
-export const createPersistedWire = <T>(key: string, value: T | null = null) => {
+export const createPersistedWire = <T>(key: string, value: T | null = null): PersistedWire<T> => {
     rwpLog('[RWP] createPersistedWire() called in instance:', instanceId, 'key:', key, 'value:', value)
 
     // This check helps ensure no accidental key typos occur

@@ -1,6 +1,10 @@
+import type { Wire } from '@forminator/react-wire'
+
 export type RWPOptions = {
     logging: { enabled: boolean }
 }
+
+export type PersistedWire<T> = Wire<T | null>
 
 export interface InternalStorage {
     getItem: (key: string) => string | null
