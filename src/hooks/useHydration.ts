@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { getHasHydrated, getIsClient } from '@/utils'
 import { upgradeStorage } from '@/react-wire-persisted'
+import { getHasHydrated, getIsClient } from '@/utils'
 
 export type UseHydrationOptions = {
     autoUpgrade?: boolean

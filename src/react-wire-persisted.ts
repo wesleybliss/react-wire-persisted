@@ -3,7 +3,6 @@ import LocalStorageProvider from '@/providers/LocalStorageProvider'
 import type StorageProvider from '@/providers/StorageProvider'
 import type { PersistedWire, RWPOptions } from '@/types'
 import { getHasHydratedStorage, getIsClient, markStorageAsHydrated } from '@/utils'
-import pkg from '../package.json'
 
 // Generate unique instance ID
 const instanceId = Math.random().toString(36).substring(7)
@@ -86,7 +85,7 @@ export const setNamespace = (namespace: string) => {
 
     storage.setNamespace(namespace)
     storage = new LocalStorageProvider(currentNamespace)
-    rwpLog(`[RWP] version: ${pkg.version}, setNamespace() done, registered wires after:`, registeredWires.size)
+    rwpLog(`[RWP] setNamespace() done, registered wires after:`, registeredWires.size)
 }
 
 export const setOptions = (value: RWPOptions) => {
