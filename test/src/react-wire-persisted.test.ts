@@ -1,3 +1,4 @@
+import LocalStorageProvider from '@/providers/LocalStorageProvider'
 import * as rwp from '@/react-wire-persisted'
 
 const namespace = 'fakeNamespace'
@@ -19,13 +20,18 @@ describe('react-wire-persisted', () => {
     })
 
     test('setOptions', () => {
-        const expected = { logging: { enabled: true } }
+        const expected = {
+            logging: {
+                enabled: true,
+            },
+            storageProvider: LocalStorageProvider,
+        }
 
-        expect(rwp.getOptions()).toStrictEqual(rwp.defaultOptions)
+        expect(rwp.getOptions()).toEqual(rwp.defaultOptions)
 
         rwp.setOptions(expected)
 
-        expect(rwp.getOptions()).toStrictEqual(expected)
+        expect(rwp.getOptions()).toEqual(expected)
     })
 
     test('getNamespace()', () => {
