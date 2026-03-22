@@ -172,9 +172,8 @@ var u = () => s, d = () => c, f = () => l, p = () => {
 	scripts: {
 		dev: "vite --host --config config/vite.config.development.ts",
 		clean: "rm -rf dist",
-		build: "pnpm clean && pnpm build:js && pnpm build:types",
+		build: "pnpm clean && pnpm build:js",
 		"build:js": "vite build --config config/vite.config.production.ts && cp dist/react-wire-persisted.js dist/index.js",
-		"build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly --declarationDir dist --declaration --skipLibCheck",
 		prepublishOnly: "pnpm build",
 		check: "pnpm tsc --noEmit --skipLibCheck",
 		lint: "biome check --write",
@@ -210,6 +209,7 @@ var u = () => s, d = () => c, f = () => l, p = () => {
 		typescript: "^5.9.3",
 		vite: "8.0.1",
 		"vite-jest": "^0.1.4",
+		"vite-plugin-dts": "^4.5.4",
 		"vite-tsconfig-paths": "^6.1.1",
 		vitest: "^4.1.0"
 	},

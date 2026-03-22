@@ -1,10 +1,20 @@
 import * as path from 'node:path'
 import injectProcessEnv from 'rollup-plugin-inject-process-env'
 import { getEnvironmentVars } from './environment'
+import dts from 'vite-plugin-dts'
 
 const env = getEnvironmentVars()
 
 const productionConfig = {
+    plugins: [
+        dts({
+            outDir: 'dist',
+            include: ['src'],
+            exclude: ['demo/**', '**/*.test.ts', '**/*.test.tsx'],
+            rollupTypes: true,
+            insertTypesEntry: true,
+        }),
+    ],
     build: {
         sourcemap: true,
         lib: {
