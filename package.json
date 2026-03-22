@@ -33,7 +33,7 @@
         "clean": "rm -rf dist",
         "build": "pnpm clean && pnpm build:js && pnpm build:types",
         "build:js": "vite build --config config/vite.config.production.ts && cp dist/react-wire-persisted.js dist/index.js",
-        "build:types": "tsc --emitDeclarationOnly --declarationDir dist --declaration --skipLibCheck",
+        "build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly --declarationDir dist --declaration --skipLibCheck",
         "prepublishOnly": "pnpm build",
         "check": "pnpm tsc --noEmit --skipLibCheck",
         "lint": "biome check --write",

@@ -174,7 +174,7 @@ var u = () => s, d = () => c, f = () => l, p = () => {
 		clean: "rm -rf dist",
 		build: "pnpm clean && pnpm build:js && pnpm build:types",
 		"build:js": "vite build --config config/vite.config.production.ts && cp dist/react-wire-persisted.js dist/index.js",
-		"build:types": "tsc --emitDeclarationOnly --declarationDir dist --declaration --skipLibCheck",
+		"build:types": "tsc -p tsconfig.build.json --emitDeclarationOnly --declarationDir dist --declaration --skipLibCheck",
 		prepublishOnly: "pnpm build",
 		check: "pnpm tsc --noEmit --skipLibCheck",
 		lint: "biome check --write",
@@ -325,3 +325,5 @@ var M = () => O.namespace, N = () => O, P = () => k, F = (e) => {
 }), e);
 //#endregion
 export { H as HydrationProvider, B as createPersistedWire, D as defaultOptions, M as getNamespace, P as getOptions, N as getStorage, F as setNamespace, I as setOptions, R as upgradeStorage, V as useHydration, b as utils };
+
+//# sourceMappingURL=react-wire-persisted.js.map

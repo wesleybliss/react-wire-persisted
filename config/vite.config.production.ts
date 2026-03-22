@@ -6,6 +6,7 @@ const env = getEnvironmentVars()
 
 const productionConfig = {
     build: {
+        sourcemap: true,
         lib: {
             entry: path.resolve(__dirname, '../src/index.ts'),
             name: 'react-wire-persisted',
