@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 import * as utils from '@/utils';
 import { Wire } from '@forminator/react-wire';
 
+declare type AnyStorage = InternalStorage | Storage;
+
 /**
  * Creates a persisted Wire using the `RWPStorageProvider` that is currently set
  * Defaults to `localStorage` via `LocalStorageProvider`
@@ -37,6 +39,45 @@ declare type HydrationProviderProps = {
     autoUpgrade?: boolean;
 };
 
+declare interface InternalStorage {
+    getItem: (key: string) => string | null;
+    setItem: (key: string, value: string) => void;
+    removeItem: (key: string) => void;
+}
+
+/**
+ * A storage provider for `localStorage`
+ * @see `RWPStorageProvider.ts` for documentation
+ */
+export declare class LocalStorageProvider extends RWPStorageProvider {
+    storage: AnyStorage;
+    private _isUsingFakeStorage;
+    constructor(namespace: string, registry?: Record<string, unknown>);
+    getStorage(): AnyStorage;
+    setNamespace(namespace: string): void;
+    getItem(key: string): any;
+    setItem(key: string, value: unknown): void;
+    removeItem(key: string, fromRegistry?: boolean): void;
+    getAll(): Record<string, unknown>;
+    _resetAll(useInitialValues?: boolean, excludedKeys?: string[], clearRegistry?: boolean): void;
+    resetAll(excludedKeys?: string[], clearRegistry?: boolean): void;
+    removeAll(excludedKeys?: string[], clearRegistry?: boolean): void;
+    /**
+     * Attempt to upgrade from fake storage to real localStorage
+     * This is useful for hydration scenarios
+     */
+    upgradeToRealStorage(): boolean;
+    /**
+     * Check if currently using fake storage
+     */
+    isUsingFakeStorage(): boolean;
+}
+
+export declare class MemoryStorageProvider extends LocalStorageProvider {
+    constructor(namespace: string, registry?: Record<string, unknown>);
+    getStorage(): InternalStorage;
+}
+
 declare type PersistedWire<T> = Wire<T | null>;
 
 declare type RWPOptions = {
@@ -51,7 +92,7 @@ declare type RWPOptions = {
  * @see `LocalStorageProvider.ts` for an example implementation
  */
 /** biome-ignore-all lint/correctness/noUnusedFunctionParameters: WIP next PR will switch to TypeScript */
-declare abstract class RWPStorageProvider {
+export declare abstract class RWPStorageProvider {
     namespace: string | null;
     registry: Record<string, unknown>;
     /**

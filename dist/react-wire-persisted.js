@@ -231,8 +231,15 @@ var j = () => O.namespace, M = () => O, N = (e) => {
 }, V = ({ children: e, onUpgrade: t, autoUpgrade: n = !0 }) => (B({
 	onUpgrade: t,
 	autoUpgrade: n
-}), e);
+}), e), H = class extends C {
+	constructor(e, t = {}) {
+		super(e, t);
+	}
+	getStorage() {
+		return o;
+	}
+};
 //#endregion
-export { V as HydrationProvider, z as createPersistedWire, E as defaultOptions, j as getNamespace, P as getOptions, M as getStorage, N as setNamespace, F as setOptions, L as upgradeStorage, B as useHydration, b as utils };
+export { V as HydrationProvider, C as LocalStorageProvider, H as MemoryStorageProvider, S as RWPStorageProvider, z as createPersistedWire, E as defaultOptions, j as getNamespace, P as getOptions, M as getStorage, N as setNamespace, F as setOptions, L as upgradeStorage, B as useHydration, b as utils };
 
 //# sourceMappingURL=react-wire-persisted.js.map
