@@ -1,12 +1,12 @@
-import StorageProvider from '@/providers/StorageProvider'
+import RWPStorageProvider from '@/providers/RWPStorageProvider'
 import type { AnyStorage } from '@/types'
 import { fakeLocalStorage, isLocalStorageAvailable } from '@/utils'
 
 /**
  * A storage provider for `localStorage`
- * @see `StorageProvider.ts` for documentation
+ * @see `RWPStorageProvider.ts` for documentation
  */
-class LocalStorageProvider extends StorageProvider {
+export class LocalStorageProvider extends RWPStorageProvider {
     public storage: AnyStorage
     private _isUsingFakeStorage: boolean
 

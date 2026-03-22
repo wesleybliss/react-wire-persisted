@@ -1,7 +1,7 @@
 import { createWire, type Defined, type Wire } from '@forminator/react-wire'
 import LocalStorageProvider from '@/providers/LocalStorageProvider'
-import type StorageProvider from '@/providers/StorageProvider'
-import type { PersistedWire, RWPOptions } from '@/types'
+import type RWPStorageProvider from '@/providers/RWPStorageProvider'
+import type { PersistedWire, RWPOptions, WireLikeObject } from '@/types'
 import { getHasHydratedStorage, getIsClient, markStorageAsHydrated } from '@/utils'
 
 // Generate unique instance ID
@@ -16,7 +16,12 @@ export const defaultOptions: RWPOptions = {
     logging: {
         enabled: false,
     },
+    storageProvider: LocalStorageProvider,
 }
+
+let options: RWPOptions = { ...defaultOptions }
+let storage: RWPStorageProvider
+const pendingLogs: unknown[][] = []
 
 // Set global logging flag on startup
 if (typeof globalThis !== 'undefined' && globalThis.__RWP_LOGGING_ENABLED__ === undefined) {
@@ -27,7 +32,6 @@ rwpLog('[RWP] Module initialized, instance ID:', instanceId)
 
 // Make storage global so all instances share the same storage after upgrade
 rwpLog('[RWP] About to check global storage, instanceId:', instanceId)
-let storage: StorageProvider
 try {
     if (!globalThis.__RWP_STORAGE__) {
         rwpLog('[RWP] Creating global storage in instance:', instanceId)
@@ -41,8 +45,6 @@ try {
     if (globalThis.__RWP_LOGGING_ENABLED__) console.error('[RWP] Error setting up global storage:', error)
     storage = new LocalStorageProvider('__internal_rwp_storage__')
 }
-let options: RWPOptions = { ...defaultOptions }
-const pendingLogs: unknown[][] = []
 
 // Use a global registry to handle multiple module instances
 // This ensures all instances share the same wire registry
@@ -56,21 +58,12 @@ if (typeof globalThis !== 'undefined') {
 }
 
 // Registry to track wire instances for hydration refresh
-const registeredWires =
-    globalThis.__RWP_REGISTERED_WIRES__ || new Map<string, Pick<Wire<unknown>, 'getValue' | 'setValue' | 'subscribe'>>()
+const registeredWires = globalThis.__RWP_REGISTERED_WIRES__ || new Map<string, WireLikeObject>()
 rwpLog('[RWP] registeredWires Map reference in instance:', instanceId, 'size:', registeredWires.size)
 
-/**
- * Gets the namespace of the storage provider
- */
 export const getNamespace = (): string | null => storage.namespace
 
-/**
- * Gets the current storage provider class instance
- */
-export const getStorage = (): StorageProvider => storage
-
-export const getOptions = () => options
+export const getStorage = (): RWPStorageProvider => storage
 
 /**
  * Sets the namespace for the storage provider
@@ -88,7 +81,9 @@ export const setNamespace = (namespace: string) => {
     rwpLog(`[RWP] setNamespace() done, registered wires after:`, registeredWires.size)
 }
 
-export const setOptions = (value: RWPOptions) => {
+export const getOptions = (): RWPOptions => options
+
+export const setOptions = (value: Partial<RWPOptions>) => {
     options = {
         ...options,
         ...value,
@@ -114,30 +109,28 @@ const refreshAllWires = () => {
     rwpLog('[RWP] refreshAllWires() called in instance:', instanceId, 'registered wires:', registeredWires.size)
     log('react-wire-persisted: refreshAllWires() called, registered wires:', registeredWires.size)
 
-    registeredWires.forEach(
-        (wire: Wire<unknown> | Pick<Wire<unknown>, 'getValue' | 'setValue' | 'subscribe'>, key: string) => {
-            const storedValue = storage.getItem(key)
-            const currentValue = wire.getValue()
+    registeredWires.forEach((wire: Wire<unknown> | WireLikeObject, key: string) => {
+        const storedValue = storage.getItem(key)
+        const currentValue = wire.getValue()
 
-            rwpLog('[RWP] Checking wire', key, {
-                storedValue,
-                currentValue,
-                willUpdate: storedValue !== null && storedValue !== currentValue,
-            })
+        rwpLog('[RWP] Checking wire', key, {
+            storedValue,
+            currentValue,
+            willUpdate: storedValue !== null && storedValue !== currentValue,
+        })
 
-            log('react-wire-persisted: Checking wire', key, {
-                storedValue,
-                currentValue,
-                willUpdate: storedValue !== null && storedValue !== currentValue,
-            })
+        log('react-wire-persisted: Checking wire', key, {
+            storedValue,
+            currentValue,
+            willUpdate: storedValue !== null && storedValue !== currentValue,
+        })
 
-            if (storedValue !== null && storedValue !== currentValue) {
-                rwpLog('[RWP] Refreshing wire', key, 'with stored value', storedValue)
-                log('react-wire-persisted: Refreshing wire', key, 'with stored value', storedValue)
-                wire.setValue(storedValue)
-            }
-        },
-    )
+        if (storedValue !== null && storedValue !== currentValue) {
+            rwpLog('[RWP] Refreshing wire', key, 'with stored value', storedValue)
+            log('react-wire-persisted: Refreshing wire', key, 'with stored value', storedValue)
+            wire.setValue(storedValue)
+        }
+    })
 }
 
 /**
@@ -185,7 +178,7 @@ const log = (...args: unknown[]) => {
 }
 
 /**
- * Creates a persisted Wire using the `StorageProvider` that is currently set
+ * Creates a persisted Wire using the `RWPStorageProvider` that is currently set
  * Defaults to `localStorage` via `LocalStorageProvider`
  *
  * @param {String} key Unique key for storing this value

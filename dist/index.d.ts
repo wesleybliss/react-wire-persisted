@@ -1,17 +1,9 @@
 import { ReactNode } from 'react';
+import * as utils from '@/utils';
 import { Wire } from '@forminator/react-wire';
 
 /**
- * Adds a key to the keys map
- *
- * @param {String} value Key name
- */
-declare const addKey = (value: string): void => {
-    storageKeys[value] = value
-};
-
-/**
- * Creates a persisted Wire using the `StorageProvider` that is currently set
+ * Creates a persisted Wire using the `RWPStorageProvider` that is currently set
  * Defaults to `localStorage` via `LocalStorageProvider`
  *
  * @param {String} key Unique key for storing this value
@@ -22,72 +14,11 @@ export declare const createPersistedWire: <T>(key: string, value?: T | null) => 
 
 export declare const defaultOptions: RWPOptions;
 
-declare const fakeLocalStorage: InternalStorage = {
-    getItem: (key: string): string | null => storage[key],
-    setItem: (key: string, value: string): void => {
-        storage[key] = value
-    },
-    removeItem: (key: string): void => {
-        delete storage[key]
-    },
-    // Make Object.keys() work properly for _resetAll method
-    ...storage,
-};
-
-/**
- * Check if the client has finished hydrating
- */
-declare const getHasHydrated = (): boolean => hasHydrated;
-
-/**
- * Check if storage has been hydrated (safe to read from real localStorage)
- */
-declare const getHasHydratedStorage = (): boolean => hasHydratedStorage;
-
-/**
- * Check if we're running in a browser environment
- */
-declare const getIsClient = (): boolean => isClient;
-
-/**
- * Convenience method to get internally managed storage keys
- *
- * @returns {Object} InternalStorage keys map
- */
-declare const getKeys = (): Record<string, string> => storageKeys;
-
-/**
- * Gets the namespace of the storage provider
- */
 export declare const getNamespace: () => string | null;
 
 export declare const getOptions: () => RWPOptions;
 
-/**
- * Helper utility to prefix all keys in a map to use a namespace
- *
- * @param {String} namespace InternalStorage namespace prefix
- * @param {Object} keys (Optional) InternalStorage key/values. Defaults to the internally managed keys map
- */
-declare const getPrefixedKeys = (namespace: string, keys: Record<string, string> | null = null) => {
-    const items = keys || storageKeys
-
-    if (!namespace) return items
-
-    return Object.keys(items).reduce(
-    (acc, it) => {
-        acc[it] = `${namespace}.${items[it]}`
-
-        return acc
-    },
-        {} as Record<string, string>,
-    )
-};
-
-/**
- * Gets the current storage provider class instance
- */
-export declare const getStorage: () => StorageProvider;
+export declare const getStorage: () => RWPStorageProvider;
 
 export declare const HydrationProvider: ({ children, onUpgrade, autoUpgrade }: HydrationProviderProps) => ReactNode;
 
@@ -106,92 +37,29 @@ declare type HydrationProviderProps = {
     autoUpgrade?: boolean;
 };
 
-declare interface InternalStorage {
-    getItem: (key: string) => string | null
-    setItem: (key: string, value: string) => void
-    removeItem: (key: string) => void
-}
-
-/**
- * Check if localStorage is available and safe to use
- */
-declare const isLocalStorageAvailable = (): boolean => {
-    if (!isClient) return false
-
-    try {
-        const testKey = '__rwp_test__'
-
-        window.localStorage.setItem(testKey, 'test')
-        window.localStorage.removeItem(testKey)
-
-        return true
-    } catch (_) {
-        return false
-    }
-};
-
-/**
- * Checks if a value is a primitive type
- *
- * @param {*} val Value to check
- * @returns {Boolean} True if value is a primitive type
- */
-declare const isPrimitive = (val: unknown): boolean => {
-    const type = typeof val
-
-    if (val === null) return true
-    if (Array.isArray(val)) return false
-    if (type === 'object') return false
-
-    return type !== 'function'
-};
-
-/**
- * Adds a key to the keys map
- * (Alias for `addKey`)
- *
- * @param {String} value Key name
- */
-declare const key = (value: string) => addKey(value);
-
-/**
- * Mark storage as hydrated (called after upgradeStorage)
- */
-declare const markStorageAsHydrated = (): void => {
-    hasHydratedStorage = true
-};
-
 declare type PersistedWire<T> = Wire<T | null>;
 
 declare type RWPOptions = {
     logging: {
         enabled: boolean;
     };
+    storageProvider?: typeof RWPStorageProvider;
 };
-
-/**
- * Sets the namespace for the storage provider
- *
- * @param {String} namespace The namespace for the storage provider
- */
-export declare const setNamespace: (namespace: string) => void;
-
-export declare const setOptions: (value: RWPOptions) => void;
 
 /**
  * Base class to allow storage access
  * @see `LocalStorageProvider.ts` for an example implementation
  */
 /** biome-ignore-all lint/correctness/noUnusedFunctionParameters: WIP next PR will switch to TypeScript */
-declare abstract class StorageProvider {
+declare abstract class RWPStorageProvider {
     namespace: string | null;
     registry: Record<string, unknown>;
     /**
      * Initializes the class
-     * @param {String} namespace Namespace to prefix all keys with. Mostly used for the logging & reset functions
+     * @param {String} namespace Namespace to prefix all keys with. Mostly used for the logging and reset functions
      * @param {Object} registry (Optional) Initialize the storage provider with an existing registry
      */
-    constructor(namespace: string, registry: Record<string, unknown>);
+    protected constructor(namespace: string, registry: Record<string, unknown>);
     /**
      * Sets the namespace for this storage provider, and migrates
      * all stored values to the new namespace
@@ -199,7 +67,7 @@ declare abstract class StorageProvider {
      */
     abstract setNamespace(namespace: string | null): void;
     /**
-     * Registers an item with it's initial value. This is used for logging, resetting, etc.
+     * Registers an item with its initial value. This is used for logging, resetting, etc.
      * @param {String} key InternalStorage item's key
      * @param {*} initialValue InternalStorage item's initial value
      */
@@ -222,7 +90,7 @@ declare abstract class StorageProvider {
      */
     abstract removeItem(key: string, fromRegistry: boolean): void;
     /**
-     * Gets all stored keys & values
+     * Gets all stored keys and values
      * If a `namespace` was set, only keys prefixed with the namespace will be returned
      */
     abstract getAll(): Record<string, unknown>;
@@ -250,6 +118,15 @@ declare abstract class StorageProvider {
 }
 
 /**
+ * Sets the namespace for the storage provider
+ *
+ * @param {String} namespace The namespace for the storage provider
+ */
+export declare const setNamespace: (namespace: string) => void;
+
+export declare const setOptions: (value: Partial<RWPOptions>) => void;
+
+/**
  * Attempts to upgrade the storage provider from fake storage to real localStorage
  * This should be called on the client side after hydration
  *
@@ -274,21 +151,6 @@ export declare type UseHydrationOptions = {
     onUpgrade?: () => void;
 };
 
-declare namespace utils {
-    export {
-        isPrimitive,
-        fakeLocalStorage,
-        getIsClient,
-        getHasHydrated,
-        getHasHydratedStorage,
-        markStorageAsHydrated,
-        isLocalStorageAvailable,
-        addKey,
-        key,
-        getKeys,
-        getPrefixedKeys
-    }
-}
 export { utils }
 
 export { }

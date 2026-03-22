@@ -1,7 +1,7 @@
 import { fakeLocalStorage } from '@/utils'
 import LocalStorageProvider from './LocalStorageProvider'
 
-class MemoryStorageProvider extends LocalStorageProvider {
+export class MemoryStorageProvider extends LocalStorageProvider {
     constructor(namespace: string, registry: Record<string, unknown> = {}) {
         super(namespace, registry)
     }

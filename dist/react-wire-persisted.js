@@ -139,191 +139,100 @@ var u = () => s, d = () => c, f = () => l, p = () => {
 	isUsingFakeStorage() {
 		return this._isUsingFakeStorage;
 	}
-}, w = {
-	name: "react-wire-persisted",
-	version: "2.1.1",
-	author: "Wesley Bliss <wesley.bliss@gmail.com>",
-	license: "MIT",
-	type: "module",
-	main: "./dist/react-wire-persisted.umd.cjs",
-	module: "./dist/index.js",
-	types: "./dist/index.d.ts",
-	files: [
-		"src",
-		"dist",
-		"client.js",
-		"client.mjs",
-		"nextjs.js"
-	],
-	exports: {
-		".": {
-			import: "./dist/react-wire-persisted.js",
-			require: "./dist/react-wire-persisted.umd.cjs"
-		},
-		"./client": {
-			import: "./client.mjs",
-			require: "./client.js"
-		},
-		"./nextjs": {
-			import: "./nextjs.js",
-			require: "./nextjs.js"
-		}
-	},
-	scripts: {
-		dev: "vite --host --config config/vite.config.development.ts",
-		clean: "rm -rf dist",
-		build: "pnpm clean && pnpm build:js",
-		"build:js": "vite build --config config/vite.config.production.ts && cp dist/react-wire-persisted.js dist/index.js",
-		prepublishOnly: "pnpm build",
-		check: "pnpm tsc --noEmit --skipLibCheck",
-		lint: "biome check --write",
-		"lint:format": "biome format --write",
-		"lint:lint": "biome lint --write",
-		test: "pnpm test:unit",
-		"test:unit": "NODE_ENV=test vitest run",
-		"test:unit:only": "NODE_ENV=test vitest run -t ",
-		"test:unit:coverage": "NODE_ENV=test vitest run --no-color --reporter=junit --coverage --outputFile=coverage/report.xml",
-		yalc: "pnpm build && yalc push"
-	},
-	devDependencies: {
-		"@biomejs/biome": "^2.4.8",
-		"@forminator/react-wire": "^0.7.0",
-		"@testing-library/dom": "^10.4.1",
-		"@testing-library/jest-dom": "^6.9.1",
-		"@testing-library/react": "^16.3.2",
-		"@testing-library/user-event": "^14.6.1",
-		"@types/react": "^19.2.14",
-		"@types/react-dom": "^19.2.3",
-		"@vitejs/plugin-react": "^6.0.1",
-		"@vitest/coverage-v8": "^4.1.0",
-		browserslist: "^4.28.1",
-		dotenv: "^17.3.1",
-		esbuild: "^0.27.4",
-		jest: "^30.3.0",
-		"jest-environment-jsdom": "^30.3.0",
-		np: "^11.0.2",
-		react: "^19.2.4",
-		"react-dom": "^19.2.4",
-		"rollup-plugin-inject-process-env": "^1.3.1",
-		"snapshot-diff": "^0.10.0",
-		typescript: "^5.9.3",
-		vite: "8.0.1",
-		"vite-jest": "^0.1.4",
-		"vite-plugin-dts": "^4.5.4",
-		"vite-tsconfig-paths": "^6.1.1",
-		vitest: "^4.1.0"
-	},
-	peerDependencies: {
-		"@forminator/react-wire": "^0.7.0",
-		react: "^19.0.0",
-		"react-dom": "^19.0.0"
-	},
-	browserslist: {
-		production: [
-			">0.2%",
-			"not dead",
-			"not op_mini all"
-		],
-		development: [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version, not dead"
-		]
-	},
-	pnpm: { neverBuiltDependencies: [] }
-}, T = Math.random().toString(36).substring(7), E = (...e) => {
+}, w = Math.random().toString(36).substring(7), T = (...e) => {
 	typeof globalThis < "u" && globalThis.__RWP_LOGGING_ENABLED__ !== !1 && console.log(...e);
-}, D = { logging: { enabled: !1 } };
-typeof globalThis < "u" && globalThis.__RWP_LOGGING_ENABLED__ === void 0 && (globalThis.__RWP_LOGGING_ENABLED__ = D.logging.enabled), E("[RWP] Module initialized, instance ID:", T), E("[RWP] About to check global storage, instanceId:", T);
-var O;
+}, E = {
+	logging: { enabled: !1 },
+	storageProvider: C
+}, D = { ...E }, O, k = [];
+typeof globalThis < "u" && globalThis.__RWP_LOGGING_ENABLED__ === void 0 && (globalThis.__RWP_LOGGING_ENABLED__ = E.logging.enabled), T("[RWP] Module initialized, instance ID:", w), T("[RWP] About to check global storage, instanceId:", w);
 try {
-	globalThis.__RWP_STORAGE__ ? E("[RWP] Using existing global storage in instance:", T) : (E("[RWP] Creating global storage in instance:", T), globalThis.__RWP_STORAGE__ = new C("__internal_rwp_storage__")), O = globalThis.__RWP_STORAGE__, E("[RWP] InternalStorage assigned successfully");
+	globalThis.__RWP_STORAGE__ ? T("[RWP] Using existing global storage in instance:", w) : (T("[RWP] Creating global storage in instance:", w), globalThis.__RWP_STORAGE__ = new C("__internal_rwp_storage__")), O = globalThis.__RWP_STORAGE__, T("[RWP] InternalStorage assigned successfully");
 } catch (e) {
 	globalThis.__RWP_LOGGING_ENABLED__ && console.error("[RWP] Error setting up global storage:", e), O = new C("__internal_rwp_storage__");
 }
-var k = { ...D }, A = [];
-typeof globalThis < "u" && (globalThis.__RWP_REGISTERED_WIRES__ ? E("[RWP] Using existing global registeredWires in instance:", T) : (E("[RWP] Creating global registeredWires in instance:", T), globalThis.__RWP_REGISTERED_WIRES__ = /* @__PURE__ */ new Map()));
-var j = globalThis.__RWP_REGISTERED_WIRES__ || /* @__PURE__ */ new Map();
-E("[RWP] registeredWires Map reference in instance:", T, "size:", j.size);
-var M = () => O.namespace, N = () => O, P = () => k, F = (e) => {
-	E("[RWP] setNamespace() called with:", e, "registered wires before:", j.size);
-	let t = e || M();
+typeof globalThis < "u" && (globalThis.__RWP_REGISTERED_WIRES__ ? T("[RWP] Using existing global registeredWires in instance:", w) : (T("[RWP] Creating global registeredWires in instance:", w), globalThis.__RWP_REGISTERED_WIRES__ = /* @__PURE__ */ new Map()));
+var A = globalThis.__RWP_REGISTERED_WIRES__ || /* @__PURE__ */ new Map();
+T("[RWP] registeredWires Map reference in instance:", w, "size:", A.size);
+var j = () => O.namespace, M = () => O, N = (e) => {
+	T("[RWP] setNamespace() called with:", e, "registered wires before:", A.size);
+	let t = e || j();
 	if (!t) throw Error("react-wire-persisted: Cannot set namespace to null or undefined");
-	O.setNamespace(e), O = new C(t), E(`[RWP] version: ${w.version}, setNamespace() done, registered wires after:`, j.size);
-}, I = (e) => {
+	O.setNamespace(e), O = new C(t), T("[RWP] setNamespace() done, registered wires after:", A.size);
+}, P = () => D, F = (e) => {
 	/* istanbul ignore next */
-	if (k = {
-		...k,
+	if (D = {
+		...D,
 		...e
-	}, typeof globalThis < "u" && (globalThis.__RWP_LOGGING_ENABLED__ = k.logging.enabled), k.logging.enabled) for (console.info("Flushing", A.length, "pending logs"); A.length;)
+	}, typeof globalThis < "u" && (globalThis.__RWP_LOGGING_ENABLED__ = D.logging.enabled), D.logging.enabled) for (console.info("Flushing", k.length, "pending logs"); k.length;)
  /* istanbul ignore next */
-	console.log(...A.shift() || []);
-}, L = () => {
-	E("[RWP] refreshAllWires() called in instance:", T, "registered wires:", j.size), z("react-wire-persisted: refreshAllWires() called, registered wires:", j.size), j.forEach((e, t) => {
+	console.log(...k.shift() || []);
+}, I = () => {
+	T("[RWP] refreshAllWires() called in instance:", w, "registered wires:", A.size), R("react-wire-persisted: refreshAllWires() called, registered wires:", A.size), A.forEach((e, t) => {
 		let n = O.getItem(t), r = e.getValue();
-		E("[RWP] Checking wire", t, {
+		T("[RWP] Checking wire", t, {
 			storedValue: n,
 			currentValue: r,
 			willUpdate: n !== null && n !== r
-		}), z("react-wire-persisted: Checking wire", t, {
+		}), R("react-wire-persisted: Checking wire", t, {
 			storedValue: n,
 			currentValue: r,
 			willUpdate: n !== null && n !== r
-		}), n !== null && n !== r && (E("[RWP] Refreshing wire", t, "with stored value", n), z("react-wire-persisted: Refreshing wire", t, "with stored value", n), e.setValue(n));
+		}), n !== null && n !== r && (T("[RWP] Refreshing wire", t, "with stored value", n), R("react-wire-persisted: Refreshing wire", t, "with stored value", n), e.setValue(n));
 	});
-}, R = () => {
-	if (E("[RWP] upgradeStorage() called in instance:", T, {
+}, L = () => {
+	if (T("[RWP] upgradeStorage() called in instance:", w, {
 		isClient: u(),
 		isUsingFakeStorage: O.isUsingFakeStorage()
-	}), z("react-wire-persisted: upgradeStorage() called", {
+	}), R("react-wire-persisted: upgradeStorage() called", {
 		isClient: u(),
 		isUsingFakeStorage: O.isUsingFakeStorage()
 	}), !u()) return !1;
 	let e = O.upgradeToRealStorage();
-	return E("[RWP] upgradeToRealStorage() returned", e), z("react-wire-persisted: upgradeToRealStorage() returned", e), e && (p(), E("[RWP] Upgraded to real localStorage, calling refreshAllWires()"), z("react-wire-persisted: Upgraded to real localStorage after hydration"), L()), e;
-}, z = (...e) => {
+	return T("[RWP] upgradeToRealStorage() returned", e), R("react-wire-persisted: upgradeToRealStorage() returned", e), e && (p(), T("[RWP] Upgraded to real localStorage, calling refreshAllWires()"), R("react-wire-persisted: Upgraded to real localStorage after hydration"), I()), e;
+}, R = (...e) => {
 	/* istanbul ignore next */
-	k.logging.enabled ? console.log(...e) : A.push(e);
-}, B = (e, t = null) => {
-	if (E("[RWP] createPersistedWire() called in instance:", T, "key:", e, "value:", t), !e) throw Error(`createPersistedWire: Key cannot be a falsey value (${e}}`);
+	D.logging.enabled ? console.log(...e) : k.push(e);
+}, z = (e, t = null) => {
+	if (T("[RWP] createPersistedWire() called in instance:", w, "key:", e, "value:", t), !e) throw Error(`createPersistedWire: Key cannot be a falsey value (${e}}`);
 	O.register(e, t);
-	let r = n(t), i = () => r.getValue(), a = (t) => (E("[RWP] setValue called in instance:", T, "key:", e, "isUsingFakeStorage:", O.isUsingFakeStorage()), O.setItem(e, t), r.setValue(t)), o = (e) => r.subscribe(e), s = t, c = f() || !O.isUsingFakeStorage();
+	let r = n(t), i = () => r.getValue(), a = (t) => (T("[RWP] setValue called in instance:", w, "key:", e, "isUsingFakeStorage:", O.isUsingFakeStorage()), O.setItem(e, t), r.setValue(t)), o = (e) => r.subscribe(e), s = t, c = f() || !O.isUsingFakeStorage();
 	if (c && u()) {
 		let t = O.getItem(e);
 		t !== null && (s = t);
 	}
-	return z("react-wire-persisted: create", e, {
+	return R("react-wire-persisted: create", e, {
 		value: t,
 		initialValue: s,
 		hasHydratedStorage: f(),
 		isUsingFakeStorage: O.isUsingFakeStorage(),
 		canReadStorage: c
-	}), s !== t && s !== void 0 && a(s), j.set(e, {
+	}), s !== t && s !== void 0 && a(s), A.set(e, {
 		getValue: i,
 		setValue: a,
 		subscribe: o
-	}), E("[RWP] Wire registered, total wires:", j.size, "keys:", Array.from(j.keys())), {
+	}), T("[RWP] Wire registered, total wires:", A.size, "keys:", Array.from(A.keys())), {
 		...r,
 		getValue: i,
 		setValue: a,
 		subscribe: o
 	};
-}, V = (n = {}) => {
+}, B = (n = {}) => {
 	let { autoUpgrade: r = !0, onUpgrade: i } = n, a = t(!1);
 	return e(() => {
 		if (!r || a.current || !u()) return;
 		let e = () => {
-			d() && !a.current && R() && (a.current = !0, i?.());
+			d() && !a.current && L() && (a.current = !0, i?.());
 		};
 		e();
 		let t = setTimeout(e, 0);
 		return () => clearTimeout(t);
 	}, [r, i]), { hasUpgraded: a.current };
-}, H = ({ children: e, onUpgrade: t, autoUpgrade: n = !0 }) => (V({
+}, V = ({ children: e, onUpgrade: t, autoUpgrade: n = !0 }) => (B({
 	onUpgrade: t,
 	autoUpgrade: n
 }), e);
 //#endregion
-export { H as HydrationProvider, B as createPersistedWire, D as defaultOptions, M as getNamespace, P as getOptions, N as getStorage, F as setNamespace, I as setOptions, R as upgradeStorage, V as useHydration, b as utils };
+export { V as HydrationProvider, z as createPersistedWire, E as defaultOptions, j as getNamespace, P as getOptions, M as getStorage, N as setNamespace, F as setOptions, L as upgradeStorage, B as useHydration, b as utils };
 
 //# sourceMappingURL=react-wire-persisted.js.map

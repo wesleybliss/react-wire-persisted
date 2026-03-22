@@ -3,18 +3,18 @@
  * @see `LocalStorageProvider.ts` for an example implementation
  */
 /** biome-ignore-all lint/correctness/noUnusedFunctionParameters: WIP next PR will switch to TypeScript */
-abstract class StorageProvider {
+export abstract class RWPStorageProvider {
     namespace: string | null
     registry: Record<string, unknown>
 
     /**
      * Initializes the class
-     * @param {String} namespace Namespace to prefix all keys with. Mostly used for the logging & reset functions
+     * @param {String} namespace Namespace to prefix all keys with. Mostly used for the logging and reset functions
      * @param {Object} registry (Optional) Initialize the storage provider with an existing registry
      */
-    constructor(namespace: string, registry: Record<string, unknown>) {
+    protected constructor(namespace: string, registry: Record<string, unknown>) {
         // Simulate being an abstract class
-        if (new.target === StorageProvider)
+        if (new.target === RWPStorageProvider)
             throw TypeError(`StorageProvider is abstract. Extend this class to implement it`)
 
         this.namespace = namespace || null
@@ -30,7 +30,7 @@ abstract class StorageProvider {
     abstract setNamespace(namespace: string | null): void
 
     /**
-     * Registers an item with it's initial value. This is used for logging, resetting, etc.
+     * Registers an item with its initial value. This is used for logging, resetting, etc.
      * @param {String} key InternalStorage item's key
      * @param {*} initialValue InternalStorage item's initial value
      */
@@ -62,7 +62,7 @@ abstract class StorageProvider {
     abstract removeItem(key: string, fromRegistry: boolean): void
 
     /**
-     * Gets all stored keys & values
+     * Gets all stored keys and values
      * If a `namespace` was set, only keys prefixed with the namespace will be returned
      */
     /* istanbul ignore next */
@@ -102,4 +102,4 @@ abstract class StorageProvider {
     }
 }
 
-export default StorageProvider
+export default RWPStorageProvider

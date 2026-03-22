@@ -1,5 +1,5 @@
 import LocalStorageProvider from '@/providers/LocalStorageProvider'
-import StorageProvider from '@/providers/StorageProvider'
+import RWPStorageProvider from '@/providers/RWPStorageProvider'
 
 const namespace = 'fakeNamespace'
 const keyFor = (key: string) => `${namespace}.${key}`
@@ -33,7 +33,7 @@ describe('LocalStorageProvider', () => {
     })
 
     test('Has expected methods', () => {
-        const baseMethods = Object.getOwnPropertyNames(StorageProvider.prototype)
+        const baseMethods = Object.getOwnPropertyNames(RWPStorageProvider.prototype)
 
         const methods = [
             'setNamespace',

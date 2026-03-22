@@ -1,9 +1,9 @@
-import StorageProvider from '@/providers/StorageProvider'
+import RWPStorageProvider from '@/providers/RWPStorageProvider'
 
-test("Abstract class StorageProvider can't be instantiated", () => {
+test("Abstract class RWPStorageProvider can't be instantiated", () => {
     const fn = () => {
         const namespace = 'fakeNamespace'
-        return new (StorageProvider as unknown as new (ns: string) => StorageProvider)(namespace)
+        return new (RWPStorageProvider as unknown as new (ns: string) => RWPStorageProvider)(namespace)
     }
 
     expect(fn).toThrow(Error)
