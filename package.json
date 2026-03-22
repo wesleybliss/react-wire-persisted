@@ -16,6 +16,7 @@
     ],
     "exports": {
         ".": {
+            "types": "./dist/index.d.ts",
             "import": "./dist/react-wire-persisted.js",
             "require": "./dist/react-wire-persisted.umd.cjs"
         },
