@@ -185,7 +185,7 @@ const log = (...args: unknown[]) => {
  * @param {*} value Initial value of this Wire
  * @returns A new Wire decorated with localStorage functionality
  */
-export const createPersistedWire = <T>(key: string, value: T | null = null): PersistedWire<T> => {
+export const createPersistedWire = <T = null>(key: string, value: T = null as T): PersistedWire<T> => {
     rwpLog('[RWP] createPersistedWire() called in instance:', instanceId, 'key:', key, 'value:', value)
 
     // This check helps ensure no accidental key typos occur
@@ -195,11 +195,11 @@ export const createPersistedWire = <T>(key: string, value: T | null = null): Per
     storage.register(key, value)
 
     // The actual Wire backing object
-    const wire = createWire<T | null>(value)
+    const wire = createWire<T>(value)
 
     const getValue = () => wire.getValue()
 
-    const setValue = (newValue: Defined<T | null>) => {
+    const setValue = (newValue: Defined<T>) => {
         rwpLog(
             '[RWP] setValue called in instance:',
             instanceId,
@@ -212,12 +212,12 @@ export const createPersistedWire = <T>(key: string, value: T | null = null): Per
         return wire.setValue(newValue)
     }
 
-    const subscribe = (callback: (value: Defined<T | null>) => void) => {
+    const subscribe = (callback: (value: Defined<T>) => void) => {
         return wire.subscribe(callback)
     }
 
     // Always start with default value to ensure SSR consistency
-    let initialValue: T | null = value
+    let initialValue: T = value
 
     // Only read from storage if we've hydrated OR if storage is already using real localStorage
     // (prevents hydration mismatch in SSR, but allows normal behavior in client-only apps)
@@ -237,7 +237,7 @@ export const createPersistedWire = <T>(key: string, value: T | null = null): Per
         canReadStorage,
     })
 
-    if (initialValue !== value && initialValue !== undefined) setValue(initialValue as Defined<T | null>)
+    if (initialValue !== value && initialValue !== undefined) setValue(initialValue as Defined<T>)
 
     // Register wire for post-hydration refresh
     registeredWires.set(key, {

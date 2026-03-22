@@ -98,7 +98,7 @@ See [LocalStorageProvider](src/providers/LocalStorageProvider.ts) and [MemorySto
 
 ## API
 
-### `createPersistedWire<T>(key: string, value: T | null): PersistedWire<T>`
+### `createPersistedWire<T = null>(key: string, value?: T): PersistedWire<T>`
 
 Creates a persisted Wire that automatically syncs with the configured storage provider.
 

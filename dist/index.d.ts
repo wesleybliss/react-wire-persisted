@@ -12,7 +12,7 @@ declare type AnyStorage = InternalStorage | Storage;
  * @param {*} value Initial value of this Wire
  * @returns A new Wire decorated with localStorage functionality
  */
-export declare const createPersistedWire: <T>(key: string, value?: T | null) => PersistedWire<T>;
+export declare const createPersistedWire: <T = null>(key: string, value?: T) => PersistedWire<T>;
 
 export declare const defaultOptions: RWPOptions;
 
@@ -78,7 +78,7 @@ export declare class MemoryStorageProvider extends LocalStorageProvider {
     getStorage(): InternalStorage;
 }
 
-declare type PersistedWire<T> = Wire<T | null>;
+declare type PersistedWire<T> = Wire<T>;
 
 declare type RWPOptions = {
     logging: {

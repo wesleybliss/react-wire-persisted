@@ -6,7 +6,7 @@ export type RWPOptions = {
     storageProvider?: typeof RWPStorageProvider
 }
 
-export type PersistedWire<T> = Wire<T | null>
+export type PersistedWire<T> = Wire<T>
 
 export interface InternalStorage {
     getItem: (key: string) => string | null
