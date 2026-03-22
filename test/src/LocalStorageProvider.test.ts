@@ -1,5 +1,5 @@
-import LocalStorageProvider from 'src/providers/LocalStorageProvider'
-import StorageProvider from 'src/providers/StorageProvider'
+import LocalStorageProvider from '@/providers/LocalStorageProvider'
+import StorageProvider from '@/providers/StorageProvider'
 
 const namespace = 'fakeNamespace'
 const keyFor = (key: string) => `${namespace}.${key}`

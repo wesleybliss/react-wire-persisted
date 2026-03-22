@@ -22,7 +22,6 @@
         "types": ["vite/client", "vitest/globals"],
         "paths": {
             "vite-env": ["./vite-env.d.ts"],
-            "src/*": ["./src/*"],
             "tests/*": ["./tests/*"],
             "@/*": ["./src/*"]
         }

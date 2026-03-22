@@ -5,7 +5,7 @@ import Button from 'demo/src/components/Button'
 import * as store from 'demo/src/store'
 import type { ChangeEvent } from 'react'
 import { useEffect, useState } from 'react'
-import { getStorage } from 'src/react-wire-persisted'
+import { getStorage } from '@/react-wire-persisted'
 import TextInput from './TextInput'
 
 const DemoActions = () => {

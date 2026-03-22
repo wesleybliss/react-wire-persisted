@@ -1,4 +1,4 @@
-import * as rwp from 'src/react-wire-persisted'
+import * as rwp from '@/react-wire-persisted'
 
 const namespace = 'fakeNamespace'
 const noKeys = null as unknown as string[]

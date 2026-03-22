@@ -1,4 +1,4 @@
-import { fakeLocalStorage } from 'src/utils'
+import { fakeLocalStorage } from '@/utils'
 import LocalStorageProvider from './LocalStorageProvider'
 
 class MemoryStorageProvider extends LocalStorageProvider {

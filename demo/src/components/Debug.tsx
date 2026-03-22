@@ -3,8 +3,8 @@ import * as actions from 'demo/src/actions'
 import * as constants from 'demo/src/constants'
 import * as store from 'demo/src/store'
 import { useEffect } from 'react'
-import * as rwp from 'src/react-wire-persisted'
-import * as rwpUtils from 'src/utils'
+import * as rwp from '@/react-wire-persisted'
+import * as rwpUtils from '@/utils'
 
 const Debug = () => {
     const categories = useWireValue(store.categories)

@@ -10,12 +10,20 @@ import testingConfig from './config/vite.config.testing'
 const env = getEnvironmentVars()
 const isProduction = process.env.NODE_ENV === 'production'
 
+const excludedFiles = [
+    'demo/**',
+]
+
+const resolvedExcludes = excludedFiles
+    .map(p => path.resolve(__dirname, p))
+
 const config = {
     root: __dirname,
     define: loadEnvironment(env),
     plugins: [react(), tsconfigPaths()],
     resolve: {
         alias: {
+            'react-wire-persisted': path.resolve(__dirname, '../src'),
             src: path.resolve(__dirname, 'src'),
             tests: path.resolve(__dirname, 'tests'),
         },
@@ -23,6 +31,7 @@ const config = {
     build: {
         sourcemap: !!process.env.SOURCEMAPS || isProduction,
         rollupOptions: {
+            external: resolvedExcludes,
             output: {
                 manualChunks(id) {
                     if (id.includes('node_modules')) {

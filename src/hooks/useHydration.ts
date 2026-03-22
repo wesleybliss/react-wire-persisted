@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { getHasHydrated, getIsClient } from 'src/utils'
+import { getHasHydrated, getIsClient } from '@/utils'
 import { upgradeStorage } from '@/react-wire-persisted'
 
 export type UseHydrationOptions = {
