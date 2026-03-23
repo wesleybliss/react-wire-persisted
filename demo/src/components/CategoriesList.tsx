@@ -1,0 +1,63 @@
+import { useWireState, useWireValue } from '@forminator/react-wire'
+import * as actions from 'demo/src/actions'
+import * as store from 'demo/src/store'
+import { useEffect, useState } from 'react'
+
+import ListItem from './ListItem'
+
+// Don't hold up test unnecessarily
+/* istanbul ignore next */
+const simulatedTimeout = process.env.NODE_ENV === 'test' ? 0 : 800
+
+const CategoriesList = () => {
+    const [loading, setLoading] = useState<boolean>(false)
+
+    const categories = useWireValue(store.categories)
+    const hasCategories = useWireValue(store.hasCategories)
+    const [selectedCategoryId, setSelectedCategoryId] = useWireState(store.selectedCategoryId)
+
+    // Fetch categories onload
+    useEffect(() => {
+        const fetchCategories = async () => {
+            setLoading(true)
+            await actions.fetchCategories()
+            setLoading(false)
+        }
+
+        setTimeout(fetchCategories, simulatedTimeout)
+    }, [])
+
+    return (
+        <div className="CategoriesList h-full bg-slate-100">
+            <header className="mb-4 p-4 text-xl">CATEGORIES</header>
+
+            {loading && (
+                <div className="p-4">
+                    <i>Loading...</i>
+                </div>
+            )}
+
+            {!loading && !hasCategories && (
+                <div className="p-4">
+                    <p>No categories yet.</p>
+                </div>
+            )}
+
+            {!loading && hasCategories && (
+                <ul data-testid="categories-list">
+                    {categories?.map((it, i) => (
+                        <ListItem
+                            key={`category-${i}`}
+                            active={selectedCategoryId === it.id}
+                            onClick={() => setSelectedCategoryId(it.id)}
+                        >
+                            {it.name}
+                        </ListItem>
+                    ))}
+                </ul>
+            )}
+        </div>
+    )
+}
+
+export default CategoriesList

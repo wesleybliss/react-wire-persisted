@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <HydrationProvider
-          onUpgrade={() => console.log('Storage upgraded!')}
+          onUpgrade={() => console.log('InternalStorage upgraded!')}
         >
           {children}
         </HydrationProvider>
@@ -60,7 +60,7 @@ import { useHydration } from 'react-wire-persisted/client'
 
 export function MyHydrationProvider({ children }) {
   useHydration({
-    onUpgrade: () => console.log('Storage upgraded!')
+    onUpgrade: () => console.log('InternalStorage upgraded!')
   })
   return children
 }
@@ -76,7 +76,7 @@ function MyApp({ Component, pageProps }) {
   // This will automatically upgrade to real localStorage after hydration
   useHydration({
     onUpgrade: () => {
-      console.log('Storage upgraded to localStorage!')
+      console.log('InternalStorage upgraded to localStorage!')
     }
   })
 

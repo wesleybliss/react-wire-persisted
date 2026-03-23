@@ -1,6 +1,0 @@
-// Vitest Snapshot v1
-
-exports[`App renders 1`] = `
-"Snapshot Diff:
-Compared values have no visual difference."
-`;

@@ -1,0 +1,31 @@
+{
+    "compilerOptions": {
+        "tsBuildInfoFile": "./node_modules/.cache/tsbuildinfo/rwp.tsbuildinfo",
+        "declaration": true,
+        "declarationDir": "./node_modules/.cache/dts/rwp",
+        "composite": false,
+        "baseUrl": ".",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": false,
+        "target": "es2017",
+        "skipLibCheck": true,
+        "strict": true,
+        "allowSyntheticDefaultImports": true,
+        "emitDeclarationOnly": true,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "react-jsx",
+        "incremental": true,
+        "types": ["vite/client", "vitest/globals"],
+        "paths": {
+            "vite-env": ["./vite-env.d.ts"],
+            "tests/*": ["./tests/*"],
+            "@/*": ["./src/*"]
+        }
+    },
+    "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+    "exclude": ["node_modules", "task/**", "vite.config.ts", "eslint.config.js", "dist"]
+}

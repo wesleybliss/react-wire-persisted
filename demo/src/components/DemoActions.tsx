@@ -1,0 +1,66 @@
+/* istanbul ignore file */
+
+import { useWireState } from '@forminator/react-wire'
+import Button from 'demo/src/components/Button'
+import * as store from 'demo/src/store'
+import type { ChangeEvent } from 'react'
+import { useEffect, useState } from 'react'
+import { getStorage } from '@/react-wire-persisted'
+import TextInput from './TextInput'
+
+const DemoActions = () => {
+    const [inputText, setInputText] = useState('')
+
+    const [demoText, setDemoText] = useWireState(store.demoText)
+    const [demoNumber, setDemoNumber] = useWireState(store.demoNumber)
+
+    const handleLogAllClick = () => {
+        console.log(getStorage().getAll())
+    }
+
+    const handleInputTextChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setInputText(e.target.value?.toString() || '')
+    }
+
+    const handleSaveDemoText = () => {
+        setDemoText(inputText)
+    }
+
+    const handledemoNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const parsed = parseInt(e.target.value, 10)
+        if (parsed.toString() !== e.target.value) return
+        setDemoNumber(parsed)
+    }
+
+    useEffect(() => setInputText(demoText ?? ''), [demoText])
+
+    return (
+        <div className="p-4 flex justify-center items-center content-center">
+            <div className="mx-2 p-2 bg-gray-200">
+                <Button onClick={handleLogAllClick}>Log All Stored Items</Button>
+            </div>
+
+            <div className="mx-2 p-2 flex justify-center items-center content-center bg-gray-200">
+                <TextInput
+                    className="mr-2"
+                    value={inputText}
+                    placeholder="New namespace"
+                    onChange={handleInputTextChange}
+                />
+                <Button onClick={handleSaveDemoText}>Change Demo Text</Button>
+            </div>
+
+            <div className="mx-2 p-2 flex justify-center items-center content-center bg-gray-200">
+                <TextInput
+                    className="mr-2"
+                    type="number"
+                    value={demoNumber?.toString() ?? ''}
+                    placeholder="42 (auto saves)"
+                    onChange={handledemoNumberChange}
+                />
+            </div>
+        </div>
+    )
+}
+
+export default DemoActions
