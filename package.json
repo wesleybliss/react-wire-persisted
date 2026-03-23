@@ -1,6 +1,6 @@
 {
     "name": "react-wire-persisted",
-    "version": "2.1.1",
+    "version": "3.0.0",
     "author": "Wesley Bliss <wesley.bliss@gmail.com>",
     "license": "MIT",
     "type": "module",
