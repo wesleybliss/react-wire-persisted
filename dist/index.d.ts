@@ -1,6 +1,12 @@
 import { ReactNode } from 'react';
-import * as utils from '@/utils';
 import { Wire } from '@forminator/react-wire';
+
+/**
+ * Adds a key to the keys map
+ *
+ * @param {String} value Key name
+ */
+declare const addKey: (value: string) => void;
 
 declare type AnyStorage = InternalStorage | Storage;
 
@@ -16,9 +22,41 @@ export declare const createPersistedWire: <T = null>(key: string, value?: T) => 
 
 export declare const defaultOptions: RWPOptions;
 
+declare const fakeLocalStorage: InternalStorage;
+
+/**
+ * Check if the client has finished hydrating
+ */
+declare const getHasHydrated: () => boolean;
+
+/**
+ * Check if storage has been hydrated (safe to read from real localStorage)
+ */
+declare const getHasHydratedStorage: () => boolean;
+
+/**
+ * Check if we're running in a browser environment
+ */
+declare const getIsClient: () => boolean;
+
+/**
+ * Convenience method to get internally managed storage keys
+ *
+ * @returns {Object} InternalStorage keys map
+ */
+declare const getKeys: () => Record<string, string>;
+
 export declare const getNamespace: () => string | null;
 
 export declare const getOptions: () => RWPOptions;
+
+/**
+ * Helper utility to prefix all keys in a map to use a namespace
+ *
+ * @param {String} namespace InternalStorage namespace prefix
+ * @param {Object} keys (Optional) InternalStorage key/values. Defaults to the internally managed keys map
+ */
+declare const getPrefixedKeys: (namespace: string, keys?: Record<string, string> | null) => Record<string, string>;
 
 export declare const getStorage: () => RWPStorageProvider;
 
@@ -44,6 +82,27 @@ declare interface InternalStorage {
     setItem: (key: string, value: string) => void;
     removeItem: (key: string) => void;
 }
+
+/**
+ * Check if localStorage is available and safe to use
+ */
+declare const isLocalStorageAvailable: () => boolean;
+
+/**
+ * Checks if a value is a primitive type
+ *
+ * @param {*} val Value to check
+ * @returns {Boolean} True if value is a primitive type
+ */
+declare const isPrimitive: (val: unknown) => boolean;
+
+/**
+ * Adds a key to the keys map
+ * (Alias for `addKey`)
+ *
+ * @param {String} value Key name
+ */
+declare const key: (value: string) => void;
 
 /**
  * A storage provider for `localStorage`
@@ -72,6 +131,11 @@ export declare class LocalStorageProvider extends RWPStorageProvider {
      */
     isUsingFakeStorage(): boolean;
 }
+
+/**
+ * Mark storage as hydrated (called after upgradeStorage)
+ */
+declare const markStorageAsHydrated: () => void;
 
 export declare class MemoryStorageProvider extends LocalStorageProvider {
     constructor(namespace: string, registry?: Record<string, unknown>);
@@ -192,6 +256,21 @@ export declare type UseHydrationOptions = {
     onUpgrade?: () => void;
 };
 
+declare namespace utils {
+    export {
+        isPrimitive,
+        fakeLocalStorage,
+        getIsClient,
+        getHasHydrated,
+        getHasHydratedStorage,
+        markStorageAsHydrated,
+        isLocalStorageAvailable,
+        addKey,
+        key,
+        getKeys,
+        getPrefixedKeys
+    }
+}
 export { utils }
 
 export { }
